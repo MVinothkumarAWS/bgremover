@@ -1,6 +1,8 @@
 "use client";
 
+import { useState } from "react";
 import { usePremium } from "@/context/PremiumContext";
+import { useRazorpay } from "@/hooks/useRazorpay";
 import Link from "next/link";
 
 const plans = [
@@ -113,22 +115,36 @@ const faqs = [
 ];
 
 export default function PricingSection() {
-  const { state, setPlan, addCredits, isPro } = usePremium();
+  const { state, setPlan, isPro } = usePremium();
+  const { pay } = useRazorpay();
+  const [processing, setProcessing] = useState<string | null>(null);
+  const [toast, setToast] = useState("");
 
-  const handleSelectPlan = (planId: "free" | "pro" | "business") => {
+  const showToast = (msg: string) => {
+    setToast(msg);
+    setTimeout(() => setToast(""), 4000);
+  };
+
+  const handleSelectPlan = async (planId: "free" | "pro" | "business") => {
+    if (planId === "free") {
+      setPlan("free");
+      return;
+    }
     if (planId === "business") {
       window.open("mailto:sales@k2techinfo.com?subject=BG Remover Business Plan", "_blank");
       return;
     }
-    // In production, this would redirect to Stripe/payment
-    // For demo, we just set the plan
-    setPlan(planId);
+    setProcessing(planId);
+    const result = await pay(`${planId}_monthly`);
+    setProcessing(null);
+    showToast(result.message);
   };
 
-  const handleBuyCredits = (credits: number) => {
-    // In production, this would redirect to Stripe/payment
-    // For demo, we just add credits
-    addCredits(credits);
+  const handleBuyCredits = async (credits: number) => {
+    setProcessing(`credits_${credits}`);
+    const result = await pay(`credits_${credits}`);
+    setProcessing(null);
+    showToast(result.message);
   };
 
   return (
@@ -174,16 +190,16 @@ export default function PricingSection() {
 
               <button
                 onClick={() => handleSelectPlan(plan.id)}
-                disabled={state.plan === plan.id}
+                disabled={state.plan === plan.id || processing === plan.id}
                 className={`w-full py-3 font-semibold rounded-xl transition-colors mb-6 ${
                   state.plan === plan.id
                     ? "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                     : plan.highlighted
                     ? "bg-blue-600 text-white hover:bg-blue-700"
                     : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
-                }`}
+                } ${processing === plan.id ? "opacity-60 cursor-wait" : ""}`}
               >
-                {state.plan === plan.id ? "Current Plan" : plan.cta}
+                {processing === plan.id ? "Processing..." : state.plan === plan.id ? "Current Plan" : plan.cta}
               </button>
 
               <ul className="space-y-2">
@@ -234,9 +250,10 @@ export default function PricingSection() {
                 <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">{pack.perCredit}/credit</p>
                 <button
                   onClick={() => handleBuyCredits(pack.credits)}
-                  className="w-full py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors"
+                  disabled={processing === `credits_${pack.credits}`}
+                  className={`w-full py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ${processing === `credits_${pack.credits}` ? "opacity-60 cursor-wait" : ""}`}
                 >
-                  Buy Now
+                  {processing === `credits_${pack.credits}` ? "Processing..." : "Buy Now"}
                 </button>
               </div>
             ))}
@@ -300,6 +317,13 @@ export default function PricingSection() {
           </div>
         </div>
       </div>
+
+      {/* Toast */}
+      {toast && (
+        <div className="fixed bottom-6 left-1/2 -translate-x-1/2 px-6 py-3 bg-gray-900 dark:bg-gray-100 text-white dark:text-gray-900 text-sm font-medium rounded-xl shadow-lg toast-enter z-50">
+          {toast}
+        </div>
+      )}
     </div>
   );
 }

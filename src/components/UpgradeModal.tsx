@@ -1,10 +1,14 @@
 "use client";
 
 import Link from "next/link";
+import { useState } from "react";
 import { usePremium } from "@/context/PremiumContext";
+import { useRazorpay } from "@/hooks/useRazorpay";
 
 export default function UpgradeModal() {
   const { upgradePrompt, dismissUpgrade } = usePremium();
+  const { pay } = useRazorpay();
+  const [paying, setPaying] = useState(false);
 
   if (!upgradePrompt) return null;
 
@@ -55,16 +59,28 @@ export default function UpgradeModal() {
         </div>
 
         <div className="flex flex-col gap-3">
+          <button
+            onClick={async () => {
+              setPaying(true);
+              const result = await pay("pro_monthly");
+              setPaying(false);
+              if (result.success) dismissUpgrade();
+            }}
+            disabled={paying}
+            className={`w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors ${paying ? "opacity-60 cursor-wait" : ""}`}
+          >
+            {paying ? "Processing..." : "Upgrade to Pro - ₹799/mo"}
+          </button>
           <Link
             href="/pricing"
             onClick={dismissUpgrade}
-            className="w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors text-center"
+            className="w-full py-3 text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline transition-colors text-center"
           >
-            View Plans - Starting at $9.99/mo
+            View all plans
           </Link>
           <button
             onClick={dismissUpgrade}
-            className="w-full py-3 text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
+            className="w-full py-2 text-gray-500 dark:text-gray-400 text-sm hover:text-gray-700 dark:hover:text-gray-300 transition-colors"
           >
             Maybe later
           </button>
