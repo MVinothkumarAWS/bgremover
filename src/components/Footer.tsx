@@ -43,6 +43,12 @@ export default function Footer() {
 
         <div className="border-t border-gray-800 pt-8 flex flex-col sm:flex-row items-center justify-between gap-4">
           <p className="text-sm">&copy; {new Date().getFullYear()} BG Remover. All rights reserved.</p>
+          <p className="text-sm">
+            Powered by{" "}
+            <a href="https://k2techinfo.com" target="_blank" rel="noopener noreferrer" className="text-blue-400 font-semibold hover:text-blue-300 transition-colors">
+              K2 TechInfo
+            </a>
+          </p>
           <p className="text-xs text-gray-500">All processing is done locally. No images are uploaded to any server.</p>
         </div>
       </div>
