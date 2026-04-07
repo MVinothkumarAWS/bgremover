@@ -62,7 +62,7 @@ export default function Hero() {
       setShowUrlInput(false);
       setUrlInput("");
     } catch {
-      setUrlError("Could not load image from URL. Check the link and try again.");
+      setUrlError("Could not load image from URL. The server may block cross-origin requests. Try downloading the image first, then upload it.");
     } finally {
       setUrlLoading(false);
     }
@@ -187,6 +187,15 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
   const [results, setResults] = useState<Map<string, string>>(new Map());
   const [processing, setProcessing] = useState(true);
   const [current, setCurrent] = useState(0);
+
+  // Cleanup object URLs on unmount
+  useEffect(() => {
+    return () => {
+      results.forEach((url) => {
+        if (url !== "error") URL.revokeObjectURL(url);
+      });
+    };
+  }, [results]);
 
   const processAll = useCallback(async () => {
     const { removeBackground } = await import("@imgly/background-removal");

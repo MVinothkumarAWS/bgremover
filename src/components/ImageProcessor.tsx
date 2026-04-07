@@ -94,6 +94,19 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
     return () => URL.revokeObjectURL(url);
   }, [file]);
 
+  // Cleanup resultUrl and bgImageUrl on unmount
+  useEffect(() => {
+    return () => {
+      if (resultUrl) URL.revokeObjectURL(resultUrl);
+    };
+  }, [resultUrl]);
+
+  useEffect(() => {
+    return () => {
+      if (bgImageUrl) URL.revokeObjectURL(bgImageUrl);
+    };
+  }, [bgImageUrl]);
+
   // Process image
   useEffect(() => {
     let cancelled = false;
@@ -368,6 +381,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   const handleBgImageUpload = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
     const f = e.target.files?.[0];
     if (f) {
+      if (bgImageUrl) URL.revokeObjectURL(bgImageUrl);
       const url = URL.createObjectURL(f);
       setBgImageUrl(url);
       setBgColor("transparent");
