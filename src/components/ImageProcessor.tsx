@@ -1,6 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { usePremium } from "@/context/PremiumContext";
+import AdBanner from "./AdBanner";
 
 interface ImageProcessorProps {
   file: File;
@@ -45,6 +47,9 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   const [showOriginal, setShowOriginal] = useState(false);
   const [sliderPos, setSliderPos] = useState(50);
   const [viewMode, setViewMode] = useState<"result" | "compare">("result");
+
+  // Premium
+  const { isPro, canTouchUp, showUpgrade, state: premiumState } = usePremium();
 
   // Background options
   const [bgColor, setBgColor] = useState("transparent");
@@ -521,21 +526,27 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
               open={activePanel === "touchup"}
               onToggle={() => setActivePanel(activePanel === "touchup" ? null : "touchup")}
             >
-              <div className="space-y-3">
-                <div className="flex gap-2">
-                  <button onClick={() => setActiveTool(activeTool === "erase" ? "none" : "erase")} className={tabClass(activeTool === "erase")}>Erase</button>
-                  <button onClick={() => setActiveTool(activeTool === "restore" ? "none" : "restore")} className={tabClass(activeTool === "restore")}>Restore</button>
-                </div>
-                {activeTool !== "none" && (
-                  <div>
-                    <label className="text-xs text-gray-500 dark:text-gray-400">Brush: {brushSize}px</label>
-                    <input type="range" min={5} max={80} value={brushSize} onChange={(e) => setBrushSize(+e.target.value)} className="w-full" />
+              {canTouchUp ? (
+                <div className="space-y-3">
+                  <div className="flex gap-2">
+                    <button onClick={() => setActiveTool(activeTool === "erase" ? "none" : "erase")} className={tabClass(activeTool === "erase")}>Erase</button>
+                    <button onClick={() => setActiveTool(activeTool === "restore" ? "none" : "restore")} className={tabClass(activeTool === "restore")}>Restore</button>
                   </div>
-                )}
-                {touchedUpUrl && (
-                  <button onClick={() => { setTouchedUpUrl(""); setActiveTool("none"); }} className="text-xs text-red-500 hover:underline">Reset touch-up</button>
-                )}
-              </div>
+                  {activeTool !== "none" && (
+                    <div>
+                      <label className="text-xs text-gray-500 dark:text-gray-400">Brush: {brushSize}px</label>
+                      <input type="range" min={5} max={80} value={brushSize} onChange={(e) => setBrushSize(+e.target.value)} className="w-full" />
+                    </div>
+                  )}
+                  {touchedUpUrl && (
+                    <button onClick={() => { setTouchedUpUrl(""); setActiveTool("none"); }} className="text-xs text-red-500 hover:underline">Reset touch-up</button>
+                  )}
+                </div>
+              ) : (
+                <button onClick={() => showUpgrade("Touch-Up Editor")} className="w-full text-xs px-3 py-2 bg-blue-50 dark:bg-blue-900/30 text-blue-600 dark:text-blue-400 rounded-lg hover:bg-blue-100 dark:hover:bg-blue-900/50 font-medium transition-colors">
+                  Upgrade to Pro to unlock
+                </button>
+              )}
             </ToolbarSection>
 
             <ToolbarSection
@@ -699,6 +710,21 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
               New Image
             </button>
+          </div>
+
+          {/* Credits / plan info */}
+          <div className="text-center mt-4">
+            {!isPro && (
+              <p className="text-xs text-gray-400 dark:text-gray-500">
+                Free plan: {premiumState.dailyProcessed}/10 images today &middot; {premiumState.credits} HD credits left &middot;{" "}
+                <a href="/pricing" className="text-blue-600 dark:text-blue-400 hover:underline font-medium">Upgrade for unlimited</a>
+              </p>
+            )}
+          </div>
+
+          {/* Ad after result */}
+          <div className="mt-6">
+            <AdBanner slot="editor-bottom" format="horizontal" />
           </div>
         </div>
       </div>
