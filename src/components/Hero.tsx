@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useRef } from "react";
+import { useState, useEffect, useCallback, useRef } from "react";
 import ImageProcessor from "./ImageProcessor";
 
 export default function Hero() {
@@ -203,7 +203,7 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
     setProcessing(false);
   }, [files]);
 
-  useState(() => { processAll(); });
+  useEffect(() => { processAll(); }, [processAll]);
 
   const handleDownloadAll = useCallback(() => {
     results.forEach((url, name) => {
