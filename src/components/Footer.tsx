@@ -24,8 +24,8 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Product</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><a href="#upload" className="hover:text-violet-400 transition-colors">Background Removal</a></li>
-              <li><a href="#features" className="hover:text-violet-400 transition-colors">All Features</a></li>
+              <li><Link href="/#upload" className="hover:text-violet-400 transition-colors">Background Removal</Link></li>
+              <li><Link href="/#features" className="hover:text-violet-400 transition-colors">All Features</Link></li>
               <li><Link href="/pricing" className="hover:text-violet-400 transition-colors">Pricing</Link></li>
               <li><Link href="/api-docs" className="hover:text-violet-400 transition-colors">API Docs</Link></li>
             </ul>
@@ -34,9 +34,9 @@ export default function Footer() {
           <div>
             <h4 className="text-white font-semibold mb-4">Resources</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><a href="#how-it-works" className="hover:text-violet-400 transition-colors">How It Works</a></li>
-              <li><a href="#gallery" className="hover:text-violet-400 transition-colors">Gallery</a></li>
-              <li><a href="#upload" className="hover:text-violet-400 transition-colors">Get Started</a></li>
+              <li><Link href="/#how-it-works" className="hover:text-violet-400 transition-colors">How It Works</Link></li>
+              <li><Link href="/#gallery" className="hover:text-violet-400 transition-colors">Gallery</Link></li>
+              <li><Link href="/#upload" className="hover:text-violet-400 transition-colors">Get Started</Link></li>
             </ul>
           </div>
         </div>

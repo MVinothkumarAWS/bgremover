@@ -34,11 +34,11 @@ export default function Header() {
 
           <nav className="hidden md:flex items-center gap-5">
             {[
-              { href: "#features", label: "Features" },
-              { href: "#how-it-works", label: "How It Works" },
-              { href: "#gallery", label: "Gallery" },
+              { href: "/#features", label: "Features" },
+              { href: "/#how-it-works", label: "How It Works" },
+              { href: "/#gallery", label: "Gallery" },
             ].map(link => (
-              <a key={link.href} href={link.href} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">{link.label}</a>
+              <Link key={link.href} href={link.href} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">{link.label}</Link>
             ))}
             <Link href="/pricing" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Pricing</Link>
             <Link href="/api-docs" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">API</Link>
@@ -106,9 +106,9 @@ export default function Header() {
         {menuOpen && (
           <div className="md:hidden py-4 border-t border-gray-100 dark:border-gray-800 animate-fade-up">
             <div className="flex flex-col gap-3">
-              <a href="#features" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Features</a>
-              <a href="#how-it-works" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>How It Works</a>
-              <a href="#gallery" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Gallery</a>
+              <Link href="/#features" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Features</Link>
+              <Link href="/#how-it-works" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>How It Works</Link>
+              <Link href="/#gallery" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Gallery</Link>
               <Link href="/pricing" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Pricing</Link>
               <Link href="/api-docs" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>API</Link>
               {!isSignedIn && (
