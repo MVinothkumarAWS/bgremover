@@ -5,7 +5,7 @@ import { usePremium } from "@/context/PremiumContext";
 import { useRazorpay } from "@/hooks/useRazorpay";
 
 const CREDIT_OPTIONS = [3, 5, 10, 25, 50, 100];
-const CREDIT_PRICE_PER = 67; // ₹67 per credit for pay-as-you-go
+const CREDIT_PRICE_PER = 33; // ₹33 per credit (~half of remove.bg's ₹67)
 
 const plans = [
   {
@@ -27,9 +27,9 @@ const plans = [
     name: "Lite",
     subtitle: "Use up to 40 credits per month",
     hasDropdown: false,
-    price: "₹539",
+    price: "₹269",
     period: "/ month",
-    yearly: "₹6,469 billed yearly",
+    yearly: "₹3,228 billed yearly",
     features: [],
     featureGroups: [
       { title: "AI Photo editor", items: ["Remove background", "AI background", "Erase & restore", "Max quality exports"] },
@@ -42,9 +42,9 @@ const plans = [
     name: "Pro",
     subtitle: "Use up to 200 credits per month",
     hasDropdown: false,
-    price: "₹2,385",
+    price: "₹1,199",
     period: "/ month",
-    yearly: "₹28,620 billed yearly",
+    yearly: "₹14,388 billed yearly",
     features: [],
     featureGroups: [
       { title: "AI Photo editor", items: ["Remove background", "AI background", "Erase & restore", "Max quality exports"] },
@@ -71,9 +71,9 @@ const plans = [
 ];
 
 const VOLUME_OPTIONS = [
-  { credits: 500, price: "₹5,355", yearly: "₹64,260 billed yearly" },
-  { credits: 1000, price: "₹9,500", yearly: "₹1,14,000 billed yearly" },
-  { credits: 2500, price: "₹21,000", yearly: "₹2,52,000 billed yearly" },
+  { credits: 500, price: "₹2,699", yearly: "₹32,388 billed yearly" },
+  { credits: 1000, price: "₹4,799", yearly: "₹57,588 billed yearly" },
+  { credits: 2500, price: "₹9,999", yearly: "₹1,19,988 billed yearly" },
 ];
 
 const faqs = [

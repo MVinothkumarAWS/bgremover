@@ -8,16 +8,21 @@ function getRazorpay() {
   });
 }
 
-// Plans and credit packs with pricing in INR (paise)
+// Plans and credit packs with pricing in INR (paise) - ~50% of remove.bg
 const PRODUCTS: Record<string, { amount: number; currency: string; description: string }> = {
   // Subscription plans
-  pro_monthly: { amount: 79900, currency: "INR", description: "BG Remover Pro - Monthly" },
-  business_monthly: { amount: 249900, currency: "INR", description: "BG Remover Business - Monthly" },
-  // Credit packs
-  credits_10: { amount: 39900, currency: "INR", description: "10 HD Credits" },
-  credits_50: { amount: 159900, currency: "INR", description: "50 HD Credits" },
-  credits_200: { amount: 499900, currency: "INR", description: "200 HD Credits" },
-  credits_500: { amount: 839900, currency: "INR", description: "500 HD Credits" },
+  lite_monthly: { amount: 26900, currency: "INR", description: "BG Remover Lite - 40 credits/mo" },
+  pro_monthly: { amount: 119900, currency: "INR", description: "BG Remover Pro - 200 credits/mo" },
+  volume_500_monthly: { amount: 269900, currency: "INR", description: "BG Remover Volume+ 500 credits/mo" },
+  volume_1000_monthly: { amount: 479900, currency: "INR", description: "BG Remover Volume+ 1000 credits/mo" },
+  volume_2500_monthly: { amount: 999900, currency: "INR", description: "BG Remover Volume+ 2500 credits/mo" },
+  // Pay-as-you-go credit packs (₹33/credit)
+  credits_3: { amount: 9900, currency: "INR", description: "3 HD Credits" },
+  credits_5: { amount: 16500, currency: "INR", description: "5 HD Credits" },
+  credits_10: { amount: 33000, currency: "INR", description: "10 HD Credits" },
+  credits_25: { amount: 82500, currency: "INR", description: "25 HD Credits" },
+  credits_50: { amount: 165000, currency: "INR", description: "50 HD Credits" },
+  credits_100: { amount: 330000, currency: "INR", description: "100 HD Credits" },
 };
 
 export async function POST(request: NextRequest) {
