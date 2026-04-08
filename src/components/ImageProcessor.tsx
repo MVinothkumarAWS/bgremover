@@ -41,6 +41,25 @@ const PRESET_TEMPLATES = [
   { label: "YouTube Thumbnail (1280x720)", width: 1280, height: 720 },
 ];
 
+const DESIGN_TEMPLATES = [
+  { label: "Sunset Beach", bg: "linear-gradient(135deg, #ff6b35, #f7c948, #ff6b35)", type: "gradient" as const },
+  { label: "Ocean Blue", bg: "linear-gradient(135deg, #667eea, #764ba2)", type: "gradient" as const },
+  { label: "Forest Green", bg: "linear-gradient(135deg, #11998e, #38ef7d)", type: "gradient" as const },
+  { label: "Night Sky", bg: "linear-gradient(135deg, #0f0c29, #302b63, #24243e)", type: "gradient" as const },
+  { label: "Rose Gold", bg: "linear-gradient(135deg, #f093fb, #f5576c)", type: "gradient" as const },
+  { label: "Arctic", bg: "linear-gradient(135deg, #e0eafc, #cfdef3)", type: "gradient" as const },
+  { label: "Warm Sunset", bg: "linear-gradient(135deg, #fa709a, #fee140)", type: "gradient" as const },
+  { label: "Deep Space", bg: "linear-gradient(135deg, #1a1a2e, #16213e, #0f3460)", type: "gradient" as const },
+  { label: "Pastel Dream", bg: "linear-gradient(135deg, #a18cd1, #fbc2eb)", type: "gradient" as const },
+  { label: "Emerald", bg: "linear-gradient(135deg, #43e97b, #38f9d7)", type: "gradient" as const },
+  { label: "Studio White", bg: "#f5f5f5", type: "solid" as const },
+  { label: "Studio Gray", bg: "#e0e0e0", type: "solid" as const },
+  { label: "E-commerce", bg: "#ffffff", type: "solid" as const },
+  { label: "Dark Studio", bg: "#1a1a1a", type: "solid" as const },
+  { label: "LinkedIn Blue", bg: "#0077b5", type: "solid" as const },
+  { label: "Teal Brand", bg: "#00b4d8", type: "solid" as const },
+];
+
 export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   const [originalUrl, setOriginalUrl] = useState("");
   const [resultUrl, setResultUrl] = useState("");
@@ -92,7 +111,63 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   const [textSize, setTextSize] = useState(32);
   const [textPosition, setTextPosition] = useState<"top" | "center" | "bottom">("bottom");
 
-  // History
+  // Undo/Redo
+  interface EditorState {
+    bgColor: string;
+    bgImageUrl: string;
+    shadow: boolean;
+    blurBg: number;
+    textOverlay: string;
+    textColor: string;
+    textSize: number;
+    textPosition: "top" | "center" | "bottom";
+    touchedUpUrl: string;
+    selectedTemplate: number;
+  }
+  const [undoStack, setUndoStack] = useState<EditorState[]>([]);
+  const [redoStack, setRedoStack] = useState<EditorState[]>([]);
+
+  const captureState = useCallback((): EditorState => ({
+    bgColor, bgImageUrl, shadow, blurBg, textOverlay, textColor, textSize, textPosition, touchedUpUrl, selectedTemplate,
+  }), [bgColor, bgImageUrl, shadow, blurBg, textOverlay, textColor, textSize, textPosition, touchedUpUrl, selectedTemplate]);
+
+  const pushUndo = useCallback(() => {
+    setUndoStack((prev) => [...prev.slice(-19), captureState()]);
+    setRedoStack([]);
+  }, [captureState]);
+
+  const applyState = useCallback((s: EditorState) => {
+    setBgColor(s.bgColor);
+    setBgImageUrl(s.bgImageUrl);
+    setShadow(s.shadow);
+    setBlurBg(s.blurBg);
+    setTextOverlay(s.textOverlay);
+    setTextColor(s.textColor);
+    setTextSize(s.textSize);
+    setTextPosition(s.textPosition);
+    setTouchedUpUrl(s.touchedUpUrl);
+    setSelectedTemplate(s.selectedTemplate);
+  }, []);
+
+  const handleUndo = useCallback(() => {
+    if (undoStack.length === 0) return;
+    const current = captureState();
+    setRedoStack((prev) => [...prev, current]);
+    const prev = undoStack[undoStack.length - 1];
+    setUndoStack((s) => s.slice(0, -1));
+    applyState(prev);
+  }, [undoStack, captureState, applyState]);
+
+  const handleRedo = useCallback(() => {
+    if (redoStack.length === 0) return;
+    const current = captureState();
+    setUndoStack((prev) => [...prev, current]);
+    const next = redoStack[redoStack.length - 1];
+    setRedoStack((s) => s.slice(0, -1));
+    applyState(next);
+  }, [redoStack, captureState, applyState]);
+
+  // Toast
   const [toast, setToast] = useState("");
 
   // Compare slider
@@ -539,14 +614,14 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
                   {PRESET_COLORS.map((c) => (
                     <button
                       key={c.value}
-                      onClick={() => { setBgColor(c.value); setBgImageUrl(""); setBlurBg(0); }}
+                      onClick={() => { pushUndo(); setBgColor(c.value); setBgImageUrl(""); setBlurBg(0); }}
                       title={c.label}
                       className={`w-7 h-7 rounded-full border-2 transition-all ${bgColor === c.value && !bgImageUrl && !blurBg ? "border-blue-600 scale-110" : "border-gray-200 dark:border-gray-600 hover:border-gray-400"} ${c.value === "transparent" ? "checkerboard" : ""}`}
                       style={c.value !== "transparent" ? { backgroundColor: c.value } : undefined}
                     />
                   ))}
                   <div className="relative">
-                    <input type="color" value={bgColor === "transparent" ? "#ffffff" : bgColor} onChange={(e) => { setBgColor(e.target.value); setBgImageUrl(""); setBlurBg(0); }} className="absolute inset-0 w-7 h-7 opacity-0 cursor-pointer" />
+                    <input type="color" value={bgColor === "transparent" ? "#ffffff" : bgColor} onChange={(e) => { pushUndo(); setBgColor(e.target.value); setBgImageUrl(""); setBlurBg(0); }} className="absolute inset-0 w-7 h-7 opacity-0 cursor-pointer" />
                     <div className="w-7 h-7 rounded-full border-2 border-gray-200 dark:border-gray-600" style={{ background: "conic-gradient(red,yellow,lime,aqua,blue,magenta,red)" }} />
                   </div>
                 </div>
@@ -603,7 +678,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
             >
               <div className="space-y-3">
                 <label className="flex items-center gap-2 text-sm text-gray-700 dark:text-gray-300 cursor-pointer">
-                  <input type="checkbox" checked={shadow} onChange={(e) => setShadow(e.target.checked)} className="rounded" />
+                  <input type="checkbox" checked={shadow} onChange={(e) => { pushUndo(); setShadow(e.target.checked); }} className="rounded" />
                   Drop Shadow
                 </label>
               </div>
@@ -677,6 +752,66 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
                 )}
               </div>
             </ToolbarSection>
+
+            <ToolbarSection
+              title="Design Templates"
+              icon={<DesignIcon />}
+              open={activePanel === "designs"}
+              onToggle={() => setActivePanel(activePanel === "designs" ? null : "designs")}
+            >
+              <div className="grid grid-cols-4 gap-1.5">
+                {DESIGN_TEMPLATES.map((tpl) => (
+                  <button
+                    key={tpl.label}
+                    onClick={() => {
+                      pushUndo();
+                      if (tpl.type === "gradient") {
+                        setBgColor("transparent");
+                        setBgImageUrl("");
+                        setBlurBg(0);
+                        // For gradients, we render to a canvas and use as bg image
+                        const c = document.createElement("canvas");
+                        c.width = 400; c.height = 400;
+                        const ctx = c.getContext("2d")!;
+                        const grad = ctx.createLinearGradient(0, 0, 400, 400);
+                        const colors = tpl.bg.match(/#[a-f0-9]{6}/gi) || ["#667eea", "#764ba2"];
+                        colors.forEach((color, i) => grad.addColorStop(i / (colors.length - 1), color));
+                        ctx.fillStyle = grad;
+                        ctx.fillRect(0, 0, 400, 400);
+                        setBgImageUrl(c.toDataURL());
+                      } else {
+                        setBgColor(tpl.bg);
+                        setBgImageUrl("");
+                        setBlurBg(0);
+                      }
+                    }}
+                    title={tpl.label}
+                    className="w-full aspect-square rounded-lg border border-gray-200 dark:border-gray-700 hover:border-violet-400 hover:scale-105 transition-all overflow-hidden"
+                    style={{ background: tpl.bg }}
+                  />
+                ))}
+              </div>
+            </ToolbarSection>
+
+            {/* Undo/Redo */}
+            <div className="border-t border-gray-100 dark:border-gray-800 p-3 flex gap-2">
+              <button
+                onClick={handleUndo}
+                disabled={undoStack.length === 0}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M3 10h10a8 8 0 018 8v2M3 10l6 6m-6-6l6-6" /></svg>
+                Undo
+              </button>
+              <button
+                onClick={handleRedo}
+                disabled={redoStack.length === 0}
+                className="flex-1 flex items-center justify-center gap-1.5 py-2 text-xs font-medium rounded-lg transition-colors disabled:opacity-30 disabled:cursor-not-allowed bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
+              >
+                <svg className="w-3.5 h-3.5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M21 10H11a8 8 0 00-8 8v2m18-10l-6 6m6-6l-6-6" /></svg>
+                Redo
+              </button>
+            </div>
           </div>
         </div>
 
@@ -937,6 +1072,9 @@ function TypeIcon() {
 }
 function CropIcon() {
   return <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" /></svg>;
+}
+function DesignIcon() {
+  return <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M7 21a4 4 0 01-4-4V5a2 2 0 012-2h4a2 2 0 012 2v12a4 4 0 01-4 4zm0 0h12a2 2 0 002-2v-4a2 2 0 00-2-2h-2.343M11 7.343l1.657-1.657a2 2 0 012.828 0l2.829 2.829a2 2 0 010 2.828l-8.486 8.485M7 17h.01" /></svg>;
 }
 function DownloadIcon() {
   return <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>;
