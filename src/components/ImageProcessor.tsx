@@ -6,7 +6,7 @@ import { hasClerkKey } from "./AuthProvider";
 import { usePremium } from "@/context/PremiumContext";
 import AdBanner from "./AdBanner";
 
-const FREE_MAX_PX = 500; // Free download max dimension
+const FREE_SCALE = 0.5; // Free download = half resolution
 
 interface ImageProcessorProps {
   file: File;
@@ -56,6 +56,8 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   const { isSignedIn } = useAuthSafe();
   const { isPro, canTouchUp, showUpgrade, state: premiumState, useHDCredit } = usePremium();
   const [showHDPrompt, setShowHDPrompt] = useState(false);
+  const [showDownloadDropdown, setShowDownloadDropdown] = useState(false);
+  const [originalDimensions, setOriginalDimensions] = useState({ w: 0, h: 0 });
   const canDownloadHD = isSignedIn && (isPro || premiumState.credits > 0);
 
   // Background options
@@ -164,7 +166,10 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
     if (!resultUrl) return;
     const img = new Image();
     img.crossOrigin = "anonymous";
-    img.onload = () => { resultImageRef.current = img; };
+    img.onload = () => {
+      resultImageRef.current = img;
+      setOriginalDimensions({ w: img.naturalWidth, h: img.naturalHeight });
+    };
     img.src = resultUrl;
   }, [resultUrl]);
 
@@ -361,15 +366,20 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
     return () => clearTimeout(timeout);
   }, [status, generateComposite]);
 
+  const previewW = Math.round(originalDimensions.w * FREE_SCALE);
+  const previewH = Math.round(originalDimensions.h * FREE_SCALE);
+  const previewMaxPx = Math.max(previewW, previewH);
+
   const handleDownloadFree = useCallback(async () => {
-    const dataUrl = await generateComposite(FREE_MAX_PX);
+    const dataUrl = await generateComposite(previewMaxPx || 500);
     const a = document.createElement("a");
     a.href = dataUrl;
     const baseName = file.name.replace(/\.[^.]+$/, "");
     a.download = `${baseName}-preview.${downloadFormat}`;
     a.click();
-    showToast(`Downloaded (${FREE_MAX_PX}px preview)`);
-  }, [generateComposite, file.name, downloadFormat]);
+    setShowDownloadDropdown(false);
+    showToast(`Downloaded (${previewW} x ${previewH})`);
+  }, [generateComposite, file.name, downloadFormat, previewMaxPx, previewW, previewH]);
 
   const handleDownloadHD = useCallback(async () => {
     if (!isSignedIn) {
@@ -389,6 +399,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
     const baseName = file.name.replace(/\.[^.]+$/, "");
     a.download = `${baseName}-hd.${downloadFormat}`;
     a.click();
+    setShowDownloadDropdown(false);
     showToast("HD image downloaded!");
   }, [generateComposite, file.name, downloadFormat, isSignedIn, isPro, useHDCredit, showUpgrade]);
 
@@ -733,27 +744,66 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
 
           {/* Action buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-            {/* Free download (500px) */}
-            <button onClick={handleDownloadFree} className="px-6 py-3 bg-gray-700 dark:bg-gray-600 text-white font-medium rounded-xl hover:bg-gray-800 dark:hover:bg-gray-500 transition-colors flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-              Download Preview
-              <span className="text-xs opacity-70">({FREE_MAX_PX}px)</span>
-            </button>
+            {/* Download dropdown (like remove.bg) */}
+            <div className="relative">
+              <button
+                onClick={() => setShowDownloadDropdown(!showDownloadDropdown)}
+                className="px-8 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-full hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25 flex items-center gap-2"
+              >
+                <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+                Download
+                <svg className={`w-4 h-4 transition-transform ${showDownloadDropdown ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" /></svg>
+              </button>
 
-            {/* HD download */}
-            <button onClick={handleDownloadHD} className="px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-medium rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25 flex items-center gap-2">
-              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-              Download HD
-              {!isSignedIn && <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded">Sign up</span>}
-              {isSignedIn && !isPro && premiumState.credits > 0 && <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded">{premiumState.credits} credits</span>}
-              {isPro && <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded">Pro</span>}
-            </button>
+              {showDownloadDropdown && (
+                <>
+                  <div className="fixed inset-0 z-40" onClick={() => setShowDownloadDropdown(false)} />
+                  <div className="absolute right-0 mt-2 w-72 bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-fade-up">
+                    {/* Preview - Free */}
+                    <button
+                      onClick={handleDownloadFree}
+                      className="w-full flex items-center gap-3 px-5 py-4 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border-b border-gray-100 dark:border-gray-800"
+                    >
+                      <div className="w-8 h-8 bg-gray-100 dark:bg-gray-800 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg className="w-4 h-4 text-gray-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z" /></svg>
+                      </div>
+                      <div className="flex-1 text-left">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">Preview</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{previewW} x {previewH}</p>
+                      </div>
+                      <span className="px-2.5 py-1 bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 text-xs font-bold rounded-full">Free</span>
+                    </button>
 
-            <button onClick={handleShare} className="px-5 py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors flex items-center gap-2">
+                    {/* Max - Unlock */}
+                    <button
+                      onClick={handleDownloadHD}
+                      className="w-full flex items-center gap-3 px-5 py-4 hover:bg-violet-50 dark:hover:bg-violet-950/30 transition-colors"
+                    >
+                      <div className="w-8 h-8 bg-amber-100 dark:bg-amber-900/50 rounded-lg flex items-center justify-center flex-shrink-0">
+                        <svg className="w-4 h-4 text-amber-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                      </div>
+                      <div className="flex-1 text-left">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">Max</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400">{originalDimensions.w} x {originalDimensions.h}</p>
+                      </div>
+                      {isPro ? (
+                        <span className="px-2.5 py-1 bg-green-100 dark:bg-green-900/50 text-green-600 dark:text-green-400 text-xs font-bold rounded-full">Pro</span>
+                      ) : isSignedIn && premiumState.credits > 0 ? (
+                        <span className="px-2.5 py-1 bg-violet-100 dark:bg-violet-900/50 text-violet-600 dark:text-violet-400 text-xs font-bold rounded-full">{premiumState.credits} credits</span>
+                      ) : (
+                        <span className="px-2.5 py-1 bg-amber-400 text-white text-xs font-bold rounded-full">Unlock</span>
+                      )}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+
+            <button onClick={handleShare} className="px-5 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
               Share
             </button>
-            <button onClick={onReset} className="px-5 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2">
+            <button onClick={onReset} className="px-5 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-full hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
               New Image
             </button>
