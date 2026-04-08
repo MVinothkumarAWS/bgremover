@@ -1,8 +1,11 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
+import { useAuth, SignInButton } from "@clerk/nextjs";
 import { usePremium } from "@/context/PremiumContext";
 import AdBanner from "./AdBanner";
+
+const FREE_MAX_PX = 500; // Free download max dimension
 
 interface ImageProcessorProps {
   file: File;
@@ -48,8 +51,11 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   const [sliderPos, setSliderPos] = useState(50);
   const [viewMode, setViewMode] = useState<"result" | "compare">("result");
 
-  // Premium
-  const { isPro, canTouchUp, showUpgrade, state: premiumState } = usePremium();
+  // Auth & Premium
+  const { isSignedIn } = useAuth();
+  const { isPro, canTouchUp, showUpgrade, state: premiumState, useHDCredit } = usePremium();
+  const [showHDPrompt, setShowHDPrompt] = useState(false);
+  const canDownloadHD = isSignedIn && (isPro || premiumState.credits > 0);
 
   // Background options
   const [bgColor, setBgColor] = useState("transparent");
@@ -269,14 +275,21 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   }, []);
 
   // Generate final composite
-  const generateComposite = useCallback(async (): Promise<string> => {
+  const generateComposite = useCallback(async (maxSize?: number): Promise<string> => {
     const img = touchedUpUrl
       ? await loadImage(touchedUpUrl)
       : resultImageRef.current || (await loadImage(resultUrl));
 
     const template = PRESET_TEMPLATES[selectedTemplate];
-    const outW = template.width || img.naturalWidth;
-    const outH = template.height || img.naturalHeight;
+    let outW = template.width || img.naturalWidth;
+    let outH = template.height || img.naturalHeight;
+
+    // Enforce max size for free downloads
+    if (maxSize && (outW > maxSize || outH > maxSize)) {
+      const ratio = Math.min(maxSize / outW, maxSize / outH);
+      outW = Math.round(outW * ratio);
+      outH = Math.round(outH * ratio);
+    }
 
     const canvas = document.createElement("canvas");
     canvas.width = outW;
@@ -347,15 +360,36 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
     return () => clearTimeout(timeout);
   }, [status, generateComposite]);
 
-  const handleDownload = useCallback(async () => {
+  const handleDownloadFree = useCallback(async () => {
+    const dataUrl = await generateComposite(FREE_MAX_PX);
+    const a = document.createElement("a");
+    a.href = dataUrl;
+    const baseName = file.name.replace(/\.[^.]+$/, "");
+    a.download = `${baseName}-preview.${downloadFormat}`;
+    a.click();
+    showToast(`Downloaded (${FREE_MAX_PX}px preview)`);
+  }, [generateComposite, file.name, downloadFormat]);
+
+  const handleDownloadHD = useCallback(async () => {
+    if (!isSignedIn) {
+      setShowHDPrompt(true);
+      return;
+    }
+    if (!isPro) {
+      const used = useHDCredit();
+      if (!used) {
+        showUpgrade("HD Downloads");
+        return;
+      }
+    }
     const dataUrl = await generateComposite();
     const a = document.createElement("a");
     a.href = dataUrl;
     const baseName = file.name.replace(/\.[^.]+$/, "");
-    a.download = `${baseName}-edited.${downloadFormat}`;
+    a.download = `${baseName}-hd.${downloadFormat}`;
     a.click();
-    showToast("Image downloaded!");
-  }, [generateComposite, file.name, downloadFormat]);
+    showToast("HD image downloaded!");
+  }, [generateComposite, file.name, downloadFormat, isSignedIn, isPro, useHDCredit, showUpgrade]);
 
   const handleShare = useCallback(async () => {
     const dataUrl = await generateComposite();
@@ -698,19 +732,50 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
 
           {/* Action buttons */}
           <div className="flex flex-wrap items-center justify-center gap-3 mt-6">
-            <button onClick={handleDownload} className="px-6 py-3 bg-blue-600 text-white font-medium rounded-xl hover:bg-blue-700 transition-colors shadow-lg shadow-blue-600/25 flex items-center gap-2">
+            {/* Free download (500px) */}
+            <button onClick={handleDownloadFree} className="px-6 py-3 bg-gray-700 dark:bg-gray-600 text-white font-medium rounded-xl hover:bg-gray-800 dark:hover:bg-gray-500 transition-colors flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
-              Download
+              Download Preview
+              <span className="text-xs opacity-70">({FREE_MAX_PX}px)</span>
             </button>
-            <button onClick={handleShare} className="px-6 py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors flex items-center gap-2">
+
+            {/* HD download */}
+            <button onClick={handleDownloadHD} className="px-6 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-medium rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25 flex items-center gap-2">
+              <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
+              Download HD
+              {!isSignedIn && <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded">Sign up</span>}
+              {isSignedIn && !isPro && premiumState.credits > 0 && <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded">{premiumState.credits} credits</span>}
+              {isPro && <span className="text-xs bg-white/20 px-1.5 py-0.5 rounded">Pro</span>}
+            </button>
+
+            <button onClick={handleShare} className="px-5 py-3 bg-green-600 text-white font-medium rounded-xl hover:bg-green-700 transition-colors flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M8.684 13.342C8.886 12.938 9 12.482 9 12c0-.482-.114-.938-.316-1.342m0 2.684a3 3 0 110-2.684m0 2.684l6.632 3.316m-6.632-6l6.632-3.316m0 0a3 3 0 105.367-2.684 3 3 0 00-5.367 2.684zm0 9.316a3 3 0 105.368 2.684 3 3 0 00-5.368-2.684z" /></svg>
               Share
             </button>
-            <button onClick={onReset} className="px-6 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2">
+            <button onClick={onReset} className="px-5 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors flex items-center gap-2">
               <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M12 4v16m8-8H4" /></svg>
               New Image
             </button>
           </div>
+
+          {/* HD Sign-up prompt */}
+          {showHDPrompt && !isSignedIn && (
+            <div className="mt-4 p-4 bg-violet-50 dark:bg-violet-950/50 border border-violet-200 dark:border-violet-800 rounded-xl text-center animate-fade-up">
+              <p className="text-sm text-gray-700 dark:text-gray-300 mb-3">
+                <span className="font-bold">Sign up for free</span> to download HD images. Get 5 free HD credits!
+              </p>
+              <div className="flex items-center justify-center gap-3">
+                <SignInButton mode="modal">
+                  <button className="px-5 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-violet-500/25">
+                    Sign Up Free
+                  </button>
+                </SignInButton>
+                <button onClick={() => setShowHDPrompt(false)} className="text-sm text-gray-500 hover:text-gray-700">
+                  Maybe later
+                </button>
+              </div>
+            </div>
+          )}
 
           {/* Credits / plan info */}
           <div className="text-center mt-4">

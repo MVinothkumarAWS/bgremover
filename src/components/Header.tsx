@@ -2,11 +2,13 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/nextjs";
 import DarkModeToggle from "./DarkModeToggle";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const { isSignedIn } = useAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -40,13 +42,40 @@ export default function Header() {
             <Link href="/pricing" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Pricing</Link>
             <Link href="/api-docs" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">API</Link>
             <DarkModeToggle />
-            <a href="#upload" className="inline-flex items-center px-5 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25 hover:shadow-violet-500/40 hover:-translate-y-0.5">
-              Upload Image
-            </a>
+
+            {isSignedIn ? (
+              <UserButton
+                appearance={{
+                  elements: {
+                    avatarBox: "w-9 h-9",
+                  },
+                }}
+              />
+            ) : (
+              <div className="flex items-center gap-2">
+                <SignInButton mode="modal">
+                  <button className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                    Log in
+                  </button>
+                </SignInButton>
+                <SignUpButton mode="modal">
+                  <button className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25">
+                    Sign up
+                  </button>
+                </SignUpButton>
+              </div>
+            )}
           </nav>
 
           <div className="flex md:hidden items-center gap-2">
             <DarkModeToggle />
+            {isSignedIn ? (
+              <UserButton appearance={{ elements: { avatarBox: "w-8 h-8" } }} />
+            ) : (
+              <SignInButton mode="modal">
+                <button className="text-sm font-medium text-violet-600 dark:text-violet-400">Log in</button>
+              </SignInButton>
+            )}
             <button className="p-2" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle navigation menu" aria-expanded={menuOpen}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 {menuOpen ? (
@@ -67,7 +96,6 @@ export default function Header() {
               <a href="#gallery" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Gallery</a>
               <Link href="/pricing" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Pricing</Link>
               <Link href="/api-docs" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>API</Link>
-              <a href="#upload" className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl" onClick={() => setMenuOpen(false)}>Upload Image</a>
             </div>
           </div>
         )}
