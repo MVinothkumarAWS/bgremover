@@ -8,6 +8,7 @@ import Testimonials from "@/components/Testimonials";
 import History from "@/components/History";
 import UpgradeModal from "@/components/UpgradeModal";
 import Footer from "@/components/Footer";
+import ScrollReveal from "@/components/ScrollReveal";
 
 export default function Home() {
   return (
@@ -15,18 +16,24 @@ export default function Home() {
       <Header />
       <main className="flex-1">
         <Hero />
-        <div className="max-w-5xl mx-auto px-4 py-4">
-          <AdBanner slot="after-hero" format="horizontal" />
-        </div>
+        <ScrollReveal direction="up">
+          <div className="max-w-5xl mx-auto px-4 py-4">
+            <AdBanner slot="after-hero" format="horizontal" />
+          </div>
+        </ScrollReveal>
         <Features />
-        <div className="max-w-5xl mx-auto px-4 py-4">
-          <AdBanner slot="after-features" format="horizontal" />
-        </div>
+        <ScrollReveal direction="up">
+          <div className="max-w-5xl mx-auto px-4 py-4">
+            <AdBanner slot="after-features" format="horizontal" />
+          </div>
+        </ScrollReveal>
         <HowItWorks />
         <Gallery />
-        <div className="max-w-5xl mx-auto px-4 py-4">
-          <AdBanner slot="after-gallery" format="horizontal" />
-        </div>
+        <ScrollReveal direction="up">
+          <div className="max-w-5xl mx-auto px-4 py-4">
+            <AdBanner slot="after-gallery" format="horizontal" />
+          </div>
+        </ScrollReveal>
         <Testimonials />
         <History />
       </main>

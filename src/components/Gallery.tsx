@@ -1,5 +1,6 @@
 "use client";
 
+import Link from "next/link";
 import { useAnimateOnScroll } from "@/hooks/useAnimateOnScroll";
 
 const SAMPLES = [
@@ -57,10 +58,10 @@ export default function Gallery() {
         </div>
 
         <div className={`text-center mt-12 ${isVisible ? "animate-fade-up delay-700" : "opacity-0"}`}>
-          <a href="#upload" className="inline-flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-xl shadow-violet-500/25 hover:shadow-violet-500/40 hover:-translate-y-0.5">
+          <Link href="/#upload" className="inline-flex items-center gap-2 px-8 py-3.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-xl shadow-violet-500/25 hover:shadow-violet-500/40 hover:-translate-y-0.5">
             Try It Yourself
             <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M14 5l7 7m0 0l-7 7m7-7H3" /></svg>
-          </a>
+          </Link>
         </div>
       </div>
     </section>

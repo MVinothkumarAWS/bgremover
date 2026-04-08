@@ -705,7 +705,7 @@ function ToolBtn({ onClick, disabled, title, children }: { onClick: () => void; 
   return (
     <button onClick={onClick} disabled={disabled} title={title}
       className="p-2 rounded-xl text-gray-500 dark:text-gray-400 hover:text-violet-600 hover:bg-violet-50 dark:hover:bg-violet-900/30 disabled:opacity-30 disabled:cursor-not-allowed transition-all">
-      <svg className="w-4.5 h-4.5" fill="none" stroke="currentColor" viewBox="0 0 24 24">{children}</svg>
+      <svg className="w-[18px] h-[18px]" fill="none" stroke="currentColor" viewBox="0 0 24 24">{children}</svg>
     </button>
   );
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useAnimateOnScroll } from "@/hooks/useAnimateOnScroll";
+import ScrollReveal from "./ScrollReveal";
 
 const testimonials = [
   { name: "Sarah Chen", role: "E-commerce Seller", text: "I used to spend hours in Photoshop. BG Remover does it in seconds. My product listings look so much more professional now.", color: "from-pink-500 to-rose-500" },
@@ -30,10 +31,9 @@ export default function Testimonials() {
 
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
           {testimonials.map((t, i) => (
+            <ScrollReveal key={t.name} direction={i % 2 === 0 ? "left" : "right"} delay={i * 100}>
             <div
-              key={t.name}
-              className={`bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 hover:-translate-y-1 hover:shadow-lg transition-all duration-300 ${isVisible ? "animate-fade-up" : "opacity-0"}`}
-              style={{ animationDelay: `${i * 0.1}s` }}
+              className="bg-gray-50 dark:bg-gray-800/50 rounded-2xl p-6 border border-gray-100 dark:border-gray-700/50 hover:-translate-y-1 hover:shadow-lg transition-all duration-300"
             >
               <div className="flex items-center gap-3 mb-4">
                 <div className={`w-11 h-11 bg-gradient-to-br ${t.color} rounded-xl flex items-center justify-center text-white text-sm font-bold shadow-lg`}>
@@ -53,6 +53,7 @@ export default function Testimonials() {
               </div>
               <p className="text-gray-600 dark:text-gray-300 text-sm leading-relaxed">&ldquo;{t.text}&rdquo;</p>
             </div>
+            </ScrollReveal>
           ))}
         </div>
       </div>

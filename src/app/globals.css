@@ -16,8 +16,20 @@
   --color-brand-900: #4c1d95;
 }
 
+html {
+  scroll-behavior: smooth;
+}
+
 body {
   font-family: var(--font-sans), system-ui, sans-serif;
+}
+
+/* Smooth scroll offset for sticky header */
+:target {
+  scroll-margin-top: 80px;
+}
+section[id] {
+  scroll-margin-top: 80px;
 }
 
 /* ── Animated gradient background ── */
