@@ -3,6 +3,19 @@
 import { useState, useEffect, useCallback, useRef } from "react";
 import ImageProcessor from "./ImageProcessor";
 
+const SHOWCASE_IMAGES = [
+  "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=500&h=600&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=500&h=600&fit=crop&crop=face",
+  "https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&h=600&fit=crop&crop=face",
+];
+
+const SAMPLE_IMAGES = [
+  { src: "https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=80&h=80&fit=crop&crop=face", label: "Portrait" },
+  { src: "https://images.unsplash.com/photo-1583511655857-d19b40a7a54e?w=80&h=80&fit=crop", label: "Pet" },
+  { src: "https://images.unsplash.com/photo-1523275335684-37898b6baf30?w=80&h=80&fit=crop", label: "Product" },
+  { src: "https://images.unsplash.com/photo-1494976388531-d1058494cdd8?w=80&h=80&fit=crop", label: "Car" },
+];
+
 export default function Hero() {
   const [files, setFiles] = useState<File[]>([]);
   const [dragActive, setDragActive] = useState(false);
@@ -10,7 +23,16 @@ export default function Hero() {
   const [urlLoading, setUrlLoading] = useState(false);
   const [urlError, setUrlError] = useState("");
   const [showUrlInput, setShowUrlInput] = useState(false);
+  const [currentImage, setCurrentImage] = useState(0);
   const inputRef = useRef<HTMLInputElement>(null);
+
+  // Rotate showcase images
+  useEffect(() => {
+    const interval = setInterval(() => {
+      setCurrentImage((prev) => (prev + 1) % SHOWCASE_IMAGES.length);
+    }, 4000);
+    return () => clearInterval(interval);
+  }, []);
 
   const handleFiles = useCallback((newFiles: File[]) => {
     const imageFiles = newFiles.filter((f) => f.type.startsWith("image/"));
@@ -38,9 +60,17 @@ export default function Hero() {
       setFiles([new File([blob], fileName, { type: blob.type })]);
       setShowUrlInput(false); setUrlInput("");
     } catch {
-      setUrlError("Could not load image. The server may block cross-origin requests. Try downloading first.");
+      setUrlError("Could not load image. Try downloading it first, then upload.");
     } finally { setUrlLoading(false); }
   }, [urlInput]);
+
+  const handleSampleImage = useCallback(async (src: string, label: string) => {
+    try {
+      const res = await fetch(src.replace("w=80&h=80", "w=800&h=800"));
+      const blob = await res.blob();
+      setFiles([new File([blob], `${label.toLowerCase()}.jpg`, { type: "image/jpeg" })]);
+    } catch { /* ignore */ }
+  }, []);
 
   const handleReset = useCallback(() => {
     setFiles([]); if (inputRef.current) inputRef.current.value = "";
@@ -48,93 +78,158 @@ export default function Hero() {
 
   return (
     <section id="upload" className="relative overflow-hidden">
-      {/* Animated background */}
+      {/* Background */}
       <div className="absolute inset-0 bg-gradient-to-br from-violet-50 via-white to-indigo-50 dark:from-gray-950 dark:via-gray-900 dark:to-violet-950" />
-      <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-violet-400/10 dark:bg-violet-600/5 rounded-full blur-3xl -translate-y-1/2 translate-x-1/4" />
-      <div className="absolute bottom-0 left-0 w-[400px] h-[400px] bg-indigo-400/10 dark:bg-indigo-600/5 rounded-full blur-3xl translate-y-1/3 -translate-x-1/4" />
+      <div className="absolute top-20 right-10 w-[400px] h-[400px] bg-violet-300/15 dark:bg-violet-600/5 rounded-full blur-3xl" />
+      <div className="absolute bottom-10 left-10 w-[300px] h-[300px] bg-indigo-300/15 dark:bg-indigo-600/5 rounded-full blur-3xl" />
 
-      <div className="relative max-w-5xl mx-auto px-4 sm:px-6 lg:px-8 py-16 sm:py-24">
+      <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 sm:py-20">
         {files.length === 0 ? (
-          <div className="text-center">
-            {/* Badge */}
-            <div className="animate-fade-up inline-flex items-center gap-2 px-4 py-1.5 bg-violet-100 dark:bg-violet-900/40 text-violet-700 dark:text-violet-300 text-sm font-medium rounded-full mb-8 border border-violet-200 dark:border-violet-800">
-              <span className="w-2 h-2 bg-green-500 rounded-full animate-pulse" />
-              AI-Powered &middot; 100% Free &middot; No Signup
-            </div>
-
-            <h1 className="animate-fade-up delay-100 text-4xl sm:text-5xl lg:text-7xl font-extrabold text-gray-900 dark:text-white mb-6 tracking-tight leading-[1.1]">
-              Remove Any
-              <br />
-              <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Background</span>
-              {" "}Instantly
-            </h1>
-
-            <p className="animate-fade-up delay-200 text-lg sm:text-xl text-gray-600 dark:text-gray-400 mb-12 max-w-2xl mx-auto leading-relaxed">
-              Professional background removal in seconds. Your images never leave your browser.
-              100% private, powered by cutting-edge AI.
-            </p>
-
-            {/* Upload zone */}
-            <div
-              className={`animate-scale-in delay-300 upload-zone relative max-w-2xl mx-auto border-2 border-dashed rounded-2xl p-10 sm:p-14 cursor-pointer backdrop-blur-sm ${
-                dragActive
-                  ? "dragging border-violet-500 bg-violet-50/80 dark:bg-violet-950/50"
-                  : "border-gray-300/80 dark:border-gray-600/80 bg-white/60 dark:bg-gray-900/60 hover:border-violet-400"
-              }`}
-              onDrop={handleDrop}
-              onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
-              onDragLeave={(e) => { e.preventDefault(); setDragActive(false); }}
-              onClick={() => inputRef.current?.click()}
-            >
-              <input ref={inputRef} type="file" accept="image/png,image/jpeg,image/webp" multiple className="hidden" onChange={handleInputChange} />
-
-              <div className="flex flex-col items-center gap-5">
-                <div className="w-20 h-20 bg-gradient-to-br from-violet-100 to-indigo-100 dark:from-violet-900/50 dark:to-indigo-900/50 rounded-2xl flex items-center justify-center float">
-                  <svg className="w-10 h-10 text-violet-600 dark:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                    <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12" />
-                  </svg>
+          <>
+            {/* ── Two-column hero layout ── */}
+            <div className="grid grid-cols-1 lg:grid-cols-2 gap-12 lg:gap-8 items-center">
+              {/* Left: Text + Animated Person */}
+              <div className="text-center lg:text-left order-2 lg:order-1">
+                {/* Animated person image */}
+                <div className="relative w-[280px] sm:w-[340px] h-[340px] sm:h-[420px] mx-auto lg:mx-0 mb-8">
+                  {SHOWCASE_IMAGES.map((src, i) => (
+                    <img
+                      key={src}
+                      src={src}
+                      alt="Person with removed background"
+                      className={`absolute inset-0 w-full h-full object-cover object-top rounded-3xl transition-all duration-1000 ${
+                        i === currentImage
+                          ? "opacity-100 scale-100 translate-y-0"
+                          : "opacity-0 scale-95 translate-y-4"
+                      }`}
+                      style={{
+                        filter: i === currentImage ? "drop-shadow(0 20px 40px rgba(124, 58, 237, 0.2))" : "none",
+                        animation: i === currentImage ? "float 4s ease-in-out infinite" : "none",
+                      }}
+                      loading={i === 0 ? "eager" : "lazy"}
+                    />
+                  ))}
+                  {/* Decorative elements */}
+                  <div className="absolute -bottom-3 -right-3 w-20 h-20 bg-gradient-to-br from-violet-500 to-indigo-500 rounded-2xl -z-10 opacity-20" />
+                  <div className="absolute -top-3 -left-3 w-16 h-16 bg-gradient-to-br from-cyan-400 to-blue-500 rounded-xl -z-10 opacity-20 float-delay-1" />
+                  {/* Indicator dots */}
+                  <div className="absolute -bottom-8 left-1/2 -translate-x-1/2 flex gap-2">
+                    {SHOWCASE_IMAGES.map((_, i) => (
+                      <button
+                        key={i}
+                        onClick={() => setCurrentImage(i)}
+                        className={`w-2 h-2 rounded-full transition-all ${
+                          i === currentImage ? "bg-violet-600 w-6" : "bg-gray-300 dark:bg-gray-600"
+                        }`}
+                      />
+                    ))}
+                  </div>
                 </div>
-                <div>
-                  <p className="text-xl font-bold text-gray-900 dark:text-white mb-1">Drop your image here</p>
-                  <p className="text-sm text-gray-500 dark:text-gray-400">or click to browse &middot; batch upload supported</p>
+
+                <h1 className="animate-fade-up text-4xl sm:text-5xl lg:text-6xl font-extrabold text-gray-900 dark:text-white tracking-tight leading-[1.1] mt-12 lg:mt-0">
+                  Remove Image
+                  <br />
+                  <span className="bg-gradient-to-r from-violet-600 via-purple-600 to-indigo-600 bg-clip-text text-transparent">Background</span>
+                </h1>
+                <p className="animate-fade-up delay-100 mt-4 text-xl text-gray-600 dark:text-gray-400">
+                  100% Automatically and{" "}
+                  <span className="inline-flex items-center px-3 py-0.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-bold rounded-full">
+                    Free
+                  </span>
+                </p>
+              </div>
+
+              {/* Right: Upload Box */}
+              <div className="order-1 lg:order-2">
+                <div
+                  className={`animate-scale-in upload-zone relative rounded-3xl p-8 sm:p-10 cursor-pointer border-2 border-dashed transition-all duration-300 bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm shadow-xl shadow-gray-200/50 dark:shadow-none ${
+                    dragActive
+                      ? "dragging border-violet-500 bg-violet-50/80 dark:bg-violet-950/50"
+                      : "border-gray-200 dark:border-gray-700 hover:border-violet-400 hover:shadow-violet-200/30"
+                  }`}
+                  onDrop={handleDrop}
+                  onDragOver={(e) => { e.preventDefault(); setDragActive(true); }}
+                  onDragLeave={(e) => { e.preventDefault(); setDragActive(false); }}
+                  onClick={() => inputRef.current?.click()}
+                >
+                  <input ref={inputRef} type="file" accept="image/png,image/jpeg,image/webp" multiple className="hidden" onChange={handleInputChange} />
+
+                  <div className="flex flex-col items-center gap-5">
+                    <button
+                      type="button"
+                      className="px-10 py-4 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-lg font-bold rounded-full hover:from-violet-700 hover:to-indigo-700 transition-all shadow-xl shadow-violet-500/30 hover:shadow-violet-500/50 hover:-translate-y-0.5 pulse-glow"
+                    >
+                      Upload Image
+                    </button>
+
+                    <p className="text-gray-500 dark:text-gray-400 text-sm">
+                      or drop a file,
+                    </p>
+
+                    {!showUrlInput ? (
+                      <button
+                        onClick={(e) => { e.stopPropagation(); setShowUrlInput(true); }}
+                        className="text-sm text-gray-500 dark:text-gray-400"
+                      >
+                        paste image or{" "}
+                        <span className="text-violet-600 dark:text-violet-400 underline font-medium">URL</span>
+                      </button>
+                    ) : (
+                      <div className="flex gap-2 w-full" onClick={(e) => e.stopPropagation()}>
+                        <input
+                          type="url" value={urlInput} onChange={(e) => setUrlInput(e.target.value)}
+                          onKeyDown={(e) => e.key === "Enter" && handleUrlSubmit()}
+                          placeholder="https://example.com/image.jpg"
+                          className="flex-1 px-4 py-2 border border-gray-200 dark:border-gray-700 rounded-xl text-sm bg-white dark:bg-gray-900 text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 outline-none"
+                          autoFocus
+                        />
+                        <button onClick={handleUrlSubmit} disabled={urlLoading} className="px-4 py-2 bg-violet-600 text-white text-sm font-medium rounded-xl hover:bg-violet-700 disabled:opacity-50">{urlLoading ? "..." : "Go"}</button>
+                      </div>
+                    )}
+                    {urlError && <p className="text-xs text-red-500">{urlError}</p>}
+                  </div>
                 </div>
-                <button type="button" className="px-8 py-3.5 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-xl shadow-violet-500/25 hover:shadow-violet-500/40 hover:-translate-y-0.5">
-                  Choose File(s)
-                </button>
-                <p className="text-xs text-gray-400 dark:text-gray-500">PNG, JPG, WebP &middot; Up to 20MB</p>
+
+                {/* Sample images */}
+                <div className="animate-fade-up delay-300 mt-6 flex items-center gap-3 justify-center lg:justify-start">
+                  <p className="text-sm text-gray-500 dark:text-gray-400 font-medium">
+                    No image?<br />Try one of these:
+                  </p>
+                  <div className="flex gap-2">
+                    {SAMPLE_IMAGES.map((sample) => (
+                      <button
+                        key={sample.label}
+                        onClick={() => handleSampleImage(sample.src, sample.label)}
+                        className="w-12 h-12 rounded-xl overflow-hidden border-2 border-gray-200 dark:border-gray-700 hover:border-violet-400 transition-all hover:scale-110 hover:shadow-lg"
+                        title={`Try ${sample.label}`}
+                      >
+                        <img src={sample.src} alt={sample.label} className="w-full h-full object-cover" loading="lazy" />
+                      </button>
+                    ))}
+                  </div>
+                </div>
+
+                <p className="animate-fade-up delay-400 text-[11px] text-gray-400 dark:text-gray-500 text-center lg:text-left mt-4 max-w-md">
+                  By uploading an image you agree to our Terms of Service. Your images are processed locally and never uploaded to any server.
+                </p>
               </div>
             </div>
 
-            {/* URL Input */}
-            <div className="max-w-2xl mx-auto mt-6 animate-fade-up delay-400">
-              {!showUrlInput ? (
-                <button onClick={(e) => { e.stopPropagation(); setShowUrlInput(true); }} className="text-sm text-violet-600 dark:text-violet-400 hover:underline font-medium">
-                  Or paste an image URL
-                </button>
-              ) : (
-                <div className="flex gap-2 items-center">
-                  <input type="url" value={urlInput} onChange={(e) => setUrlInput(e.target.value)} onKeyDown={(e) => e.key === "Enter" && handleUrlSubmit()} placeholder="https://example.com/image.jpg" className="flex-1 px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-xl text-sm bg-white/80 dark:bg-gray-900/80 backdrop-blur-sm text-gray-900 dark:text-white focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none" autoFocus />
-                  <button onClick={handleUrlSubmit} disabled={urlLoading} className="px-4 py-2.5 bg-violet-600 text-white text-sm font-medium rounded-xl hover:bg-violet-700 disabled:opacity-50 transition-colors">{urlLoading ? "Loading..." : "Go"}</button>
-                  <button onClick={() => { setShowUrlInput(false); setUrlError(""); }} className="px-3 py-2.5 text-gray-500 text-sm">Cancel</button>
-                </div>
-              )}
-              {urlError && <p className="text-sm text-red-500 mt-2">{urlError}</p>}
-            </div>
-
-            {/* Stats */}
-            <div className="animate-fade-up delay-500 grid grid-cols-3 gap-6 max-w-lg mx-auto mt-14">
+            {/* Stats bar */}
+            <div className="animate-fade-up delay-500 mt-16 grid grid-cols-2 sm:grid-cols-4 gap-6 max-w-2xl mx-auto">
               {[
-                { value: "100%", label: "Free Forever" },
-                { value: "5s", label: "Avg Processing" },
-                { value: "100%", label: "Private & Secure" },
+                { value: "100%", label: "Free" },
+                { value: "5s", label: "Processing" },
+                { value: "100%", label: "Private" },
+                { value: "HD", label: "Quality" },
               ].map((stat) => (
                 <div key={stat.label} className="text-center">
                   <p className="text-2xl sm:text-3xl font-extrabold bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">{stat.value}</p>
-                  <p className="text-xs sm:text-sm text-gray-500 dark:text-gray-400 mt-1">{stat.label}</p>
+                  <p className="text-xs text-gray-500 dark:text-gray-400 mt-0.5 font-medium">{stat.label}</p>
                 </div>
               ))}
             </div>
-          </div>
+          </>
         ) : files.length === 1 ? (
           <ImageProcessor file={files[0]} onReset={handleReset} />
         ) : (
@@ -212,12 +307,12 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
       </div>
       <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
         {!processing && (
-          <button onClick={handleDownloadAll} className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-medium rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25 flex items-center justify-center gap-2">
+          <button onClick={handleDownloadAll} className="w-full sm:w-auto px-8 py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-medium rounded-xl shadow-lg shadow-violet-500/25 flex items-center justify-center gap-2">
             <svg className="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
             Download All
           </button>
         )}
-        <button onClick={onReset} className="w-full sm:w-auto px-8 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors">Start Over</button>
+        <button onClick={onReset} className="w-full sm:w-auto px-8 py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-medium rounded-xl">Start Over</button>
       </div>
     </div>
   );
