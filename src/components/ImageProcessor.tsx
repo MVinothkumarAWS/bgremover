@@ -398,24 +398,33 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
               <>
                 <div className="fixed inset-0 z-40" onClick={() => setShowDownloadDropdown(false)} />
                 <div className="absolute right-0 mt-2 w-64 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-fade-up">
+                  {/* Free download */}
                   <button onClick={dlFree} className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors border-b border-gray-100 dark:border-gray-800">
-                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M15 12a3 3 0 11-6 0 3 3 0 016 0z" /></svg>
+                    <svg className="w-5 h-5 text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4" /></svg>
                     <div className="flex-1 text-left">
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">Preview</p>
-                      <p className="text-[11px] text-gray-400">{previewW} x {previewH}</p>
+                      <p className="text-sm font-semibold text-gray-900 dark:text-white">{previewW} x {previewH}</p>
                     </div>
-                    <span className="px-2 py-0.5 bg-gray-100 dark:bg-gray-800 text-gray-500 text-[11px] font-bold rounded-full">Free</span>
+                    <span className="px-2.5 py-1 bg-gray-100 dark:bg-gray-800 text-gray-500 text-[11px] font-bold rounded-full">Free</span>
                   </button>
-                  <button onClick={dlHD} className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-violet-50 dark:hover:bg-violet-950/30 transition-colors">
-                    <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
-                    <div className="flex-1 text-left">
-                      <p className="text-sm font-semibold text-gray-900 dark:text-white">Max</p>
-                      <p className="text-[11px] text-gray-400">{originalDimensions.w} x {originalDimensions.h}</p>
-                    </div>
-                    {isSignedIn && isPro ? <span className="px-2 py-0.5 bg-green-100 text-green-600 text-[11px] font-bold rounded-full">Pro</span>
-                     : isSignedIn ? <span className="px-2 py-0.5 bg-violet-100 text-violet-600 text-[11px] font-bold rounded-full">{premiumState.credits} cr</span>
-                     : <span className="px-2 py-0.5 bg-amber-400 text-white text-[11px] font-bold rounded-full">Unlock</span>}
-                  </button>
+                  {/* HD download / Unlock */}
+                  {isSignedIn ? (
+                    <button onClick={dlHD} className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-violet-50 dark:hover:bg-violet-950/30 transition-colors">
+                      <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                      <div className="flex-1 text-left">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{originalDimensions.w} x {originalDimensions.h}</p>
+                      </div>
+                      {isPro ? <span className="px-2.5 py-1 bg-green-100 text-green-600 text-[11px] font-bold rounded-full">Pro</span>
+                       : <span className="px-2.5 py-1 bg-violet-100 text-violet-600 text-[11px] font-bold rounded-full">{premiumState.credits} credits</span>}
+                    </button>
+                  ) : (
+                    <a href="/pricing" className="w-full flex items-center gap-3 px-4 py-3.5 hover:bg-amber-50 dark:hover:bg-amber-950/20 transition-colors cursor-pointer">
+                      <svg className="w-5 h-5 text-amber-500" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" /></svg>
+                      <div className="flex-1 text-left">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white">{originalDimensions.w} x {originalDimensions.h}</p>
+                      </div>
+                      <span className="px-2.5 py-1 bg-amber-400 text-white text-[11px] font-bold rounded-full cursor-pointer hover:bg-amber-500 transition-colors">Unlock</span>
+                    </a>
+                  )}
                 </div>
               </>
             )}
@@ -588,13 +597,18 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
                 )}
                 <div className="pt-2 space-y-2">
                   <button onClick={dlFree} className="w-full py-3 bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 font-semibold rounded-xl hover:bg-gray-200 dark:hover:bg-gray-700 transition-colors text-sm">
-                    Download Preview <span className="text-gray-400 font-normal">({previewW}x{previewH})</span>
+                    Download <span className="text-gray-400 font-normal">{previewW} x {previewH}</span> <span className="text-[10px] bg-gray-200 dark:bg-gray-700 px-1.5 py-0.5 rounded-full ml-1">Free</span>
                   </button>
-                  <button onClick={dlHD} className="w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/20 text-sm flex items-center justify-center gap-2">
-                    Download HD <span className="text-violet-200">({originalDimensions.w}x{originalDimensions.h})</span>
-                    {!isSignedIn && <span className="px-1.5 py-0.5 bg-amber-400 text-white text-[10px] font-bold rounded">Unlock</span>}
-                    {isSignedIn && !isPro && <span className="px-1.5 py-0.5 bg-violet-200 text-violet-700 text-[10px] font-bold rounded">{premiumState.credits} credits</span>}
-                  </button>
+                  {isSignedIn ? (
+                    <button onClick={dlHD} className="w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/20 text-sm flex items-center justify-center gap-2">
+                      Download HD <span className="text-violet-200">{originalDimensions.w} x {originalDimensions.h}</span>
+                      {!isPro && <span className="px-1.5 py-0.5 bg-white/20 text-[10px] font-bold rounded">{premiumState.credits} cr</span>}
+                    </button>
+                  ) : (
+                    <a href="/pricing" className="w-full py-3 bg-gradient-to-r from-amber-500 to-orange-500 text-white font-semibold rounded-xl hover:from-amber-600 hover:to-orange-600 transition-all shadow-lg shadow-amber-500/20 text-sm flex items-center justify-center gap-2">
+                      Unlock HD <span className="text-amber-100">{originalDimensions.w} x {originalDimensions.h}</span>
+                    </a>
+                  )}
                 </div>
               </div>
             )}
