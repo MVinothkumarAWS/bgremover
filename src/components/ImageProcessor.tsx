@@ -280,8 +280,11 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   }, [composite, file.name, downloadFormat, previewW, previewH]);
 
   const dlHD = useCallback(async () => {
-    if (!isSignedIn) { setShowHDPrompt(true); return; }
-    if (!isPro && !useHDCredit()) { showUpgrade("HD Downloads"); return; }
+    // If auth is not configured, allow HD downloads for everyone
+    if (hasClerkKey) {
+      if (!isSignedIn) { setShowHDPrompt(true); return; }
+      if (!isPro && !useHDCredit()) { showUpgrade("HD Downloads"); return; }
+    }
     const d = await composite();
     const a = document.createElement("a"); a.href = d; a.download = `${file.name.replace(/\.[^.]+$/, "")}-hd.${downloadFormat}`; a.click();
     setShowDownloadDropdown(false); notify("HD downloaded!");
@@ -412,7 +415,8 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
                       <p className="text-sm font-semibold text-gray-900 dark:text-white">Max</p>
                       <p className="text-[11px] text-gray-400">{originalDimensions.w} x {originalDimensions.h}</p>
                     </div>
-                    {isPro ? <span className="px-2 py-0.5 bg-green-100 text-green-600 text-[11px] font-bold rounded-full">Pro</span>
+                    {!hasClerkKey ? <span className="px-2 py-0.5 bg-green-100 text-green-600 text-[11px] font-bold rounded-full">Free</span>
+                     : isPro ? <span className="px-2 py-0.5 bg-green-100 text-green-600 text-[11px] font-bold rounded-full">Pro</span>
                      : <span className="px-2 py-0.5 bg-amber-400 text-white text-[11px] font-bold rounded-full">Unlock</span>}
                   </button>
                 </div>
@@ -449,7 +453,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
             {activeTab === "edit" && (
               <div className="space-y-5">
                 <Section title="Touch Up">
-                  {canTouchUp ? (
+                  {(!hasClerkKey || canTouchUp) ? (
                     <>
                       <div className="flex gap-2">
                         <PillBtn active={activeTool === "erase"} onClick={() => setActiveTool(activeTool === "erase" ? "none" : "erase")}>Erase</PillBtn>
@@ -591,7 +595,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
                   </button>
                   <button onClick={dlHD} className="w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/20 text-sm flex items-center justify-center gap-2">
                     Download HD <span className="text-violet-200">({originalDimensions.w}x{originalDimensions.h})</span>
-                    {!isPro && <span className="px-1.5 py-0.5 bg-amber-400 text-white text-[10px] font-bold rounded">Unlock</span>}
+                    {hasClerkKey && !isPro && <span className="px-1.5 py-0.5 bg-amber-400 text-white text-[10px] font-bold rounded">Unlock</span>}
                   </button>
                 </div>
               </div>
