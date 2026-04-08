@@ -2,14 +2,14 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
+import { useLocalAuth } from "@/context/AuthContext";
 import DarkModeToggle from "./DarkModeToggle";
-import { useAuthSafe } from "@/hooks/useAuthSafe";
-import { hasClerkKey } from "./AuthProvider";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { isSignedIn } = useAuthSafe();
+  const [showUserMenu, setShowUserMenu] = useState(false);
+  const { user, isSignedIn, logout } = useLocalAuth();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -37,26 +37,59 @@ export default function Header() {
               { href: "#features", label: "Features" },
               { href: "#how-it-works", label: "How It Works" },
               { href: "#gallery", label: "Gallery" },
-            ].map((link) => (
+            ].map(link => (
               <a key={link.href} href={link.href} className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">{link.label}</a>
             ))}
             <Link href="/pricing" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Pricing</Link>
             <Link href="/api-docs" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">API</Link>
             <DarkModeToggle />
 
-            {hasClerkKey ? (
-              <AuthButtons isSignedIn={!!isSignedIn} />
+            {isSignedIn ? (
+              <div className="relative">
+                <button
+                  onClick={() => setShowUserMenu(!showUserMenu)}
+                  className="w-9 h-9 bg-gradient-to-br from-violet-500 to-indigo-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md hover:shadow-lg transition-shadow"
+                >
+                  {user?.name?.charAt(0).toUpperCase() || "U"}
+                </button>
+                {showUserMenu && (
+                  <>
+                    <div className="fixed inset-0 z-40" onClick={() => setShowUserMenu(false)} />
+                    <div className="absolute right-0 mt-2 w-56 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-fade-up">
+                      <div className="px-4 py-3 border-b border-gray-100 dark:border-gray-800">
+                        <p className="text-sm font-semibold text-gray-900 dark:text-white truncate">{user?.name}</p>
+                        <p className="text-xs text-gray-500 dark:text-gray-400 truncate">{user?.email}</p>
+                      </div>
+                      <Link href="/pricing" onClick={() => setShowUserMenu(false)} className="block px-4 py-2.5 text-sm text-gray-700 dark:text-gray-300 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors">
+                        My Plan
+                      </Link>
+                      <button onClick={() => { logout(); setShowUserMenu(false); }} className="w-full text-left px-4 py-2.5 text-sm text-red-600 hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors">
+                        Log out
+                      </button>
+                    </div>
+                  </>
+                )}
+              </div>
             ) : (
-              <a href="#upload" className="px-5 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25">
-                Upload Image
-              </a>
+              <div className="flex items-center gap-2">
+                <Link href="/login" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
+                  Log in
+                </Link>
+                <Link href="/signup" className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25">
+                  Sign up
+                </Link>
+              </div>
             )}
           </nav>
 
           <div className="flex md:hidden items-center gap-2">
             <DarkModeToggle />
-            {hasClerkKey && !isSignedIn && (
-              <MobileAuthButton />
+            {isSignedIn ? (
+              <button onClick={() => { logout(); }} className="w-8 h-8 bg-gradient-to-br from-violet-500 to-indigo-500 rounded-full flex items-center justify-center text-white text-xs font-bold">
+                {user?.name?.charAt(0).toUpperCase() || "U"}
+              </button>
+            ) : (
+              <Link href="/login" className="text-sm font-medium text-violet-600 dark:text-violet-400">Log in</Link>
             )}
             <button className="p-2" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle navigation menu" aria-expanded={menuOpen}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -78,37 +111,13 @@ export default function Header() {
               <a href="#gallery" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Gallery</a>
               <Link href="/pricing" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Pricing</Link>
               <Link href="/api-docs" className="text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>API</Link>
+              {!isSignedIn && (
+                <Link href="/signup" className="inline-flex items-center justify-center px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl" onClick={() => setMenuOpen(false)}>Sign up free</Link>
+              )}
             </div>
           </div>
         )}
       </div>
     </header>
-  );
-}
-
-function AuthButtons({ isSignedIn }: { isSignedIn: boolean }) {
-  // Dynamic import so Clerk components only load when keys exist
-  const { SignInButton, SignUpButton, UserButton } = require("@clerk/nextjs");
-  if (isSignedIn) {
-    return <UserButton appearance={{ elements: { avatarBox: "w-9 h-9" } }} />;
-  }
-  return (
-    <div className="flex items-center gap-2">
-      <SignInButton mode="modal">
-        <button className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Log in</button>
-      </SignInButton>
-      <SignUpButton mode="modal">
-        <button className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25">Sign up</button>
-      </SignUpButton>
-    </div>
-  );
-}
-
-function MobileAuthButton() {
-  const { SignInButton } = require("@clerk/nextjs");
-  return (
-    <SignInButton mode="modal">
-      <button className="text-sm font-medium text-violet-600 dark:text-violet-400">Log in</button>
-    </SignInButton>
   );
 }
