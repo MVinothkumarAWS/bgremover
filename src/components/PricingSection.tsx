@@ -172,12 +172,12 @@ export default function PricingSection() {
               key={plan.id}
               className={`rounded-2xl p-8 border ${
                 plan.highlighted
-                  ? "border-blue-600 bg-blue-50 dark:bg-blue-950/50 shadow-xl shadow-blue-600/10 relative"
+                  ? "border-violet-600 bg-violet-50 dark:bg-violet-950/50 shadow-xl shadow-violet-600/10 relative"
                   : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
               }`}
             >
               {plan.highlighted && (
-                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-blue-600 text-white text-xs font-bold rounded-full">
+                <div className="absolute -top-4 left-1/2 -translate-x-1/2 px-4 py-1 bg-violet-600 text-white text-xs font-bold rounded-full">
                   MOST POPULAR
                 </div>
               )}
@@ -195,7 +195,7 @@ export default function PricingSection() {
                   state.plan === plan.id
                     ? "bg-gray-200 dark:bg-gray-700 text-gray-500 dark:text-gray-400 cursor-not-allowed"
                     : plan.highlighted
-                    ? "bg-blue-600 text-white hover:bg-blue-700"
+                    ? "bg-violet-600 text-white hover:bg-violet-700"
                     : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
                 } ${processing === plan.id ? "opacity-60 cursor-wait" : ""}`}
               >
@@ -233,7 +233,7 @@ export default function PricingSection() {
             <p className="text-gray-600 dark:text-gray-400">
               Pay-as-you-go. 1 credit = 1 HD download. No subscription needed.
             </p>
-            <p className="text-sm text-blue-600 dark:text-blue-400 mt-2 font-medium">
+            <p className="text-sm text-violet-600 dark:text-violet-400 mt-2 font-medium">
               Your balance: {state.credits} credits
             </p>
           </div>
@@ -242,16 +242,16 @@ export default function PricingSection() {
             {creditPacks.map((pack) => (
               <div
                 key={pack.credits}
-                className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-5 text-center hover:border-blue-400 dark:hover:border-blue-500 transition-colors"
+                className="bg-white dark:bg-gray-900 border border-gray-200 dark:border-gray-700 rounded-xl p-5 text-center hover:border-violet-400 dark:hover:border-violet-500 transition-colors"
               >
                 <p className="text-3xl font-bold text-gray-900 dark:text-white">{pack.credits}</p>
                 <p className="text-xs text-gray-500 dark:text-gray-400 mb-2">credits</p>
-                <p className="text-lg font-bold text-blue-600 mb-1">{pack.price}</p>
+                <p className="text-lg font-bold text-violet-600 mb-1">{pack.price}</p>
                 <p className="text-xs text-gray-400 dark:text-gray-500 mb-4">{pack.perCredit}/credit</p>
                 <button
                   onClick={() => handleBuyCredits(pack.credits)}
                   disabled={processing === `credits_${pack.credits}`}
-                  className={`w-full py-2 text-sm font-medium bg-blue-600 text-white rounded-lg hover:bg-blue-700 transition-colors ${processing === `credits_${pack.credits}` ? "opacity-60 cursor-wait" : ""}`}
+                  className={`w-full py-2 text-sm font-medium bg-violet-600 text-white rounded-lg hover:bg-violet-700 transition-colors ${processing === `credits_${pack.credits}` ? "opacity-60 cursor-wait" : ""}`}
                 >
                   {processing === `credits_${pack.credits}` ? "Processing..." : "Buy Now"}
                 </button>
@@ -271,15 +271,15 @@ export default function PricingSection() {
             </p>
             <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-8">
               <div className="bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
-                <p className="text-3xl font-bold text-blue-600 mb-1">30%</p>
+                <p className="text-3xl font-bold text-violet-600 mb-1">30%</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Recurring Commission</p>
               </div>
               <div className="bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
-                <p className="text-3xl font-bold text-blue-600 mb-1">90 days</p>
+                <p className="text-3xl font-bold text-violet-600 mb-1">90 days</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Cookie Duration</p>
               </div>
               <div className="bg-white dark:bg-gray-900 rounded-xl p-5 border border-gray-100 dark:border-gray-800">
-                <p className="text-3xl font-bold text-blue-600 mb-1">Monthly</p>
+                <p className="text-3xl font-bold text-violet-600 mb-1">Monthly</p>
                 <p className="text-sm text-gray-600 dark:text-gray-400">Payouts via PayPal</p>
               </div>
             </div>

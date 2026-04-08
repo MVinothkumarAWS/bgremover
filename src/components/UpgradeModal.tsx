@@ -15,8 +15,8 @@ export default function UpgradeModal() {
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm" onClick={dismissUpgrade}>
       <div className="bg-white dark:bg-gray-900 rounded-2xl shadow-2xl max-w-md w-full p-8 text-center" onClick={(e) => e.stopPropagation()}>
-        <div className="w-16 h-16 bg-blue-100 dark:bg-blue-900 rounded-full flex items-center justify-center mx-auto mb-6">
-          <svg className="w-8 h-8 text-blue-600 dark:text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+        <div className="w-16 h-16 bg-violet-100 dark:bg-violet-900 rounded-full flex items-center justify-center mx-auto mb-6">
+          <svg className="w-8 h-8 text-violet-600 dark:text-violet-400" fill="none" stroke="currentColor" viewBox="0 0 24 24">
             <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M13 10V3L4 14h7v7l9-11h-7z" />
           </svg>
         </div>
@@ -25,7 +25,7 @@ export default function UpgradeModal() {
           Upgrade to Pro
         </h3>
         <p className="text-gray-600 dark:text-gray-400 mb-6">
-          <span className="font-semibold text-blue-600">{upgradePrompt}</span> is a Pro feature. Upgrade to unlock all premium features.
+          <span className="font-semibold text-violet-600">{upgradePrompt}</span> is a Pro feature. Upgrade to unlock all premium features.
         </p>
 
         <div className="bg-gray-50 dark:bg-gray-800 rounded-xl p-4 mb-6 text-left">
@@ -67,14 +67,14 @@ export default function UpgradeModal() {
               if (result.success) dismissUpgrade();
             }}
             disabled={paying}
-            className={`w-full py-3 bg-blue-600 text-white font-semibold rounded-xl hover:bg-blue-700 transition-colors ${paying ? "opacity-60 cursor-wait" : ""}`}
+            className={`w-full py-3 bg-gradient-to-r from-violet-600 to-indigo-600 text-white font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-colors ${paying ? "opacity-60 cursor-wait" : ""}`}
           >
             {paying ? "Processing..." : "Upgrade to Pro - ₹799/mo"}
           </button>
           <Link
             href="/pricing"
             onClick={dismissUpgrade}
-            className="w-full py-3 text-blue-600 dark:text-blue-400 text-sm font-medium hover:underline transition-colors text-center"
+            className="w-full py-3 text-violet-600 dark:text-violet-400 text-sm font-medium hover:underline transition-colors text-center"
           >
             View all plans
           </Link>

@@ -1,7 +1,8 @@
 "use client";
 
 import { useState, useEffect, useRef, useCallback } from "react";
-import { useAuth, SignInButton } from "@clerk/nextjs";
+import { useAuthSafe } from "@/hooks/useAuthSafe";
+import { hasClerkKey } from "./AuthProvider";
 import { usePremium } from "@/context/PremiumContext";
 import AdBanner from "./AdBanner";
 
@@ -52,7 +53,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   const [viewMode, setViewMode] = useState<"result" | "compare">("result");
 
   // Auth & Premium
-  const { isSignedIn } = useAuth();
+  const { isSignedIn } = useAuthSafe();
   const { isPro, canTouchUp, showUpgrade, state: premiumState, useHDCredit } = usePremium();
   const [showHDPrompt, setShowHDPrompt] = useState(false);
   const canDownloadHD = isSignedIn && (isPro || premiumState.credits > 0);
@@ -765,11 +766,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
                 <span className="font-bold">Sign up for free</span> to download HD images. Get 5 free HD credits!
               </p>
               <div className="flex items-center justify-center gap-3">
-                <SignInButton mode="modal">
-                  <button className="px-5 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-violet-500/25">
-                    Sign Up Free
-                  </button>
-                </SignInButton>
+                <HDSignUpButton />
                 <button onClick={() => setShowHDPrompt(false)} className="text-sm text-gray-500 hover:text-gray-700">
                   Maybe later
                 </button>
@@ -829,6 +826,24 @@ function ToolbarSection({ title, icon, open, onToggle, children }: {
 
 function tabClass(active: boolean) {
   return `flex-1 text-xs px-3 py-1.5 rounded-lg font-medium transition-colors ${active ? "bg-blue-600 text-white" : "bg-gray-100 dark:bg-gray-800 text-gray-600 dark:text-gray-400 hover:bg-gray-200 dark:hover:bg-gray-700"}`;
+}
+
+function HDSignUpButton() {
+  if (hasClerkKey) {
+    const { SignInButton } = require("@clerk/nextjs");
+    return (
+      <SignInButton mode="modal">
+        <button className="px-5 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 shadow-lg shadow-violet-500/25">
+          Sign Up Free
+        </button>
+      </SignInButton>
+    );
+  }
+  return (
+    <a href="/pricing" className="px-5 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl inline-block">
+      Sign Up Free
+    </a>
+  );
 }
 
 function loadImage(src: string): Promise<HTMLImageElement> {

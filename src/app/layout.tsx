@@ -1,6 +1,6 @@
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
-import { ClerkProvider } from "@clerk/nextjs";
+import { AuthProvider } from "@/components/AuthProvider";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { PremiumProvider } from "@/context/PremiumContext";
 import "./globals.css";
@@ -15,6 +15,23 @@ export const metadata: Metadata = {
   description:
     "Remove image backgrounds automatically in seconds. 100% free, no signup required. Powered by AI.",
   manifest: "/manifest.json",
+  keywords: ["background remover", "remove background", "AI background removal", "transparent PNG", "free background remover", "image editor"],
+  openGraph: {
+    title: "BG Remover - Remove Image Background Instantly",
+    description: "Professional AI background removal. 100% free, private, runs in your browser.",
+    url: "https://bgremover.k2techinfo.com",
+    siteName: "BG Remover",
+    type: "website",
+    locale: "en_US",
+  },
+  twitter: {
+    card: "summary_large_image",
+    title: "BG Remover - Remove Image Background Instantly",
+    description: "Professional AI background removal. 100% free, private, runs in your browser.",
+  },
+  alternates: {
+    canonical: "https://bgremover.k2techinfo.com",
+  },
 };
 
 export default function RootLayout({
@@ -25,11 +42,11 @@ export default function RootLayout({
   return (
     <html lang="en" className={`${inter.variable} h-full antialiased`} suppressHydrationWarning>
       <body className="min-h-full flex flex-col bg-white dark:bg-gray-950 text-gray-900 dark:text-gray-100 transition-colors">
-        <ClerkProvider>
+        <AuthProvider>
           <ThemeProvider>
             <PremiumProvider>{children}</PremiumProvider>
           </ThemeProvider>
-        </ClerkProvider>
+        </AuthProvider>
       </body>
     </html>
   );

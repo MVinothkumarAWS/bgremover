@@ -2,13 +2,14 @@
 
 import Link from "next/link";
 import { useState, useEffect } from "react";
-import { SignInButton, SignUpButton, UserButton, useAuth } from "@clerk/nextjs";
 import DarkModeToggle from "./DarkModeToggle";
+import { useAuthSafe } from "@/hooks/useAuthSafe";
+import { hasClerkKey } from "./AuthProvider";
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
-  const { isSignedIn } = useAuth();
+  const { isSignedIn } = useAuthSafe();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -43,38 +44,19 @@ export default function Header() {
             <Link href="/api-docs" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">API</Link>
             <DarkModeToggle />
 
-            {isSignedIn ? (
-              <UserButton
-                appearance={{
-                  elements: {
-                    avatarBox: "w-9 h-9",
-                  },
-                }}
-              />
+            {hasClerkKey ? (
+              <AuthButtons isSignedIn={!!isSignedIn} />
             ) : (
-              <div className="flex items-center gap-2">
-                <SignInButton mode="modal">
-                  <button className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
-                    Log in
-                  </button>
-                </SignInButton>
-                <SignUpButton mode="modal">
-                  <button className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25">
-                    Sign up
-                  </button>
-                </SignUpButton>
-              </div>
+              <a href="#upload" className="px-5 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25">
+                Upload Image
+              </a>
             )}
           </nav>
 
           <div className="flex md:hidden items-center gap-2">
             <DarkModeToggle />
-            {isSignedIn ? (
-              <UserButton appearance={{ elements: { avatarBox: "w-8 h-8" } }} />
-            ) : (
-              <SignInButton mode="modal">
-                <button className="text-sm font-medium text-violet-600 dark:text-violet-400">Log in</button>
-              </SignInButton>
+            {hasClerkKey && !isSignedIn && (
+              <MobileAuthButton />
             )}
             <button className="p-2" onClick={() => setMenuOpen(!menuOpen)} aria-label="Toggle navigation menu" aria-expanded={menuOpen}>
               <svg className="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
@@ -101,5 +83,32 @@ export default function Header() {
         )}
       </div>
     </header>
+  );
+}
+
+function AuthButtons({ isSignedIn }: { isSignedIn: boolean }) {
+  // Dynamic import so Clerk components only load when keys exist
+  const { SignInButton, SignUpButton, UserButton } = require("@clerk/nextjs");
+  if (isSignedIn) {
+    return <UserButton appearance={{ elements: { avatarBox: "w-9 h-9" } }} />;
+  }
+  return (
+    <div className="flex items-center gap-2">
+      <SignInButton mode="modal">
+        <button className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">Log in</button>
+      </SignInButton>
+      <SignUpButton mode="modal">
+        <button className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25">Sign up</button>
+      </SignUpButton>
+    </div>
+  );
+}
+
+function MobileAuthButton() {
+  const { SignInButton } = require("@clerk/nextjs");
+  return (
+    <SignInButton mode="modal">
+      <button className="text-sm font-medium text-violet-600 dark:text-violet-400">Log in</button>
+    </SignInButton>
   );
 }

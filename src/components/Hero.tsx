@@ -64,6 +64,23 @@ export default function Hero() {
     } finally { setUrlLoading(false); }
   }, [urlInput]);
 
+  // Clipboard paste (Ctrl+V)
+  useEffect(() => {
+    const handlePaste = (e: ClipboardEvent) => {
+      const items = e.clipboardData?.items;
+      if (!items) return;
+      for (const item of Array.from(items)) {
+        if (item.type.startsWith("image/")) {
+          const file = item.getAsFile();
+          if (file) { setFiles([file]); e.preventDefault(); }
+          return;
+        }
+      }
+    };
+    window.addEventListener("paste", handlePaste);
+    return () => window.removeEventListener("paste", handlePaste);
+  }, []);
+
   const handleSampleImage = useCallback(async (src: string, label: string) => {
     try {
       const res = await fetch(src.replace("w=80&h=80", "w=800&h=800"));

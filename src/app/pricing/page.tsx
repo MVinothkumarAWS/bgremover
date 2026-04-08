@@ -5,6 +5,11 @@ import PricingSection from "@/components/PricingSection";
 export const metadata = {
   title: "Pricing - BG Remover",
   description: "Choose the right plan for you. Start free, upgrade when you need more.",
+  openGraph: {
+    title: "Pricing - BG Remover",
+    description: "Free, Pro & Business plans. Start removing backgrounds today.",
+    url: "https://bgremover.k2techinfo.com/pricing",
+  },
 };
 
 export default function PricingPage() {

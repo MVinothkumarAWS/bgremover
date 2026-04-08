@@ -217,12 +217,12 @@ export default function ApiDocs() {
           <h2 className="text-2xl font-bold text-gray-900 dark:text-white mb-6">Quick Start</h2>
           <div className="space-y-4">
             <div className="flex items-start gap-4">
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">1</div>
+              <div className="w-8 h-8 bg-violet-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">1</div>
               <div>
                 <h3 className="font-semibold text-gray-900 dark:text-white">Get your API key</h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm mb-3">Click below to generate a free API key instantly.</p>
                 {!showKey ? (
-                  <button onClick={generateKey} className="px-4 py-2 bg-blue-600 text-white font-medium rounded-lg hover:bg-blue-700 transition-colors text-sm">
+                  <button onClick={generateKey} className="px-4 py-2 bg-violet-600 text-white font-medium rounded-lg hover:bg-violet-700 transition-colors text-sm">
                     Generate Free API Key
                   </button>
                 ) : (
@@ -238,7 +238,7 @@ export default function ApiDocs() {
               </div>
             </div>
             <div className="flex items-start gap-4">
-              <div className="w-8 h-8 bg-blue-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">2</div>
+              <div className="w-8 h-8 bg-violet-600 rounded-full flex items-center justify-center text-white font-bold text-sm flex-shrink-0">2</div>
               <div>
                 <h3 className="font-semibold text-gray-900 dark:text-white">Make your first request</h3>
                 <p className="text-gray-600 dark:text-gray-400 text-sm">Send an image to the API and get back a transparent PNG.</p>
@@ -357,7 +357,7 @@ export default function ApiDocs() {
                     onClick={() => setActiveTab(tab)}
                     className={`px-3 py-1.5 text-xs font-medium rounded-lg transition-colors capitalize ${
                       activeTab === tab
-                        ? "bg-blue-600 text-white"
+                        ? "bg-violet-600 text-white"
                         : "bg-gray-200 dark:bg-gray-700 text-gray-600 dark:text-gray-400 hover:bg-gray-300 dark:hover:bg-gray-600"
                     }`}
                   >
@@ -383,12 +383,12 @@ export default function ApiDocs() {
                 key={tier.name}
                 className={`rounded-xl p-6 border ${
                   tier.highlighted
-                    ? "border-blue-600 bg-blue-50 dark:bg-blue-950 shadow-lg shadow-blue-600/10"
+                    ? "border-violet-600 bg-violet-50 dark:bg-violet-950 shadow-lg shadow-violet-600/10"
                     : "border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-900"
                 }`}
               >
                 {tier.highlighted && (
-                  <div className="text-xs font-bold text-blue-600 dark:text-blue-400 mb-2">MOST POPULAR</div>
+                  <div className="text-xs font-bold text-violet-600 dark:text-violet-400 mb-2">MOST POPULAR</div>
                 )}
                 <h3 className="text-xl font-bold text-gray-900 dark:text-white">{tier.name}</h3>
                 <div className="mt-2 mb-4">
@@ -409,7 +409,7 @@ export default function ApiDocs() {
                   onClick={tier.name === "Free" && !showKey ? generateKey : undefined}
                   className={`w-full py-2 text-sm font-medium rounded-lg transition-colors ${
                     tier.highlighted
-                      ? "bg-blue-600 text-white hover:bg-blue-700"
+                      ? "bg-violet-600 text-white hover:bg-violet-700"
                       : "bg-gray-100 dark:bg-gray-800 text-gray-700 dark:text-gray-300 hover:bg-gray-200 dark:hover:bg-gray-700"
                   }`}
                 >
