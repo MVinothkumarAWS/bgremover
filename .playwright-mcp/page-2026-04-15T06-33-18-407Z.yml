@@ -1,0 +1,524 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - link "BGRemover" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img [ref=e7]
+        - generic [ref=e9]: BGRemover
+      - navigation [ref=e10]:
+        - button "Tools" [ref=e12]:
+          - text: Tools
+          - img [ref=e13]
+        - link "Features" [ref=e15] [cursor=pointer]:
+          - /url: /#features
+        - link "How It Works" [ref=e16] [cursor=pointer]:
+          - /url: /#how-it-works
+        - link "Pricing" [ref=e17] [cursor=pointer]:
+          - /url: /pricing
+        - link "API" [ref=e18] [cursor=pointer]:
+          - /url: /api-docs
+        - button "Switch to dark mode" [ref=e19]:
+          - img [ref=e20]
+        - generic [ref=e22]:
+          - link "Log in" [ref=e23] [cursor=pointer]:
+            - /url: /login
+          - link "Sign up" [ref=e24] [cursor=pointer]:
+            - /url: /signup
+  - main [ref=e25]:
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - generic [ref=e32]:
+          - generic [ref=e33]:
+            - img "Person with removed background" [ref=e34]
+            - img "Person with removed background" [ref=e35]
+            - img "Person with removed background" [ref=e36]
+            - generic [ref=e39]:
+              - button [ref=e40]
+              - button [ref=e41]
+              - button [ref=e42]
+          - heading "Remove Image Background" [level=1] [ref=e43]:
+            - text: Remove Image
+            - text: Background
+          - paragraph [ref=e44]:
+            - text: 100% Automatically and
+            - generic [ref=e45]: Free
+        - generic [ref=e46]:
+          - generic [ref=e48] [cursor=pointer]:
+            - button "Upload Image" [ref=e49]
+            - paragraph [ref=e50]: or drop a file,
+            - button "paste image or URL" [ref=e51]
+          - generic [ref=e52]:
+            - paragraph [ref=e53]:
+              - text: No image?
+              - text: "Try one of these:"
+            - generic [ref=e54]:
+              - button "Portrait" [ref=e55]:
+                - img "Portrait" [ref=e56]
+              - button "Pet" [ref=e57]:
+                - img "Pet" [ref=e58]
+              - button "Product" [ref=e59]:
+                - img "Product" [ref=e60]
+              - button "Car" [ref=e61]:
+                - img "Car" [ref=e62]
+          - paragraph [ref=e63]: By uploading an image you agree to our Terms of Service. Your images are processed locally and never uploaded to any server.
+      - generic [ref=e64]:
+        - generic [ref=e65]:
+          - paragraph [ref=e66]: 100%
+          - paragraph [ref=e67]: Free
+        - generic [ref=e68]:
+          - paragraph [ref=e69]: 5s
+          - paragraph [ref=e70]: Processing
+        - generic [ref=e71]:
+          - paragraph [ref=e72]: 100%
+          - paragraph [ref=e73]: Private
+        - generic [ref=e74]:
+          - paragraph [ref=e75]: HD
+          - paragraph [ref=e76]: Quality
+    - generic [ref=e81]:
+      - paragraph [ref=e82]: Advertisement
+      - paragraph [ref=e83]: "Ad Slot: after-hero"
+    - generic [ref=e86]:
+      - generic [ref=e87]:
+        - generic [ref=e88]: All Tools
+        - heading "Every Image Tool You Need" [level=2] [ref=e89]
+        - paragraph [ref=e90]: Compress, resize, crop, convert, watermark, and more — all free, all in your browser.
+      - generic [ref=e91]:
+        - button "All Tools" [ref=e92]
+        - button "Edit" [ref=e93]
+        - button "Optimize" [ref=e94]
+        - button "Convert" [ref=e95]
+        - button "Create" [ref=e96]
+        - button "Security" [ref=e97]
+        - button "Developer" [ref=e98]
+      - generic [ref=e99]:
+        - link "Remove Background Automatically remove image backgrounds with AI precision." [ref=e100] [cursor=pointer]:
+          - /url: /
+          - img [ref=e102]
+          - heading "Remove Background" [level=3] [ref=e104]
+          - paragraph [ref=e105]: Automatically remove image backgrounds with AI precision.
+        - link "Resize IMAGE Change image dimensions by pixels or percentage." [ref=e106] [cursor=pointer]:
+          - /url: /resize
+          - img [ref=e108]
+          - heading "Resize IMAGE" [level=3] [ref=e110]
+          - paragraph [ref=e111]: Change image dimensions by pixels or percentage.
+        - link "Crop IMAGE Trim and cut images with a visual cropper and aspect presets." [ref=e112] [cursor=pointer]:
+          - /url: /crop
+          - img [ref=e114]
+          - heading "Crop IMAGE" [level=3] [ref=e116]
+          - paragraph [ref=e117]: Trim and cut images with a visual cropper and aspect presets.
+        - link "Rotate IMAGE Rotate or flip images with one click." [ref=e118] [cursor=pointer]:
+          - /url: /rotate
+          - img [ref=e120]
+          - heading "Rotate IMAGE" [level=3] [ref=e122]
+          - paragraph [ref=e123]: Rotate or flip images with one click.
+        - link "Compress IMAGE Reduce file size while keeping the best quality. JPG, PNG, WebP." [ref=e124] [cursor=pointer]:
+          - /url: /compress
+          - img [ref=e126]
+          - heading "Compress IMAGE" [level=3] [ref=e128]
+          - paragraph [ref=e129]: Reduce file size while keeping the best quality. JPG, PNG, WebP.
+        - link "Upscale Image Enlarge and enhance images up to 4x with smart upscaling." [ref=e130] [cursor=pointer]:
+          - /url: /upscale
+          - img [ref=e132]
+          - heading "Upscale Image" [level=3] [ref=e134]
+          - paragraph [ref=e135]: Enlarge and enhance images up to 4x with smart upscaling.
+        - link "Convert to JPG Convert PNG, GIF, WebP, SVG and more to JPG format." [ref=e136] [cursor=pointer]:
+          - /url: /convert-to-jpg
+          - img [ref=e138]
+          - heading "Convert to JPG" [level=3] [ref=e140]
+          - paragraph [ref=e141]: Convert PNG, GIF, WebP, SVG and more to JPG format.
+        - link "Convert from JPG Convert JPG images to PNG, WebP, or GIF." [ref=e142] [cursor=pointer]:
+          - /url: /convert-from-jpg
+          - img [ref=e144]
+          - heading "Convert from JPG" [level=3] [ref=e146]
+          - paragraph [ref=e147]: Convert JPG images to PNG, WebP, or GIF.
+        - link "Image to PDF Convert multiple images into a single PDF document." [ref=e148] [cursor=pointer]:
+          - /url: /image-to-pdf
+          - img [ref=e150]
+          - heading "Image to PDF" [level=3] [ref=e152]
+          - paragraph [ref=e153]: Convert multiple images into a single PDF document.
+        - link "PDF to Image Convert PDF pages to JPG, PNG, or WebP images." [ref=e154] [cursor=pointer]:
+          - /url: /pdf-to-image
+          - img [ref=e156]
+          - heading "PDF to Image" [level=3] [ref=e158]
+          - paragraph [ref=e159]: Convert PDF pages to JPG, PNG, or WebP images.
+        - link "HTML to Image Render HTML/CSS code as a high-quality JPG or PNG image." [ref=e160] [cursor=pointer]:
+          - /url: /html-to-image
+          - img [ref=e162]
+          - heading "HTML to Image" [level=3] [ref=e164]
+          - paragraph [ref=e165]: Render HTML/CSS code as a high-quality JPG or PNG image.
+        - link "HTML to PDF Convert local HTML files or pasted HTML code to PDF." [ref=e166] [cursor=pointer]:
+          - /url: /html-to-pdf
+          - img [ref=e168]
+          - heading "HTML to PDF" [level=3] [ref=e170]
+          - paragraph [ref=e171]: Convert local HTML files or pasted HTML code to PDF.
+        - link "Photo Editor Adjust brightness, contrast, saturation, and apply filters." [ref=e172] [cursor=pointer]:
+          - /url: /photo-editor
+          - img [ref=e174]
+          - heading "Photo Editor" [level=3] [ref=e176]
+          - paragraph [ref=e177]: Adjust brightness, contrast, saturation, and apply filters.
+        - link "Meme Generator Create hilarious memes with custom captions and text." [ref=e178] [cursor=pointer]:
+          - /url: /meme-generator
+          - img [ref=e180]
+          - heading "Meme Generator" [level=3] [ref=e182]
+          - paragraph [ref=e183]: Create hilarious memes with custom captions and text.
+        - link "Collage Maker Combine multiple photos into beautiful grid collages." [ref=e184] [cursor=pointer]:
+          - /url: /collage
+          - img [ref=e186]
+          - heading "Collage Maker" [level=3] [ref=e188]
+          - paragraph [ref=e189]: Combine multiple photos into beautiful grid collages.
+        - link "Profile Picture Maker Create perfect circular profile pictures for any platform." [ref=e190] [cursor=pointer]:
+          - /url: /profile-picture
+          - img [ref=e192]
+          - heading "Profile Picture Maker" [level=3] [ref=e194]
+          - paragraph [ref=e195]: Create perfect circular profile pictures for any platform.
+        - link "GIF / Animation Maker Create animated previews and frame sequences from images." [ref=e196] [cursor=pointer]:
+          - /url: /gif-maker
+          - img [ref=e198]
+          - heading "GIF / Animation Maker" [level=3] [ref=e200]
+          - paragraph [ref=e201]: Create animated previews and frame sequences from images.
+        - link "Black & White Filters Convert images to grayscale, sepia, vintage, and duotone styles." [ref=e202] [cursor=pointer]:
+          - /url: /black-and-white
+          - img [ref=e204]
+          - heading "Black & White Filters" [level=3] [ref=e206]
+          - paragraph [ref=e207]: Convert images to grayscale, sepia, vintage, and duotone styles.
+        - link "Watermark IMAGE Protect images with text or image watermarks." [ref=e208] [cursor=pointer]:
+          - /url: /watermark
+          - img [ref=e210]
+          - heading "Watermark IMAGE" [level=3] [ref=e212]
+          - paragraph [ref=e213]: Protect images with text or image watermarks.
+        - link "Blur Face Blur faces, license plates, and sensitive areas in images." [ref=e214] [cursor=pointer]:
+          - /url: /blur-face
+          - img [ref=e216]
+          - heading "Blur Face" [level=3] [ref=e218]
+          - paragraph [ref=e219]: Blur faces, license plates, and sensitive areas in images.
+        - link "Image Splitter Split images into grid pieces for Instagram carousels & puzzles." [ref=e220] [cursor=pointer]:
+          - /url: /image-splitter
+          - img [ref=e222]
+          - heading "Image Splitter" [level=3] [ref=e224]
+          - paragraph [ref=e225]: Split images into grid pieces for Instagram carousels & puzzles.
+        - link "Color Picker Extract colors from images in HEX, RGB, and HSL formats." [ref=e226] [cursor=pointer]:
+          - /url: /color-picker
+          - img [ref=e228]
+          - heading "Color Picker" [level=3] [ref=e230]
+          - paragraph [ref=e231]: Extract colors from images in HEX, RGB, and HSL formats.
+        - link "Image to Base64 Convert images to Base64 encoded strings for developers." [ref=e232] [cursor=pointer]:
+          - /url: /image-to-base64
+          - img [ref=e234]
+          - heading "Image to Base64" [level=3] [ref=e236]
+          - paragraph [ref=e237]: Convert images to Base64 encoded strings for developers.
+    - generic [ref=e240]:
+      - generic [ref=e241]:
+        - generic [ref=e242]: Features
+        - heading "Everything You Need" [level=2] [ref=e243]
+        - paragraph [ref=e244]: Professional-grade tools for background removal, editing, and export.
+      - generic [ref=e245]:
+        - generic [ref=e246]:
+          - img [ref=e248]
+          - heading "Lightning Fast" [level=3] [ref=e250]
+          - paragraph [ref=e251]: Remove backgrounds in seconds with our AI engine. No waiting, no delays.
+        - generic [ref=e252]:
+          - img [ref=e254]
+          - heading "100% Private" [level=3] [ref=e256]
+          - paragraph [ref=e257]: All processing in your browser. Images never leave your device.
+        - generic [ref=e258]:
+          - img [ref=e260]
+          - heading "Completely Free" [level=3] [ref=e262]
+          - paragraph [ref=e263]: No signup, no watermarks, no limits. Use as much as you want.
+        - generic [ref=e264]:
+          - img [ref=e266]
+          - heading "Batch Processing" [level=3] [ref=e268]
+          - paragraph [ref=e269]: Upload multiple images and process them all simultaneously.
+        - generic [ref=e270]:
+          - img [ref=e272]
+          - heading "Touch-Up Editor" [level=3] [ref=e274]
+          - paragraph [ref=e275]: Fine-tune results with erase and restore brush tools.
+        - generic [ref=e276]:
+          - img [ref=e278]
+          - heading "Custom Backgrounds" [level=3] [ref=e280]
+          - paragraph [ref=e281]: Choose colors, upload images, or blur the original background.
+        - generic [ref=e282]:
+          - img [ref=e284]
+          - heading "Text & Effects" [level=3] [ref=e286]
+          - paragraph [ref=e287]: Add text overlays, shadows, and effects to create ready-to-use graphics.
+        - generic [ref=e288]:
+          - img [ref=e290]
+          - heading "Preset Templates" [level=3] [ref=e292]
+          - paragraph [ref=e293]: Resize for Instagram, YouTube, LinkedIn, e-commerce and more.
+        - generic [ref=e294]:
+          - img [ref=e296]
+          - heading "Multi-Format Export" [level=3] [ref=e298]
+          - paragraph [ref=e299]: Download as PNG, JPG, or WebP with customizable quality.
+    - generic [ref=e304]:
+      - paragraph [ref=e305]: Advertisement
+      - paragraph [ref=e306]: "Ad Slot: after-features"
+    - generic [ref=e308]:
+      - generic [ref=e309]:
+        - generic [ref=e310]: How It Works
+        - heading "Four Simple Steps" [level=2] [ref=e311]
+      - generic [ref=e312]:
+        - generic [ref=e313]:
+          - generic [ref=e315]:
+            - img [ref=e316]
+            - generic [ref=e318]: "1"
+          - heading "Upload" [level=3] [ref=e319]
+          - paragraph [ref=e320]: Drag & drop, browse, paste URL, or upload multiple for batch.
+        - generic [ref=e321]:
+          - generic [ref=e323]:
+            - img [ref=e324]
+            - generic [ref=e326]: "2"
+          - heading "AI Processes" [level=3] [ref=e327]
+          - paragraph [ref=e328]: Our AI removes the background in your browser. Nothing uploaded.
+        - generic [ref=e329]:
+          - generic [ref=e331]:
+            - img [ref=e332]
+            - generic [ref=e334]: "3"
+          - heading "Edit & Customize" [level=3] [ref=e335]
+          - paragraph [ref=e336]: Change backgrounds, add effects, touch up edges, overlay text.
+        - generic [ref=e337]:
+          - generic [ref=e338]:
+            - img [ref=e339]
+            - generic [ref=e341]: "4"
+          - heading "Download" [level=3] [ref=e342]
+          - paragraph [ref=e343]: Export as PNG, JPG, or WebP. Share directly or download.
+    - generic [ref=e346]:
+      - generic [ref=e347]:
+        - generic [ref=e348]: Gallery
+        - heading "Works With Everything" [level=2] [ref=e349]
+        - paragraph [ref=e350]: People, pets, products, cars and more. Our AI handles them all with precision.
+      - generic [ref=e351]:
+        - generic [ref=e353] [cursor=pointer]:
+          - img "Portraits" [ref=e354]
+          - generic [ref=e356]:
+            - paragraph [ref=e357]: Portraits
+            - paragraph [ref=e358]: Perfect headshots
+        - generic [ref=e360] [cursor=pointer]:
+          - img "Pets" [ref=e361]
+          - generic [ref=e363]:
+            - paragraph [ref=e364]: Pets
+            - paragraph [ref=e365]: Fur & fine edges
+        - generic [ref=e367] [cursor=pointer]:
+          - img "Cars" [ref=e368]
+          - generic [ref=e370]:
+            - paragraph [ref=e371]: Cars
+            - paragraph [ref=e372]: Clean cutouts
+        - generic [ref=e374] [cursor=pointer]:
+          - img "Products" [ref=e375]
+          - generic [ref=e377]:
+            - paragraph [ref=e378]: Products
+            - paragraph [ref=e379]: E-commerce ready
+        - generic [ref=e381] [cursor=pointer]:
+          - img "Animals" [ref=e382]
+          - generic [ref=e384]:
+            - paragraph [ref=e385]: Animals
+            - paragraph [ref=e386]: Complex shapes
+        - generic [ref=e388] [cursor=pointer]:
+          - img "Food" [ref=e389]
+          - generic [ref=e391]:
+            - paragraph [ref=e392]: Food
+            - paragraph [ref=e393]: Detailed edges
+      - link "Try It Yourself" [ref=e395] [cursor=pointer]:
+        - /url: /#upload
+        - text: Try It Yourself
+        - img [ref=e396]
+    - generic [ref=e402]:
+      - paragraph [ref=e403]: Advertisement
+      - paragraph [ref=e404]: "Ad Slot: after-gallery"
+    - generic [ref=e407]:
+      - generic [ref=e408]:
+        - generic [ref=e409]: Testimonials
+        - heading "Loved by Thousands" [level=2] [ref=e410]
+      - generic [ref=e411]:
+        - generic [ref=e413]:
+          - generic [ref=e414]:
+            - generic [ref=e415]: SC
+            - generic [ref=e416]:
+              - paragraph [ref=e417]: Sarah Chen
+              - paragraph [ref=e418]: E-commerce Seller
+          - generic [ref=e419]:
+            - img [ref=e420]
+            - img [ref=e422]
+            - img [ref=e424]
+            - img [ref=e426]
+            - img [ref=e428]
+          - paragraph [ref=e430]: “I used to spend hours in Photoshop. BG Remover does it in seconds. My product listings look so much more professional now.”
+        - generic [ref=e432]:
+          - generic [ref=e433]:
+            - generic [ref=e434]: AR
+            - generic [ref=e435]:
+              - paragraph [ref=e436]: Alex Rivera
+              - paragraph [ref=e437]: Graphic Designer
+          - generic [ref=e438]:
+            - img [ref=e439]
+            - img [ref=e441]
+            - img [ref=e443]
+            - img [ref=e445]
+            - img [ref=e447]
+          - paragraph [ref=e449]: “Everything runs in my browser - no uploading sensitive client images to unknown servers. The batch processing saves me hours.”
+        - generic [ref=e451]:
+          - generic [ref=e452]:
+            - generic [ref=e453]: PS
+            - generic [ref=e454]:
+              - paragraph [ref=e455]: Priya Sharma
+              - paragraph [ref=e456]: Content Creator
+          - generic [ref=e457]:
+            - img [ref=e458]
+            - img [ref=e460]
+            - img [ref=e462]
+            - img [ref=e464]
+            - img [ref=e466]
+          - paragraph [ref=e468]: “I create thumbnails for YouTube and this tool is perfect. The touch-up brush and text overlay mean I barely need any other editor.”
+        - generic [ref=e470]:
+          - generic [ref=e471]:
+            - generic [ref=e472]: JW
+            - generic [ref=e473]:
+              - paragraph [ref=e474]: James Wilson
+              - paragraph [ref=e475]: Real Estate Agent
+          - generic [ref=e476]:
+            - img [ref=e477]
+            - img [ref=e479]
+            - img [ref=e481]
+            - img [ref=e483]
+            - img [ref=e485]
+          - paragraph [ref=e487]: “I use this for property headshots and marketing materials. The preset templates for social media sizes are incredibly convenient.”
+        - generic [ref=e489]:
+          - generic [ref=e490]:
+            - generic [ref=e491]: MG
+            - generic [ref=e492]:
+              - paragraph [ref=e493]: Maria Gonzalez
+              - paragraph [ref=e494]: Small Business Owner
+          - generic [ref=e495]:
+            - img [ref=e496]
+            - img [ref=e498]
+            - img [ref=e500]
+            - img [ref=e502]
+            - img [ref=e504]
+          - paragraph [ref=e506]: “Finally a free tool that actually delivers. No watermarks, no limits, no catch. I've recommended it to everyone.”
+        - generic [ref=e508]:
+          - generic [ref=e509]:
+            - generic [ref=e510]: DK
+            - generic [ref=e511]:
+              - paragraph [ref=e512]: David Kim
+              - paragraph [ref=e513]: Photographer
+          - generic [ref=e514]:
+            - img [ref=e515]
+            - img [ref=e517]
+            - img [ref=e519]
+            - img [ref=e521]
+            - img [ref=e523]
+          - paragraph [ref=e525]: “The AI handles complex edges like hair and fur remarkably well. The blur background feature creates beautiful depth-of-field effects.”
+  - contentinfo [ref=e526]:
+    - generic [ref=e528]:
+      - generic [ref=e529]:
+        - generic [ref=e530]:
+          - generic [ref=e531]:
+            - img [ref=e533]
+            - generic [ref=e535]: BGRemover
+          - paragraph [ref=e536]: Professional AI-powered image tools that run 100% in your browser. Compress, resize, crop, convert, watermark, and more — no uploads, no servers.
+        - generic [ref=e537]:
+          - heading "Image Tools" [level=4] [ref=e538]
+          - list [ref=e539]:
+            - listitem [ref=e540]:
+              - link "Remove Background" [ref=e541] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e542]:
+              - link "Resize IMAGE" [ref=e543] [cursor=pointer]:
+                - /url: /resize
+            - listitem [ref=e544]:
+              - link "Crop IMAGE" [ref=e545] [cursor=pointer]:
+                - /url: /crop
+            - listitem [ref=e546]:
+              - link "Rotate IMAGE" [ref=e547] [cursor=pointer]:
+                - /url: /rotate
+            - listitem [ref=e548]:
+              - link "Compress IMAGE" [ref=e549] [cursor=pointer]:
+                - /url: /compress
+            - listitem [ref=e550]:
+              - link "Upscale Image" [ref=e551] [cursor=pointer]:
+                - /url: /upscale
+            - listitem [ref=e552]:
+              - link "Convert to JPG" [ref=e553] [cursor=pointer]:
+                - /url: /convert-to-jpg
+        - generic [ref=e554]:
+          - heading "More Tools" [level=4] [ref=e555]
+          - list [ref=e556]:
+            - listitem [ref=e557]:
+              - link "Convert from JPG" [ref=e558] [cursor=pointer]:
+                - /url: /convert-from-jpg
+            - listitem [ref=e559]:
+              - link "Image to PDF" [ref=e560] [cursor=pointer]:
+                - /url: /image-to-pdf
+            - listitem [ref=e561]:
+              - link "PDF to Image" [ref=e562] [cursor=pointer]:
+                - /url: /pdf-to-image
+            - listitem [ref=e563]:
+              - link "HTML to Image" [ref=e564] [cursor=pointer]:
+                - /url: /html-to-image
+            - listitem [ref=e565]:
+              - link "HTML to PDF" [ref=e566] [cursor=pointer]:
+                - /url: /html-to-pdf
+            - listitem [ref=e567]:
+              - link "Photo Editor" [ref=e568] [cursor=pointer]:
+                - /url: /photo-editor
+            - listitem [ref=e569]:
+              - link "Meme Generator" [ref=e570] [cursor=pointer]:
+                - /url: /meme-generator
+            - listitem [ref=e571]:
+              - link "Collage Maker" [ref=e572] [cursor=pointer]:
+                - /url: /collage
+            - listitem [ref=e573]:
+              - link "Profile Picture Maker" [ref=e574] [cursor=pointer]:
+                - /url: /profile-picture
+            - listitem [ref=e575]:
+              - link "GIF / Animation Maker" [ref=e576] [cursor=pointer]:
+                - /url: /gif-maker
+            - listitem [ref=e577]:
+              - link "Black & White Filters" [ref=e578] [cursor=pointer]:
+                - /url: /black-and-white
+            - listitem [ref=e579]:
+              - link "Watermark IMAGE" [ref=e580] [cursor=pointer]:
+                - /url: /watermark
+            - listitem [ref=e581]:
+              - link "Blur Face" [ref=e582] [cursor=pointer]:
+                - /url: /blur-face
+            - listitem [ref=e583]:
+              - link "Image Splitter" [ref=e584] [cursor=pointer]:
+                - /url: /image-splitter
+            - listitem [ref=e585]:
+              - link "Color Picker" [ref=e586] [cursor=pointer]:
+                - /url: /color-picker
+            - listitem [ref=e587]:
+              - link "Image to Base64" [ref=e588] [cursor=pointer]:
+                - /url: /image-to-base64
+        - generic [ref=e589]:
+          - heading "Product" [level=4] [ref=e590]
+          - list [ref=e591]:
+            - listitem [ref=e592]:
+              - link "Features" [ref=e593] [cursor=pointer]:
+                - /url: /#features
+            - listitem [ref=e594]:
+              - link "How It Works" [ref=e595] [cursor=pointer]:
+                - /url: /#how-it-works
+            - listitem [ref=e596]:
+              - link "Pricing" [ref=e597] [cursor=pointer]:
+                - /url: /pricing
+            - listitem [ref=e598]:
+              - link "API Docs" [ref=e599] [cursor=pointer]:
+                - /url: /api-docs
+            - listitem [ref=e600]:
+              - link "Gallery" [ref=e601] [cursor=pointer]:
+                - /url: /#gallery
+      - generic [ref=e602]:
+        - paragraph [ref=e603]: © 2026 BG Remover. All rights reserved.
+        - paragraph [ref=e604]:
+          - text: Powered by
+          - link "K2 TechInfo" [ref=e605] [cursor=pointer]:
+            - /url: https://k2techinfo.com
+        - paragraph [ref=e606]: All processing is done locally in your browser.
+  - button "Open Next.js Dev Tools" [ref=e612] [cursor=pointer]:
+    - generic [ref=e615]:
+      - text: Compiling
+      - generic [ref=e616]:
+        - generic [ref=e617]: .
+        - generic [ref=e618]: .
+        - generic [ref=e619]: .
+  - alert [ref=e620]

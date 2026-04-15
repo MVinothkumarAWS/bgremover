@@ -1,0 +1,222 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - link "BGRemover" [ref=e5] [cursor=pointer]:
+        - /url: /
+        - img [ref=e7]
+        - generic [ref=e9]: BGRemover
+      - navigation [ref=e10]:
+        - button "Tools" [ref=e12]:
+          - text: Tools
+          - img [ref=e13]
+        - link "Features" [ref=e15] [cursor=pointer]:
+          - /url: /#features
+        - link "How It Works" [ref=e16] [cursor=pointer]:
+          - /url: /#how-it-works
+        - link "Pricing" [ref=e17] [cursor=pointer]:
+          - /url: /pricing
+        - link "API" [ref=e18] [cursor=pointer]:
+          - /url: /api-docs
+        - button "Switch to dark mode" [ref=e19]:
+          - img [ref=e20]
+        - generic [ref=e22]:
+          - link "Log in" [ref=e23] [cursor=pointer]:
+            - /url: /login
+          - link "Sign up" [ref=e24] [cursor=pointer]:
+            - /url: /signup
+  - main [ref=e25]:
+    - generic [ref=e30]:
+      - generic [ref=e31]:
+        - heading "Profile Picture Maker" [level=1] [ref=e32]
+        - paragraph [ref=e33]: Create perfectly sized profile pictures for any platform. Crop, zoom, and download — all in your browser.
+      - generic [ref=e34]:
+        - generic [ref=e124]:
+          - generic [ref=e125]:
+            - generic [ref=e126]:
+              - paragraph [ref=e127]: Output Size
+              - paragraph [ref=e128]: 400 x 400 px
+            - button "Upload different photo" [ref=e129]
+          - generic [ref=e130]:
+            - generic [ref=e131]:
+              - paragraph [ref=e132]: Drag to reposition · Scroll or use slider to zoom
+              - generic [ref=e136]:
+                - generic [ref=e137]:
+                  - generic [ref=e138]: Zoom
+                  - generic [ref=e139]: 1.00x
+                - slider [ref=e140] [cursor=pointer]: "1"
+                - generic [ref=e141]:
+                  - generic [ref=e142]: 1x
+                  - generic [ref=e143]: 2x
+                  - generic [ref=e144]: 3x
+            - generic [ref=e145]:
+              - generic [ref=e146]:
+                - generic [ref=e147]: Platform Size
+                - generic [ref=e148]:
+                  - button "Instagram 320x320" [ref=e149]:
+                    - generic [ref=e150]: Instagram
+                    - generic [ref=e151]: 320x320
+                  - button "Facebook 170x170" [ref=e152]:
+                    - generic [ref=e153]: Facebook
+                    - generic [ref=e154]: 170x170
+                  - button "Twitter/X 400x400" [ref=e155]:
+                    - generic [ref=e156]: Twitter/X
+                    - generic [ref=e157]: 400x400
+                  - button "LinkedIn 400x400" [ref=e158]:
+                    - generic [ref=e159]: LinkedIn
+                    - generic [ref=e160]: 400x400
+                  - button "YouTube 800x800" [ref=e161]:
+                    - generic [ref=e162]: YouTube
+                    - generic [ref=e163]: 800x800
+                  - button "TikTok 200x200" [ref=e164]:
+                    - generic [ref=e165]: TikTok
+                    - generic [ref=e166]: 200x200
+                  - button "WhatsApp 500x500" [ref=e167]:
+                    - generic [ref=e168]: WhatsApp
+                    - generic [ref=e169]: 500x500
+                  - button "Custom any size" [ref=e170]:
+                    - generic [ref=e171]: Custom
+                    - generic [ref=e172]: any size
+              - generic [ref=e173]:
+                - generic [ref=e174]: Output Shape
+                - generic [ref=e175]:
+                  - button "Circle" [ref=e176]: Circle
+                  - button "Square" [ref=e178]: Square
+                - paragraph [ref=e180]: Circle output uses transparent PNG background
+              - button "Reset Position & Zoom" [ref=e181]
+              - button "Download 400x400 PNG" [ref=e182]:
+                - generic [ref=e183]:
+                  - img [ref=e184]
+                  - text: Download 400x400 PNG
+        - generic [ref=e35]:
+          - heading "Platform Size Guide" [level=2] [ref=e186]
+          - generic [ref=e187]:
+            - generic [ref=e188]:
+              - paragraph [ref=e189]: Instagram
+              - paragraph [ref=e190]: 320x320px
+            - generic [ref=e191]:
+              - paragraph [ref=e192]: Facebook
+              - paragraph [ref=e193]: 170x170px
+            - generic [ref=e194]:
+              - paragraph [ref=e195]: Twitter/X
+              - paragraph [ref=e196]: 400x400px
+            - generic [ref=e197]:
+              - paragraph [ref=e198]: LinkedIn
+              - paragraph [ref=e199]: 400x400px
+            - generic [ref=e200]:
+              - paragraph [ref=e201]: YouTube
+              - paragraph [ref=e202]: 800x800px
+            - generic [ref=e203]:
+              - paragraph [ref=e204]: TikTok
+              - paragraph [ref=e205]: 200x200px
+            - generic [ref=e206]:
+              - paragraph [ref=e207]: WhatsApp
+              - paragraph [ref=e208]: 500x500px
+  - contentinfo [ref=e42]:
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - generic [ref=e47]:
+            - img [ref=e49]
+            - generic [ref=e51]: BGRemover
+          - paragraph [ref=e52]: Professional AI-powered image tools that run 100% in your browser. Compress, resize, crop, convert, watermark, and more — no uploads, no servers.
+        - generic [ref=e53]:
+          - heading "Image Tools" [level=4] [ref=e54]
+          - list [ref=e55]:
+            - listitem [ref=e56]:
+              - link "Remove Background" [ref=e57] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e58]:
+              - link "Resize IMAGE" [ref=e59] [cursor=pointer]:
+                - /url: /resize
+            - listitem [ref=e60]:
+              - link "Crop IMAGE" [ref=e61] [cursor=pointer]:
+                - /url: /crop
+            - listitem [ref=e62]:
+              - link "Rotate IMAGE" [ref=e63] [cursor=pointer]:
+                - /url: /rotate
+            - listitem [ref=e64]:
+              - link "Compress IMAGE" [ref=e65] [cursor=pointer]:
+                - /url: /compress
+            - listitem [ref=e66]:
+              - link "Upscale Image" [ref=e67] [cursor=pointer]:
+                - /url: /upscale
+            - listitem [ref=e68]:
+              - link "Convert to JPG" [ref=e69] [cursor=pointer]:
+                - /url: /convert-to-jpg
+        - generic [ref=e70]:
+          - heading "More Tools" [level=4] [ref=e71]
+          - list [ref=e72]:
+            - listitem [ref=e73]:
+              - link "Convert from JPG" [ref=e74] [cursor=pointer]:
+                - /url: /convert-from-jpg
+            - listitem [ref=e75]:
+              - link "Image to PDF" [ref=e76] [cursor=pointer]:
+                - /url: /image-to-pdf
+            - listitem [ref=e77]:
+              - link "PDF to Image" [ref=e78] [cursor=pointer]:
+                - /url: /pdf-to-image
+            - listitem [ref=e79]:
+              - link "HTML to Image" [ref=e80] [cursor=pointer]:
+                - /url: /html-to-image
+            - listitem [ref=e81]:
+              - link "HTML to PDF" [ref=e82] [cursor=pointer]:
+                - /url: /html-to-pdf
+            - listitem [ref=e83]:
+              - link "Photo Editor" [ref=e84] [cursor=pointer]:
+                - /url: /photo-editor
+            - listitem [ref=e85]:
+              - link "Meme Generator" [ref=e86] [cursor=pointer]:
+                - /url: /meme-generator
+            - listitem [ref=e87]:
+              - link "Collage Maker" [ref=e88] [cursor=pointer]:
+                - /url: /collage
+            - listitem [ref=e89]:
+              - link "Profile Picture Maker" [ref=e90] [cursor=pointer]:
+                - /url: /profile-picture
+            - listitem [ref=e91]:
+              - link "GIF / Animation Maker" [ref=e92] [cursor=pointer]:
+                - /url: /gif-maker
+            - listitem [ref=e93]:
+              - link "Black & White Filters" [ref=e94] [cursor=pointer]:
+                - /url: /black-and-white
+            - listitem [ref=e95]:
+              - link "Watermark IMAGE" [ref=e96] [cursor=pointer]:
+                - /url: /watermark
+            - listitem [ref=e97]:
+              - link "Blur Face" [ref=e98] [cursor=pointer]:
+                - /url: /blur-face
+            - listitem [ref=e99]:
+              - link "Image Splitter" [ref=e100] [cursor=pointer]:
+                - /url: /image-splitter
+            - listitem [ref=e101]:
+              - link "Color Picker" [ref=e102] [cursor=pointer]:
+                - /url: /color-picker
+            - listitem [ref=e103]:
+              - link "Image to Base64" [ref=e104] [cursor=pointer]:
+                - /url: /image-to-base64
+        - generic [ref=e105]:
+          - heading "Product" [level=4] [ref=e106]
+          - list [ref=e107]:
+            - listitem [ref=e108]:
+              - link "Features" [ref=e109] [cursor=pointer]:
+                - /url: /#features
+            - listitem [ref=e110]:
+              - link "How It Works" [ref=e111] [cursor=pointer]:
+                - /url: /#how-it-works
+            - listitem [ref=e112]:
+              - link "Pricing" [ref=e113] [cursor=pointer]:
+                - /url: /pricing
+            - listitem [ref=e114]:
+              - link "API Docs" [ref=e115] [cursor=pointer]:
+                - /url: /api-docs
+            - listitem [ref=e116]:
+              - link "Gallery" [ref=e117] [cursor=pointer]:
+                - /url: /#gallery
+      - generic [ref=e118]:
+        - paragraph [ref=e119]: © 2026 BG Remover. All rights reserved.
+        - paragraph [ref=e120]:
+          - text: Powered by
+          - link "K2 TechInfo" [ref=e121] [cursor=pointer]:
+            - /url: https://k2techinfo.com
+        - paragraph [ref=e122]: All processing is done locally in your browser.
+  - alert [ref=e123]

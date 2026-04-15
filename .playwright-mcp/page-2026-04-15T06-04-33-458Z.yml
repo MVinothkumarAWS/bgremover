@@ -1,0 +1,156 @@
+- generic [active] [ref=e1]:
+  - generic [ref=e2]:
+    - banner [ref=e3]:
+      - generic [ref=e5]:
+        - link "BGRemover" [ref=e6] [cursor=pointer]:
+          - /url: /
+          - img [ref=e8]
+          - generic [ref=e10]: BGRemover
+        - navigation [ref=e11]:
+          - button "Tools" [ref=e13]:
+            - text: Tools
+            - img [ref=e14]
+          - link "Features" [ref=e16] [cursor=pointer]:
+            - /url: /#features
+          - link "How It Works" [ref=e17] [cursor=pointer]:
+            - /url: /#how-it-works
+          - link "Pricing" [ref=e18] [cursor=pointer]:
+            - /url: /pricing
+          - link "API" [ref=e19] [cursor=pointer]:
+            - /url: /api-docs
+          - button "Switch to dark mode" [ref=e20]:
+            - img [ref=e21]
+          - generic [ref=e23]:
+            - link "Log in" [ref=e24] [cursor=pointer]:
+              - /url: /login
+            - link "Sign up" [ref=e25] [cursor=pointer]:
+              - /url: /signup
+    - main [ref=e26]:
+      - generic [ref=e27]:
+        - heading "Photo Collage Maker" [level=1] [ref=e28]
+        - paragraph [ref=e29]: Combine multiple photos into beautiful collages. Choose a layout, customise borders and colours, then download your creation.
+      - button "Drop images here or click to upload Upload at least 2 images to get started" [ref=e30] [cursor=pointer]:
+        - img [ref=e31]
+        - paragraph [ref=e33]: Drop images here or click to upload
+        - paragraph [ref=e34]: Upload at least 2 images to get started
+      - generic [ref=e35]:
+        - heading "How It Works" [level=2] [ref=e36]
+        - generic [ref=e37]:
+          - generic [ref=e38]:
+            - heading "1. Upload Photos" [level=3] [ref=e39]
+            - paragraph [ref=e40]: Drag and drop or click to add at least two images.
+          - generic [ref=e41]:
+            - heading "2. Pick a Layout" [level=3] [ref=e42]
+            - paragraph [ref=e43]: Choose from 8 grid presets and adjust borders and colours.
+          - generic [ref=e44]:
+            - heading "3. Download" [level=3] [ref=e45]
+            - paragraph [ref=e46]: Export your collage as a high-quality PNG or JPG.
+    - contentinfo [ref=e47]:
+      - generic [ref=e49]:
+        - generic [ref=e50]:
+          - generic [ref=e51]:
+            - generic [ref=e52]:
+              - img [ref=e54]
+              - generic [ref=e56]: BGRemover
+            - paragraph [ref=e57]: Professional AI-powered image tools that run 100% in your browser. Compress, resize, crop, convert, watermark, and more — no uploads, no servers.
+          - generic [ref=e58]:
+            - heading "Image Tools" [level=4] [ref=e59]
+            - list [ref=e60]:
+              - listitem [ref=e61]:
+                - link "Remove Background" [ref=e62] [cursor=pointer]:
+                  - /url: /
+              - listitem [ref=e63]:
+                - link "Resize IMAGE" [ref=e64] [cursor=pointer]:
+                  - /url: /resize
+              - listitem [ref=e65]:
+                - link "Crop IMAGE" [ref=e66] [cursor=pointer]:
+                  - /url: /crop
+              - listitem [ref=e67]:
+                - link "Rotate IMAGE" [ref=e68] [cursor=pointer]:
+                  - /url: /rotate
+              - listitem [ref=e69]:
+                - link "Compress IMAGE" [ref=e70] [cursor=pointer]:
+                  - /url: /compress
+              - listitem [ref=e71]:
+                - link "Upscale Image" [ref=e72] [cursor=pointer]:
+                  - /url: /upscale
+              - listitem [ref=e73]:
+                - link "Convert to JPG" [ref=e74] [cursor=pointer]:
+                  - /url: /convert-to-jpg
+          - generic [ref=e75]:
+            - heading "More Tools" [level=4] [ref=e76]
+            - list [ref=e77]:
+              - listitem [ref=e78]:
+                - link "Convert from JPG" [ref=e79] [cursor=pointer]:
+                  - /url: /convert-from-jpg
+              - listitem [ref=e80]:
+                - link "Image to PDF" [ref=e81] [cursor=pointer]:
+                  - /url: /image-to-pdf
+              - listitem [ref=e82]:
+                - link "PDF to Image" [ref=e83] [cursor=pointer]:
+                  - /url: /pdf-to-image
+              - listitem [ref=e84]:
+                - link "HTML to Image" [ref=e85] [cursor=pointer]:
+                  - /url: /html-to-image
+              - listitem [ref=e86]:
+                - link "HTML to PDF" [ref=e87] [cursor=pointer]:
+                  - /url: /html-to-pdf
+              - listitem [ref=e88]:
+                - link "Photo Editor" [ref=e89] [cursor=pointer]:
+                  - /url: /photo-editor
+              - listitem [ref=e90]:
+                - link "Meme Generator" [ref=e91] [cursor=pointer]:
+                  - /url: /meme-generator
+              - listitem [ref=e92]:
+                - link "Collage Maker" [ref=e93] [cursor=pointer]:
+                  - /url: /collage
+              - listitem [ref=e94]:
+                - link "Profile Picture Maker" [ref=e95] [cursor=pointer]:
+                  - /url: /profile-picture
+              - listitem [ref=e96]:
+                - link "GIF / Animation Maker" [ref=e97] [cursor=pointer]:
+                  - /url: /gif-maker
+              - listitem [ref=e98]:
+                - link "Black & White Filters" [ref=e99] [cursor=pointer]:
+                  - /url: /black-and-white
+              - listitem [ref=e100]:
+                - link "Watermark IMAGE" [ref=e101] [cursor=pointer]:
+                  - /url: /watermark
+              - listitem [ref=e102]:
+                - link "Blur Face" [ref=e103] [cursor=pointer]:
+                  - /url: /blur-face
+              - listitem [ref=e104]:
+                - link "Image Splitter" [ref=e105] [cursor=pointer]:
+                  - /url: /image-splitter
+              - listitem [ref=e106]:
+                - link "Color Picker" [ref=e107] [cursor=pointer]:
+                  - /url: /color-picker
+              - listitem [ref=e108]:
+                - link "Image to Base64" [ref=e109] [cursor=pointer]:
+                  - /url: /image-to-base64
+          - generic [ref=e110]:
+            - heading "Product" [level=4] [ref=e111]
+            - list [ref=e112]:
+              - listitem [ref=e113]:
+                - link "Features" [ref=e114] [cursor=pointer]:
+                  - /url: /#features
+              - listitem [ref=e115]:
+                - link "How It Works" [ref=e116] [cursor=pointer]:
+                  - /url: /#how-it-works
+              - listitem [ref=e117]:
+                - link "Pricing" [ref=e118] [cursor=pointer]:
+                  - /url: /pricing
+              - listitem [ref=e119]:
+                - link "API Docs" [ref=e120] [cursor=pointer]:
+                  - /url: /api-docs
+              - listitem [ref=e121]:
+                - link "Gallery" [ref=e122] [cursor=pointer]:
+                  - /url: /#gallery
+        - generic [ref=e123]:
+          - paragraph [ref=e124]: © 2026 BG Remover. All rights reserved.
+          - paragraph [ref=e125]:
+            - text: Powered by
+            - link "K2 TechInfo" [ref=e126] [cursor=pointer]:
+              - /url: https://k2techinfo.com
+          - paragraph [ref=e127]: All processing is done locally in your browser.
+  - alert [ref=e128]

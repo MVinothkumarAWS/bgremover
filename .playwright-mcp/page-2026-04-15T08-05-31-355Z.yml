@@ -1,0 +1,175 @@
+- generic [active] [ref=e1]:
+  - alert [ref=e124]
+  - banner [ref=e494]:
+    - generic [ref=e496]:
+      - link "BGRemover" [ref=e497] [cursor=pointer]:
+        - /url: /
+        - img [ref=e499]
+        - generic [ref=e501]: BGRemover
+      - navigation [ref=e502]:
+        - generic [ref=e503]:
+          - generic [ref=e504]: Youtube_image2.jpg
+          - button "Clear image" [ref=e505]:
+            - img [ref=e506]
+        - link "Compress IMAGE" [ref=e508] [cursor=pointer]:
+          - /url: /compress
+        - link "Resize IMAGE" [ref=e509] [cursor=pointer]:
+          - /url: /resize
+        - link "Crop IMAGE" [ref=e510] [cursor=pointer]:
+          - /url: /crop
+        - link "Rotate IMAGE" [ref=e511] [cursor=pointer]:
+          - /url: /rotate
+        - link "Convert to JPG" [ref=e512] [cursor=pointer]:
+          - /url: /convert-to-jpg
+        - link "Photo Editor" [ref=e513] [cursor=pointer]:
+          - /url: /photo-editor
+        - button "More" [ref=e515]:
+          - text: More
+          - img [ref=e516]
+        - button "Switch to dark mode" [ref=e518]:
+          - img [ref=e519]
+        - generic [ref=e521]:
+          - link "Login" [ref=e522] [cursor=pointer]:
+            - /url: /login
+          - link "Sign up" [ref=e523] [cursor=pointer]:
+            - /url: /signup
+  - main [ref=e524]:
+    - generic [ref=e529]:
+      - generic [ref=e530]:
+        - heading "Compress IMAGE" [level=1] [ref=e531]
+        - paragraph [ref=e532]: Reduce image file size without losing quality. 100% client-side — your images never leave your device.
+      - generic [ref=e533]:
+        - generic [ref=e535]:
+          - generic [ref=e536]:
+            - generic [ref=e537]:
+              - text: "Quality:"
+              - generic [ref=e538]: 80%
+            - slider [ref=e539] [cursor=pointer]: "80"
+            - generic [ref=e540]:
+              - generic [ref=e541]: Smallest file
+              - generic [ref=e542]: Best quality
+          - generic [ref=e543]:
+            - generic [ref=e544]: Output Format
+            - generic [ref=e545]:
+              - button "JPG" [ref=e546]
+              - button "PNG" [ref=e547]
+              - button "WebP" [ref=e548]
+          - generic [ref=e549]:
+            - button "Compress All" [ref=e550]
+            - button "+ Add" [ref=e551]
+            - button "Clear" [ref=e552]
+        - generic [ref=e555]:
+          - img "Youtube_image2.jpg" [ref=e557]
+          - generic [ref=e558]:
+            - paragraph [ref=e559]: Youtube_image2.jpg
+            - generic [ref=e561]: "Original: 201.5 KB"
+          - button "Remove" [ref=e563]:
+            - img [ref=e564]
+  - contentinfo [ref=e566]:
+    - generic [ref=e568]:
+      - generic [ref=e569]:
+        - generic [ref=e570]:
+          - generic [ref=e571]:
+            - img [ref=e573]
+            - generic [ref=e575]: BGRemover
+          - paragraph [ref=e576]: Professional AI-powered image tools that run 100% in your browser. Compress, resize, crop, convert, watermark, and more — no uploads, no servers.
+        - generic [ref=e577]:
+          - heading "Image Tools" [level=4] [ref=e578]
+          - list [ref=e579]:
+            - listitem [ref=e580]:
+              - link "Remove Background" [ref=e581] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e582]:
+              - link "Resize IMAGE" [ref=e583] [cursor=pointer]:
+                - /url: /resize
+            - listitem [ref=e584]:
+              - link "Crop IMAGE" [ref=e585] [cursor=pointer]:
+                - /url: /crop
+            - listitem [ref=e586]:
+              - link "Rotate IMAGE" [ref=e587] [cursor=pointer]:
+                - /url: /rotate
+            - listitem [ref=e588]:
+              - link "Compress IMAGE" [ref=e589] [cursor=pointer]:
+                - /url: /compress
+            - listitem [ref=e590]:
+              - link "Upscale Image" [ref=e591] [cursor=pointer]:
+                - /url: /upscale
+            - listitem [ref=e592]:
+              - link "Convert to JPG" [ref=e593] [cursor=pointer]:
+                - /url: /convert-to-jpg
+        - generic [ref=e594]:
+          - heading "More Tools" [level=4] [ref=e595]
+          - list [ref=e596]:
+            - listitem [ref=e597]:
+              - link "Convert from JPG" [ref=e598] [cursor=pointer]:
+                - /url: /convert-from-jpg
+            - listitem [ref=e599]:
+              - link "Image to PDF" [ref=e600] [cursor=pointer]:
+                - /url: /image-to-pdf
+            - listitem [ref=e601]:
+              - link "PDF to Image" [ref=e602] [cursor=pointer]:
+                - /url: /pdf-to-image
+            - listitem [ref=e603]:
+              - link "HTML to Image" [ref=e604] [cursor=pointer]:
+                - /url: /html-to-image
+            - listitem [ref=e605]:
+              - link "HTML to PDF" [ref=e606] [cursor=pointer]:
+                - /url: /html-to-pdf
+            - listitem [ref=e607]:
+              - link "Photo Editor" [ref=e608] [cursor=pointer]:
+                - /url: /photo-editor
+            - listitem [ref=e609]:
+              - link "Meme Generator" [ref=e610] [cursor=pointer]:
+                - /url: /meme-generator
+            - listitem [ref=e611]:
+              - link "Collage Maker" [ref=e612] [cursor=pointer]:
+                - /url: /collage
+            - listitem [ref=e613]:
+              - link "Profile Picture Maker" [ref=e614] [cursor=pointer]:
+                - /url: /profile-picture
+            - listitem [ref=e615]:
+              - link "GIF / Animation Maker" [ref=e616] [cursor=pointer]:
+                - /url: /gif-maker
+            - listitem [ref=e617]:
+              - link "Black & White Filters" [ref=e618] [cursor=pointer]:
+                - /url: /black-and-white
+            - listitem [ref=e619]:
+              - link "Watermark IMAGE" [ref=e620] [cursor=pointer]:
+                - /url: /watermark
+            - listitem [ref=e621]:
+              - link "Blur Face" [ref=e622] [cursor=pointer]:
+                - /url: /blur-face
+            - listitem [ref=e623]:
+              - link "Image Splitter" [ref=e624] [cursor=pointer]:
+                - /url: /image-splitter
+            - listitem [ref=e625]:
+              - link "Color Picker" [ref=e626] [cursor=pointer]:
+                - /url: /color-picker
+            - listitem [ref=e627]:
+              - link "Image to Base64" [ref=e628] [cursor=pointer]:
+                - /url: /image-to-base64
+        - generic [ref=e629]:
+          - heading "Product" [level=4] [ref=e630]
+          - list [ref=e631]:
+            - listitem [ref=e632]:
+              - link "Features" [ref=e633] [cursor=pointer]:
+                - /url: /#features
+            - listitem [ref=e634]:
+              - link "How It Works" [ref=e635] [cursor=pointer]:
+                - /url: /#how-it-works
+            - listitem [ref=e636]:
+              - link "Pricing" [ref=e637] [cursor=pointer]:
+                - /url: /pricing
+            - listitem [ref=e638]:
+              - link "API Docs" [ref=e639] [cursor=pointer]:
+                - /url: /api-docs
+            - listitem [ref=e640]:
+              - link "Gallery" [ref=e641] [cursor=pointer]:
+                - /url: /#gallery
+      - generic [ref=e642]:
+        - paragraph [ref=e643]: © 2026 BG Remover. All rights reserved.
+        - paragraph [ref=e644]:
+          - text: Powered by
+          - link "K2 TechInfo" [ref=e645] [cursor=pointer]:
+            - /url: https://k2techinfo.com
+        - paragraph [ref=e646]: All processing is done locally in your browser.

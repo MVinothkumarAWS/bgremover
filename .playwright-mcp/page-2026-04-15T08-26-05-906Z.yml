@@ -1,0 +1,190 @@
+- generic [active] [ref=e1]:
+  - button "Open Next.js Dev Tools" [ref=e129] [cursor=pointer]:
+    - img [ref=e130]
+  - alert [ref=e191]
+  - banner [ref=e233]:
+    - generic [ref=e235]:
+      - link [ref=e236] [cursor=pointer]:
+        - /url: /
+        - img [ref=e238]
+      - navigation [ref=e240]:
+        - button "Clear image" [ref=e242]:
+          - img [ref=e243]
+        - link "Compress IMAGE" [ref=e245] [cursor=pointer]:
+          - /url: /compress
+        - link "Resize IMAGE" [ref=e246] [cursor=pointer]:
+          - /url: /resize
+        - link "Crop IMAGE" [ref=e247] [cursor=pointer]:
+          - /url: /crop
+        - link "Rotate IMAGE" [ref=e248] [cursor=pointer]:
+          - /url: /rotate
+        - link "Convert to JPG" [ref=e249] [cursor=pointer]:
+          - /url: /convert-to-jpg
+        - link "Photo Editor" [ref=e250] [cursor=pointer]:
+          - /url: /photo-editor
+        - button "More" [ref=e252]:
+          - text: More
+          - img [ref=e253]
+        - button "Switch to light mode" [ref=e255]:
+          - img [ref=e256]
+        - generic [ref=e258]:
+          - link "Login" [ref=e259] [cursor=pointer]:
+            - /url: /login
+          - link "Sign up" [ref=e260] [cursor=pointer]:
+            - /url: /signup
+  - main [ref=e261]:
+    - generic [ref=e266]:
+      - heading "Image to PDF" [level=1] [ref=e267]
+      - paragraph [ref=e268]: Combine multiple images into a single PDF document. Reorder pages, choose page sizes, and customize layout — all in your browser.
+      - generic [ref=e269] [cursor=pointer]:
+        - img [ref=e270]
+        - paragraph [ref=e272]: Drop images here or click to browse
+        - paragraph [ref=e273]: JPG, PNG, WebP, GIF and more
+    - generic [ref=e274]:
+      - generic [ref=e275]:
+        - generic [ref=e276]:
+          - generic [ref=e277]: Page Size
+          - generic [ref=e278]:
+            - button "A4" [ref=e279]
+            - button "Letter" [ref=e280]
+            - button "A3" [ref=e281]
+            - button "A5" [ref=e282]
+        - generic [ref=e283]:
+          - generic [ref=e284]: Orientation
+          - generic [ref=e285]:
+            - button "portrait" [ref=e286]
+            - button "landscape" [ref=e287]
+        - generic [ref=e288]:
+          - generic [ref=e289]: "Margin: 10mm"
+          - slider [ref=e290]: "10"
+          - generic [ref=e291]:
+            - generic [ref=e292]: 0mm
+            - generic [ref=e293]: 50mm
+        - generic [ref=e294]:
+          - generic [ref=e295]: Image Sizing
+          - generic [ref=e296]:
+            - button "Fit to Page" [ref=e297]
+            - button "Original Size" [ref=e298]
+      - generic [ref=e299]:
+        - button "Generate PDF" [ref=e300]
+        - button "+ Add More Images" [ref=e301]
+        - button "Clear All" [ref=e302]
+      - generic [ref=e304]:
+        - generic [ref=e305]:
+          - button "Move up" [disabled] [ref=e306]:
+            - img [ref=e307]
+          - button "Move down" [disabled] [ref=e309]:
+            - img [ref=e310]
+        - generic [ref=e312]:
+          - paragraph [ref=e313]: Youtube_image2.jpg
+          - paragraph [ref=e314]: 1024 x 1536px · Page 1 of 1
+        - button "Remove" [ref=e315]:
+          - img [ref=e316]
+  - contentinfo [ref=e318]:
+    - generic [ref=e320]:
+      - generic [ref=e321]:
+        - generic [ref=e322]:
+          - generic [ref=e323]:
+            - img [ref=e325]
+            - generic [ref=e327]: BGRemover
+          - paragraph [ref=e328]: Professional AI-powered image tools that run 100% in your browser. Compress, resize, crop, convert, watermark, and more — no uploads, no servers.
+        - generic [ref=e329]:
+          - heading "Image Tools" [level=4] [ref=e330]
+          - list [ref=e331]:
+            - listitem [ref=e332]:
+              - link "Remove Background" [ref=e333] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e334]:
+              - link "Resize IMAGE" [ref=e335] [cursor=pointer]:
+                - /url: /resize
+            - listitem [ref=e336]:
+              - link "Crop IMAGE" [ref=e337] [cursor=pointer]:
+                - /url: /crop
+            - listitem [ref=e338]:
+              - link "Rotate IMAGE" [ref=e339] [cursor=pointer]:
+                - /url: /rotate
+            - listitem [ref=e340]:
+              - link "Compress IMAGE" [ref=e341] [cursor=pointer]:
+                - /url: /compress
+            - listitem [ref=e342]:
+              - link "Upscale Image" [ref=e343] [cursor=pointer]:
+                - /url: /upscale
+            - listitem [ref=e344]:
+              - link "Convert to JPG" [ref=e345] [cursor=pointer]:
+                - /url: /convert-to-jpg
+        - generic [ref=e346]:
+          - heading "More Tools" [level=4] [ref=e347]
+          - list [ref=e348]:
+            - listitem [ref=e349]:
+              - link "Convert from JPG" [ref=e350] [cursor=pointer]:
+                - /url: /convert-from-jpg
+            - listitem [ref=e351]:
+              - link "Image to PDF" [ref=e352] [cursor=pointer]:
+                - /url: /image-to-pdf
+            - listitem [ref=e353]:
+              - link "PDF to Image" [ref=e354] [cursor=pointer]:
+                - /url: /pdf-to-image
+            - listitem [ref=e355]:
+              - link "HTML to Image" [ref=e356] [cursor=pointer]:
+                - /url: /html-to-image
+            - listitem [ref=e357]:
+              - link "HTML to PDF" [ref=e358] [cursor=pointer]:
+                - /url: /html-to-pdf
+            - listitem [ref=e359]:
+              - link "Photo Editor" [ref=e360] [cursor=pointer]:
+                - /url: /photo-editor
+            - listitem [ref=e361]:
+              - link "Meme Generator" [ref=e362] [cursor=pointer]:
+                - /url: /meme-generator
+            - listitem [ref=e363]:
+              - link "Collage Maker" [ref=e364] [cursor=pointer]:
+                - /url: /collage
+            - listitem [ref=e365]:
+              - link "Profile Picture Maker" [ref=e366] [cursor=pointer]:
+                - /url: /profile-picture
+            - listitem [ref=e367]:
+              - link "GIF / Animation Maker" [ref=e368] [cursor=pointer]:
+                - /url: /gif-maker
+            - listitem [ref=e369]:
+              - link "Black & White Filters" [ref=e370] [cursor=pointer]:
+                - /url: /black-and-white
+            - listitem [ref=e371]:
+              - link "Watermark IMAGE" [ref=e372] [cursor=pointer]:
+                - /url: /watermark
+            - listitem [ref=e373]:
+              - link "Blur Face" [ref=e374] [cursor=pointer]:
+                - /url: /blur-face
+            - listitem [ref=e375]:
+              - link "Image Splitter" [ref=e376] [cursor=pointer]:
+                - /url: /image-splitter
+            - listitem [ref=e377]:
+              - link "Color Picker" [ref=e378] [cursor=pointer]:
+                - /url: /color-picker
+            - listitem [ref=e379]:
+              - link "Image to Base64" [ref=e380] [cursor=pointer]:
+                - /url: /image-to-base64
+        - generic [ref=e381]:
+          - heading "Product" [level=4] [ref=e382]
+          - list [ref=e383]:
+            - listitem [ref=e384]:
+              - link "Features" [ref=e385] [cursor=pointer]:
+                - /url: /#features
+            - listitem [ref=e386]:
+              - link "How It Works" [ref=e387] [cursor=pointer]:
+                - /url: /#how-it-works
+            - listitem [ref=e388]:
+              - link "Pricing" [ref=e389] [cursor=pointer]:
+                - /url: /pricing
+            - listitem [ref=e390]:
+              - link "API Docs" [ref=e391] [cursor=pointer]:
+                - /url: /api-docs
+            - listitem [ref=e392]:
+              - link "Gallery" [ref=e393] [cursor=pointer]:
+                - /url: /#gallery
+      - generic [ref=e394]:
+        - paragraph [ref=e395]: © 2026 BG Remover. All rights reserved.
+        - paragraph [ref=e396]:
+          - text: Powered by
+          - link "K2 TechInfo" [ref=e397] [cursor=pointer]:
+            - /url: https://k2techinfo.com
+        - paragraph [ref=e398]: All processing is done locally in your browser.

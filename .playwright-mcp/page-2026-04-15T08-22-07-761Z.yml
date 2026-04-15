@@ -1,0 +1,224 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e4]:
+      - link [ref=e134] [cursor=pointer]:
+        - /url: /
+        - img [ref=e7]
+      - navigation [ref=e10]:
+        - button "Clear image" [ref=e136]:
+          - img [ref=e137]
+        - link "Compress IMAGE" [ref=e139] [cursor=pointer]:
+          - /url: /compress
+        - link "Resize IMAGE" [ref=e140] [cursor=pointer]:
+          - /url: /resize
+        - link "Crop IMAGE" [ref=e141] [cursor=pointer]:
+          - /url: /crop
+        - link "Rotate IMAGE" [ref=e142] [cursor=pointer]:
+          - /url: /rotate
+        - link "Convert to JPG" [ref=e143] [cursor=pointer]:
+          - /url: /convert-to-jpg
+        - link "Photo Editor" [ref=e144] [cursor=pointer]:
+          - /url: /photo-editor
+        - generic [ref=e145]:
+          - button "More" [ref=e146]:
+            - text: More
+            - img [ref=e147]
+          - generic [ref=e191]:
+            - link "Upscale Image" [ref=e192] [cursor=pointer]:
+              - /url: /upscale
+              - img [ref=e194]
+              - generic [ref=e196]: Upscale Image
+            - link "Convert from JPG" [ref=e197] [cursor=pointer]:
+              - /url: /convert-from-jpg
+              - img [ref=e199]
+              - generic [ref=e201]: Convert from JPG
+            - link "Watermark IMAGE" [ref=e202] [cursor=pointer]:
+              - /url: /watermark
+              - img [ref=e204]
+              - generic [ref=e206]: Watermark IMAGE
+            - link "Blur Face" [ref=e207] [cursor=pointer]:
+              - /url: /blur-face
+              - img [ref=e209]
+              - generic [ref=e211]: Blur Face
+            - link "Meme Generator" [ref=e212] [cursor=pointer]:
+              - /url: /meme-generator
+              - img [ref=e214]
+              - generic [ref=e216]: Meme Generator
+            - link "Profile Picture Maker" [ref=e217] [cursor=pointer]:
+              - /url: /profile-picture
+              - img [ref=e219]
+              - generic [ref=e221]: Profile Picture Maker
+            - link "Black & White Filters" [ref=e222] [cursor=pointer]:
+              - /url: /black-and-white
+              - img [ref=e224]
+              - generic [ref=e226]: Black & White Filters
+            - link "Collage Maker" [ref=e227] [cursor=pointer]:
+              - /url: /collage
+              - img [ref=e229]
+              - generic [ref=e231]: Collage Maker
+        - button "Switch to light mode" [ref=e20]:
+          - img [ref=e21]
+        - generic [ref=e23]:
+          - link "Login" [ref=e24] [cursor=pointer]:
+            - /url: /login
+          - link "Sign up" [ref=e25] [cursor=pointer]:
+            - /url: /signup
+  - main [ref=e26]:
+    - generic [ref=e31]:
+      - generic [ref=e32]:
+        - heading "Resize Image" [level=1] [ref=e33]
+        - paragraph [ref=e34]: Resize any image to exact dimensions. Fast, free, and entirely in your browser.
+      - generic [ref=e35]:
+        - generic [ref=e149]:
+          - generic [ref=e150]:
+            - generic [ref=e151]:
+              - paragraph [ref=e152]: Original
+              - paragraph [ref=e153]:
+                - text: 1024 x 1536 px
+                - generic [ref=e154]: (201.5 KB)
+            - button "Upload different image" [ref=e155]
+          - generic [ref=e156]:
+            - button "By Dimensions (px)" [ref=e157]
+            - button "By File Size (KB)" [ref=e158]
+          - generic [ref=e159]:
+            - generic [ref=e160]:
+              - generic [ref=e161]: Width (px)
+              - spinbutton [ref=e162]: "1024"
+            - button "Aspect ratio locked" [ref=e163]:
+              - img [ref=e164]
+            - generic [ref=e166]:
+              - generic [ref=e167]: Height (px)
+              - spinbutton [ref=e168]: "1536"
+          - generic [ref=e169]:
+            - generic [ref=e170]: Resize by Percentage
+            - generic [ref=e171]:
+              - button "25%" [ref=e172]
+              - button "50%" [ref=e173]
+              - button "75%" [ref=e174]
+              - button "100%" [ref=e175]
+              - button "150%" [ref=e176]
+              - button "200%" [ref=e177]
+          - generic [ref=e178]:
+            - generic [ref=e179]:
+              - paragraph [ref=e180]: New Size
+              - paragraph [ref=e181]: 1024 x 1536 px
+            - button "Resize Image" [ref=e182]
+        - generic [ref=e36]:
+          - generic [ref=e37]:
+            - paragraph [ref=e183]: Original
+            - img "Original" [ref=e185]
+            - paragraph [ref=e186]: 1024 x 1536 px
+          - generic [ref=e187]:
+            - paragraph [ref=e188]: Resized Preview
+            - paragraph [ref=e190]: Click "Resize Image" to generate preview
+  - contentinfo [ref=e43]:
+    - generic [ref=e45]:
+      - generic [ref=e46]:
+        - generic [ref=e47]:
+          - generic [ref=e48]:
+            - img [ref=e50]
+            - generic [ref=e52]: BGRemover
+          - paragraph [ref=e53]: Professional AI-powered image tools that run 100% in your browser. Compress, resize, crop, convert, watermark, and more — no uploads, no servers.
+        - generic [ref=e54]:
+          - heading "Image Tools" [level=4] [ref=e55]
+          - list [ref=e56]:
+            - listitem [ref=e57]:
+              - link "Remove Background" [ref=e58] [cursor=pointer]:
+                - /url: /
+            - listitem [ref=e59]:
+              - link "Resize IMAGE" [ref=e60] [cursor=pointer]:
+                - /url: /resize
+            - listitem [ref=e61]:
+              - link "Crop IMAGE" [ref=e62] [cursor=pointer]:
+                - /url: /crop
+            - listitem [ref=e63]:
+              - link "Rotate IMAGE" [ref=e64] [cursor=pointer]:
+                - /url: /rotate
+            - listitem [ref=e65]:
+              - link "Compress IMAGE" [ref=e66] [cursor=pointer]:
+                - /url: /compress
+            - listitem [ref=e67]:
+              - link "Upscale Image" [ref=e68] [cursor=pointer]:
+                - /url: /upscale
+            - listitem [ref=e69]:
+              - link "Convert to JPG" [ref=e70] [cursor=pointer]:
+                - /url: /convert-to-jpg
+        - generic [ref=e71]:
+          - heading "More Tools" [level=4] [ref=e72]
+          - list [ref=e73]:
+            - listitem [ref=e74]:
+              - link "Convert from JPG" [ref=e75] [cursor=pointer]:
+                - /url: /convert-from-jpg
+            - listitem [ref=e76]:
+              - link "Image to PDF" [ref=e77] [cursor=pointer]:
+                - /url: /image-to-pdf
+            - listitem [ref=e78]:
+              - link "PDF to Image" [ref=e79] [cursor=pointer]:
+                - /url: /pdf-to-image
+            - listitem [ref=e80]:
+              - link "HTML to Image" [ref=e81] [cursor=pointer]:
+                - /url: /html-to-image
+            - listitem [ref=e82]:
+              - link "HTML to PDF" [ref=e83] [cursor=pointer]:
+                - /url: /html-to-pdf
+            - listitem [ref=e84]:
+              - link "Photo Editor" [ref=e85] [cursor=pointer]:
+                - /url: /photo-editor
+            - listitem [ref=e86]:
+              - link "Meme Generator" [ref=e87] [cursor=pointer]:
+                - /url: /meme-generator
+            - listitem [ref=e88]:
+              - link "Collage Maker" [ref=e89] [cursor=pointer]:
+                - /url: /collage
+            - listitem [ref=e90]:
+              - link "Profile Picture Maker" [ref=e91] [cursor=pointer]:
+                - /url: /profile-picture
+            - listitem [ref=e92]:
+              - link "GIF / Animation Maker" [ref=e93] [cursor=pointer]:
+                - /url: /gif-maker
+            - listitem [ref=e94]:
+              - link "Black & White Filters" [ref=e95] [cursor=pointer]:
+                - /url: /black-and-white
+            - listitem [ref=e96]:
+              - link "Watermark IMAGE" [ref=e97] [cursor=pointer]:
+                - /url: /watermark
+            - listitem [ref=e98]:
+              - link "Blur Face" [ref=e99] [cursor=pointer]:
+                - /url: /blur-face
+            - listitem [ref=e100]:
+              - link "Image Splitter" [ref=e101] [cursor=pointer]:
+                - /url: /image-splitter
+            - listitem [ref=e102]:
+              - link "Color Picker" [ref=e103] [cursor=pointer]:
+                - /url: /color-picker
+            - listitem [ref=e104]:
+              - link "Image to Base64" [ref=e105] [cursor=pointer]:
+                - /url: /image-to-base64
+        - generic [ref=e106]:
+          - heading "Product" [level=4] [ref=e107]
+          - list [ref=e108]:
+            - listitem [ref=e109]:
+              - link "Features" [ref=e110] [cursor=pointer]:
+                - /url: /#features
+            - listitem [ref=e111]:
+              - link "How It Works" [ref=e112] [cursor=pointer]:
+                - /url: /#how-it-works
+            - listitem [ref=e113]:
+              - link "Pricing" [ref=e114] [cursor=pointer]:
+                - /url: /pricing
+            - listitem [ref=e115]:
+              - link "API Docs" [ref=e116] [cursor=pointer]:
+                - /url: /api-docs
+            - listitem [ref=e117]:
+              - link "Gallery" [ref=e118] [cursor=pointer]:
+                - /url: /#gallery
+      - generic [ref=e119]:
+        - paragraph [ref=e120]: © 2026 BG Remover. All rights reserved.
+        - paragraph [ref=e121]:
+          - text: Powered by
+          - link "K2 TechInfo" [ref=e122] [cursor=pointer]:
+            - /url: https://k2techinfo.com
+        - paragraph [ref=e123]: All processing is done locally in your browser.
+  - button "Open Next.js Dev Tools" [ref=e129] [cursor=pointer]:
+    - img [ref=e130]
+  - alert [ref=e133]

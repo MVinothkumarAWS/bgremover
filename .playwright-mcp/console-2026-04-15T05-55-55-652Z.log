@@ -1,0 +1,2 @@
+[   39437ms] [WARNING] env.wasm.numThreads is set to 4, but this will not work unless you enable crossOriginIsolated mode. See https://web.dev/cross-origin-isolation-guide/ for more info. @ https://bgremover.k2techinfo.com/_next/static/chunks/0ceg9rh379-yr.js:8
+[   39437ms] [WARNING] WebAssembly multi-threading is not supported in the current environment. Falling back to single-threading. @ https://bgremover.k2techinfo.com/_next/static/chunks/0ceg9rh379-yr.js:8

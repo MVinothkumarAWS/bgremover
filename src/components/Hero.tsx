@@ -268,27 +268,16 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
   }, [results]);
 
   const processAll = useCallback(async () => {
-    async function processOne(file: File): Promise<Blob> {
-      // Try server-side first
-      try {
-        const formData = new FormData();
-        formData.append("image", file);
-        const res = await fetch("/api/remove-bg-server", { method: "POST", body: formData });
-        if (res.ok) return await res.blob();
-      } catch { /* fall through */ }
-      // Fallback to client-side
-      const { removeBackground } = await import("@imgly/background-removal");
-      return await removeBackground(file, {
-        model: "isnet",
-        device: "gpu",
-        rescale: false,
-        output: { format: "image/png", quality: 1.0 },
-      });
-    }
+    const { removeBackground } = await import("@imgly/background-removal");
     for (let i = 0; i < files.length; i++) {
       setCurrent(i + 1);
       try {
-        const blob = await processOne(files[i]);
+        const blob = await removeBackground(files[i], {
+          model: "isnet",
+          device: "gpu",
+          rescale: false,
+          output: { format: "image/png", quality: 1.0 },
+        });
         setResults((prev) => new Map(prev).set(files[i].name, URL.createObjectURL(blob)));
       } catch { setResults((prev) => new Map(prev).set(files[i].name, "error")); }
     }
