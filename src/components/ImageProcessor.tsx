@@ -340,7 +340,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
             {status === "loading-model" ? "Downloading AI model (first time only)..." : `Processing... ${Math.round(progress)}%`}
           </p>
         </div>
-        {originalUrl && <div className="max-w-sm mx-auto rounded-2xl overflow-hidden shadow-lg opacity-50"><img src={originalUrl} alt="Original" className="w-full" /></div>}
+        {originalUrl && <div className="max-w-2xl mx-auto rounded-2xl overflow-hidden shadow-lg opacity-50"><img src={originalUrl} alt="Original" className="w-full max-h-[65vh] object-contain" /></div>}
       </div>
     );
   }
@@ -628,15 +628,15 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
           {activeTool !== "none" ? (
             <div>
               <p className="text-center text-xs text-gray-400 mb-2">{activeTool === "erase" ? "Paint to erase" : "Paint to restore"}</p>
-              <div className="rounded-2xl overflow-hidden shadow-lg checkerboard max-h-[70vh] flex items-center justify-center">
-                <canvas ref={touchUpCanvasRef} className="max-w-full max-h-[70vh] cursor-crosshair"
+              <div className="rounded-2xl overflow-hidden shadow-lg checkerboard max-h-[80vh] flex items-center justify-center">
+                <canvas ref={touchUpCanvasRef} className="max-w-full max-h-[80vh] cursor-crosshair"
                   onMouseDown={onCanvasDown} onMouseMove={onCanvasMove} onMouseUp={onCanvasUp} onMouseLeave={onCanvasUp}
                   onTouchStart={onCanvasDown} onTouchMove={onCanvasMove} onTouchEnd={onCanvasUp} />
               </div>
             </div>
           ) : viewMode === "compare" ? (
-            <div ref={compareRef} className="relative rounded-2xl overflow-hidden shadow-lg select-none cursor-ew-resize max-h-[70vh]" onMouseDown={() => { isDraggingSlider.current = true; }} onTouchStart={() => { isDraggingSlider.current = true; }}>
-              <div className="checkerboard"><img src={previewUrl || resultUrl} alt="Result" className="max-w-full max-h-[70vh] object-contain block" draggable={false} /></div>
+            <div ref={compareRef} className="relative rounded-2xl overflow-hidden shadow-lg select-none cursor-ew-resize max-h-[80vh]" onMouseDown={() => { isDraggingSlider.current = true; }} onTouchStart={() => { isDraggingSlider.current = true; }}>
+              <div className="checkerboard"><img src={previewUrl || resultUrl} alt="Result" className="max-w-full max-h-[80vh] object-contain block" draggable={false} /></div>
               <div className="absolute inset-0 overflow-hidden" style={{ width: `${sliderPos}%` }}>
                 <img src={originalUrl} alt="Original" className="h-full block" style={{ width: compareRef.current ? `${compareRef.current.offsetWidth}px` : "100%", maxWidth: "none" }} draggable={false} />
               </div>
@@ -649,8 +649,8 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
               <div className="absolute top-3 right-3 px-2 py-0.5 bg-black/50 text-white text-[10px] font-medium rounded backdrop-blur-sm">Edited</div>
             </div>
           ) : (
-            <div className={`relative rounded-2xl overflow-hidden shadow-lg max-h-[70vh] flex items-center justify-center ${bgColor === "transparent" && !bgImageUrl && !blurBg ? "checkerboard" : ""}`}>
-              <img src={showOriginal ? originalUrl : (previewUrl || resultUrl)} alt="Result" className="max-w-full max-h-[70vh] object-contain" />
+            <div className={`relative rounded-2xl overflow-hidden shadow-lg max-h-[80vh] flex items-center justify-center ${bgColor === "transparent" && !bgImageUrl && !blurBg ? "checkerboard" : ""}`}>
+              <img src={showOriginal ? originalUrl : (previewUrl || resultUrl)} alt="Result" className="max-w-full max-h-[80vh] object-contain" />
               <button onMouseDown={() => setShowOriginal(true)} onMouseUp={() => setShowOriginal(false)} onMouseLeave={() => setShowOriginal(false)}
                 onTouchStart={() => setShowOriginal(true)} onTouchEnd={() => setShowOriginal(false)}
                 className="absolute bottom-3 left-3 px-3 py-1.5 bg-black/60 text-white text-[11px] font-medium rounded-lg backdrop-blur-sm hover:bg-black/70 select-none">
