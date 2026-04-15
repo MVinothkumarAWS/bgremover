@@ -272,7 +272,11 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
     for (let i = 0; i < files.length; i++) {
       setCurrent(i + 1);
       try {
-        const blob = await removeBackground(files[i]);
+        const blob = await removeBackground(files[i], {
+          model: "isnet",
+          device: "gpu",
+          output: { format: "image/png", quality: 1.0 },
+        });
         setResults((prev) => new Map(prev).set(files[i].name, URL.createObjectURL(blob)));
       } catch { setResults((prev) => new Map(prev).set(files[i].name, "error")); }
     }

@@ -88,7 +88,10 @@ export async function POST(request: NextRequest) {
     // Process image
     const { removeBackground } = await import("@imgly/background-removal");
     const inputBlob = new Blob([imageBuffer]);
-    const resultBlob = await removeBackground(inputBlob);
+    const resultBlob = await removeBackground(inputBlob, {
+      model: "isnet",
+      output: { format: "image/png", quality: 1.0 },
+    });
 
     // Convert if needed
     const resultBuffer = await resultBlob.arrayBuffer();

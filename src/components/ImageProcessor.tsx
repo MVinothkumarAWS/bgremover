@@ -156,6 +156,9 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
         setStatus("processing"); setProgress(30);
         const iv = setInterval(() => setProgress(p => p >= 90 ? (clearInterval(iv), 90) : p + Math.random() * 5), 500);
         const blob = await removeBackground(file, {
+          model: "isnet",
+          device: "gpu",
+          output: { format: "image/png", quality: 1.0 },
           progress: (key: string, cur: number, tot: number) => { if (key === "compute:inference") setProgress(30 + Math.round((cur / tot) * 60)); },
         });
         clearInterval(iv);
