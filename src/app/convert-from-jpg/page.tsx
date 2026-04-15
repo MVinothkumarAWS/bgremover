@@ -30,6 +30,7 @@ export default function ConvertFromJpgPage() {
   const [targetFormat, setTargetFormat] = useState<TargetFormat>("image/png");
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sharedLoaded = useRef(false);
 
   const { sharedFile, setSharedImage } = useSharedImage();
 
@@ -68,7 +69,10 @@ export default function ConvertFromJpgPage() {
   );
 
   useEffect(() => {
-    if (sharedFile && files.length === 0 && sharedFile.type.match(/^image\/jpe?g$/)) addFiles([sharedFile]);
+    if (sharedFile && !sharedLoaded.current && files.length === 0 && sharedFile.type.match(/^image\/jpe?g$/)) {
+      sharedLoaded.current = true;
+      addFiles([sharedFile]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

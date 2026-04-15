@@ -49,6 +49,7 @@ export default function GifMakerPage() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const addInputRef = useRef<HTMLInputElement>(null);
+  const sharedLoaded = useRef(false);
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const intervalRef = useRef<ReturnType<typeof setInterval> | null>(null);
   const playCountRef = useRef(0);
@@ -72,7 +73,10 @@ export default function GifMakerPage() {
   }, []);
 
   useEffect(() => {
-    if (sharedFile && frames.length === 0) addFiles([sharedFile]);
+    if (sharedFile && !sharedLoaded.current && frames.length === 0) {
+      sharedLoaded.current = true;
+      addFiles([sharedFile]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

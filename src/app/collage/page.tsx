@@ -82,6 +82,7 @@ export default function CollagePage() {
   const [images, setImages] = useState<HTMLImageElement[]>([]);
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sharedLoaded = useRef(false);
 
   const { sharedFile, setSharedImage } = useSharedImage();
 
@@ -116,7 +117,10 @@ export default function CollagePage() {
   }, [setSharedImage]);
 
   useEffect(() => {
-    if (sharedFile && images.length === 0) loadImages([sharedFile]);
+    if (sharedFile && !sharedLoaded.current && images.length === 0) {
+      sharedLoaded.current = true;
+      loadImages([sharedFile]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

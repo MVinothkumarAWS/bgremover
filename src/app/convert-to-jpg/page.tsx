@@ -23,6 +23,7 @@ export default function ConvertToJpgPage() {
   const [bgColor, setBgColor] = useState("#ffffff");
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sharedLoaded = useRef(false);
   const { sharedFile, setSharedImage } = useSharedImage();
 
   const acceptedTypes = ["image/png", "image/gif", "image/webp", "image/svg+xml"];
@@ -65,7 +66,8 @@ export default function ConvertToJpgPage() {
 
   // Load shared image on mount (only if it's a non-JPG type)
   useEffect(() => {
-    if (sharedFile && files.length === 0 && acceptedTypes.includes(sharedFile.type)) {
+    if (sharedFile && !sharedLoaded.current && files.length === 0 && acceptedTypes.includes(sharedFile.type)) {
+      sharedLoaded.current = true;
       addFiles([sharedFile]);
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps

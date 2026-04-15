@@ -37,6 +37,7 @@ export default function ImageToPdfPage() {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
   const addMoreRef = useRef<HTMLInputElement>(null);
+  const sharedLoaded = useRef(false);
 
   const { sharedFile, setSharedImage } = useSharedImage();
 
@@ -81,7 +82,10 @@ export default function ImageToPdfPage() {
   }, [setSharedImage]);
 
   useEffect(() => {
-    if (sharedFile && images.length === 0) addFiles([sharedFile]);
+    if (sharedFile && !sharedLoaded.current && images.length === 0) {
+      sharedLoaded.current = true;
+      addFiles([sharedFile]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

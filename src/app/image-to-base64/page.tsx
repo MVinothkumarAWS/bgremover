@@ -48,6 +48,7 @@ export default function ImageToBase64Page() {
   const { sharedFile, setSharedImage } = useSharedImage();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const sharedLoaded = useRef(false);
 
   const copyToClipboard = useCallback((text: string, label: string) => {
     navigator.clipboard.writeText(text);
@@ -79,7 +80,8 @@ export default function ImageToBase64Page() {
   }, []);
 
   useEffect(() => {
-    if (sharedFile && images.length === 0) {
+    if (sharedFile && !sharedLoaded.current && images.length === 0) {
+      sharedLoaded.current = true;
       const dt = new DataTransfer();
       dt.items.add(sharedFile);
       handleFiles(dt.files);

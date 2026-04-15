@@ -33,6 +33,7 @@ export default function CompressPage() {
   const [format, setFormat] = useState<"image/jpeg" | "image/png" | "image/webp">("image/jpeg");
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const sharedLoaded = useRef(false);
   const { sharedFile, setSharedImage } = useSharedImage();
 
   const formatLabel: Record<string, string> = {
@@ -65,7 +66,10 @@ export default function CompressPage() {
 
   // Load shared image on mount
   useEffect(() => {
-    if (sharedFile && images.length === 0) addFiles([sharedFile]);
+    if (sharedFile && !sharedLoaded.current && images.length === 0) {
+      sharedLoaded.current = true;
+      addFiles([sharedFile]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
