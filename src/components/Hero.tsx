@@ -268,16 +268,32 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
   }, [results]);
 
   const processAll = useCallback(async () => {
-    const { removeBackground } = await import("@imgly/background-removal");
+    const REMBG_API = process.env.NEXT_PUBLIC_REMBG_API_URL;
+
+    async function processOne(file: File): Promise<Blob> {
+      // Try rembg server API first
+      if (REMBG_API) {
+        try {
+          const formData = new FormData();
+          formData.append("image", file);
+          const res = await fetch(`${REMBG_API}/remove-bg`, { method: "POST", body: formData });
+          if (res.ok) return await res.blob();
+        } catch { /* fall through to client-side */ }
+      }
+      // Fallback to client-side
+      const { removeBackground } = await import("@imgly/background-removal");
+      return await removeBackground(file, {
+        model: "isnet",
+        device: "gpu",
+        rescale: false,
+        output: { format: "image/png", quality: 1.0 },
+      });
+    }
+
     for (let i = 0; i < files.length; i++) {
       setCurrent(i + 1);
       try {
-        const blob = await removeBackground(files[i], {
-          model: "isnet",
-          device: "gpu",
-          rescale: false,
-          output: { format: "image/png", quality: 1.0 },
-        });
+        const blob = await processOne(files[i]);
         setResults((prev) => new Map(prev).set(files[i].name, URL.createObjectURL(blob)));
       } catch { setResults((prev) => new Map(prev).set(files[i].name, "error")); }
     }

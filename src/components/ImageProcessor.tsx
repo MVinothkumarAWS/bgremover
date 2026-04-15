@@ -148,20 +148,44 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
 
   useEffect(() => {
     let cancelled = false;
+    const REMBG_API = process.env.NEXT_PUBLIC_REMBG_API_URL;
+
+    async function tryRembgApi(): Promise<Blob | null> {
+      if (!REMBG_API) return null;
+      try {
+        const formData = new FormData();
+        formData.append("image", file);
+        const res = await fetch(`${REMBG_API}/remove-bg`, {
+          method: "POST",
+          body: formData,
+        });
+        if (!res.ok) return null;
+        return await res.blob();
+      } catch { return null; }
+    }
+
+    async function clientSideFallback(): Promise<Blob> {
+      setStatus("loading-model"); setProgress(15);
+      const { removeBackground } = await import("@imgly/background-removal");
+      if (cancelled) throw new Error("cancelled");
+      setStatus("processing"); setProgress(30);
+      return await removeBackground(file, {
+        model: "isnet",
+        device: "gpu",
+        rescale: false,
+        output: { format: "image/png", quality: 1.0 },
+        progress: (key: string, cur: number, tot: number) => { if (key === "compute:inference") setProgress(30 + Math.round((cur / tot) * 60)); },
+      });
+    }
+
     async function run() {
       try {
-        setStatus("loading-model"); setProgress(10);
-        const { removeBackground } = await import("@imgly/background-removal");
-        if (cancelled) return;
-        setStatus("processing"); setProgress(30);
+        setStatus("processing"); setProgress(10);
         const iv = setInterval(() => setProgress(p => p >= 90 ? (clearInterval(iv), 90) : p + Math.random() * 5), 500);
-        const blob = await removeBackground(file, {
-          model: "isnet",
-          device: "gpu",
-          rescale: false,
-          output: { format: "image/png", quality: 1.0 },
-          progress: (key: string, cur: number, tot: number) => { if (key === "compute:inference") setProgress(30 + Math.round((cur / tot) * 60)); },
-        });
+        // Try rembg server API first, fallback to client-side
+        let blob = await tryRembgApi();
+        if (cancelled) { clearInterval(iv); return; }
+        if (!blob) blob = await clientSideFallback();
         clearInterval(iv);
         if (cancelled) return;
         setResultBlob(blob);
