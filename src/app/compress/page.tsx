@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 interface ImageItem {
   id: string;
@@ -32,6 +33,7 @@ export default function CompressPage() {
   const [format, setFormat] = useState<"image/jpeg" | "image/png" | "image/webp">("image/jpeg");
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { sharedFile, setSharedImage } = useSharedImage();
 
   const formatLabel: Record<string, string> = {
     "image/jpeg": "JPG",
@@ -47,6 +49,7 @@ export default function CompressPage() {
 
   const addFiles = useCallback((fileList: File[]) => {
     const imageFiles = fileList.filter((f) => f.type.startsWith("image/"));
+    if (imageFiles.length > 0) setSharedImage(imageFiles[0]);
     const newItems: ImageItem[] = imageFiles.map((file) => ({
       id: `${file.name}-${Date.now()}-${Math.random()}`,
       file,
@@ -58,6 +61,12 @@ export default function CompressPage() {
       status: "pending" as const,
     }));
     setImages((prev) => [...prev, ...newItems]);
+  }, [setSharedImage]);
+
+  // Load shared image on mount
+  useEffect(() => {
+    if (sharedFile && images.length === 0) addFiles([sharedFile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrop = useCallback(

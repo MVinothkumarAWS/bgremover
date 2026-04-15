@@ -3,6 +3,7 @@
 import { useState, useCallback, useRef, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -148,6 +149,8 @@ export default function PhotoEditorPage() {
   const originalImage = useRef<HTMLImageElement | null>(null);
   const [imageReady, setImageReady] = useState(false);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   /* Thumbnail canvas refs for filter previews */
   const thumbRefs = useRef<Map<string, HTMLCanvasElement>>(new Map());
 
@@ -157,6 +160,7 @@ export default function PhotoEditorPage() {
 
   const loadImage = useCallback((file: File) => {
     setImageFile(file);
+    setSharedImage(file);
     setImageReady(false);
     const url = URL.createObjectURL(file);
     setImageSrc(url);
@@ -166,6 +170,12 @@ export default function PhotoEditorPage() {
       setImageReady(true);
     };
     img.src = url;
+  }, [setSharedImage]);
+
+  // Load shared image on mount
+  useEffect(() => {
+    if (sharedFile && !imageSrc) loadImage(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleFiles = useCallback(

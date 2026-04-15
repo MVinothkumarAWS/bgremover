@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 interface FileItem {
   id: string;
@@ -22,6 +23,7 @@ export default function ConvertToJpgPage() {
   const [bgColor, setBgColor] = useState("#ffffff");
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
+  const { sharedFile, setSharedImage } = useSharedImage();
 
   const acceptedTypes = ["image/png", "image/gif", "image/webp", "image/svg+xml"];
 
@@ -56,7 +58,16 @@ export default function ConvertToJpgPage() {
         previewUrl: URL.createObjectURL(file),
       });
     }
+    if (newItems.length > 0) setSharedImage(newItems[0].file);
     setFiles((prev) => [...prev, ...newItems]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  // Load shared image on mount (only if it's a non-JPG type)
+  useEffect(() => {
+    if (sharedFile && files.length === 0 && acceptedTypes.includes(sharedFile.type)) {
+      addFiles([sharedFile]);
+    }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 

@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 interface SizePreset {
   label: string;
@@ -38,6 +39,8 @@ export default function ProfilePicturePage() {
   const previewCanvasRef = useRef<HTMLCanvasElement>(null);
   const previewContainerRef = useRef<HTMLDivElement>(null);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const PREVIEW_DISPLAY_SIZE = 300;
 
   const getOutputSize = (): number => {
@@ -48,6 +51,7 @@ export default function ProfilePicturePage() {
 
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
+    setSharedImage(file);
     const reader = new FileReader();
     reader.onload = (e) => {
       const src = e.target?.result as string;
@@ -60,6 +64,11 @@ export default function ProfilePicturePage() {
       img.src = src;
     };
     reader.readAsDataURL(file);
+  }, [setSharedImage]);
+
+  useEffect(() => {
+    if (sharedFile && !imageSrc) handleFile(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrop = useCallback(

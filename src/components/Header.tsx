@@ -1,27 +1,67 @@
 "use client";
 
 import Link from "next/link";
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect, useRef, useMemo } from "react";
 import { useLocalAuth } from "@/context/AuthContext";
+import { useSharedImage } from "@/context/SharedImageContext";
 import DarkModeToggle from "./DarkModeToggle";
 import { tools, type ToolCategory } from "@/lib/tools";
+import { usePathname } from "next/navigation";
 
-const navCategories: { key: ToolCategory; label: string; icon: string }[] = [
-  { key: "edit", label: "Edit", icon: "M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z" },
-  { key: "optimize", label: "Optimize", icon: "M13 10V3L4 14h7v7l9-11h-7z" },
-  { key: "convert", label: "Convert", icon: "M8 7h12m0 0l-4-4m4 4l-4 4m0 6H4m0 0l4 4m-4-4l4-4" },
-  { key: "create", label: "Create", icon: "M12 6v6m0 0v6m0-6h6m-6 0H6" },
-  { key: "security", label: "Security", icon: "M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z" },
-  { key: "developer", label: "Developer", icon: "M10 20l4-16m4 4l4 4-4 4M6 16l-4-4 4-4" },
+/* Top tools shown directly in the navbar */
+const PRIMARY_SLUGS = [
+  "compress",
+  "resize",
+  "crop",
+  "convert-to-jpg",
+  "photo-editor",
 ];
+
+const primaryTools = PRIMARY_SLUGS.map((s) => tools.find((t) => t.slug === s)!);
+const moreTools = tools.filter((t) => !PRIMARY_SLUGS.includes(t.slug));
+
+const moreCategories: { key: ToolCategory; label: string }[] = [
+  { key: "edit", label: "Edit" },
+  { key: "optimize", label: "Optimize" },
+  { key: "convert", label: "Convert" },
+  { key: "create", label: "Create" },
+  { key: "security", label: "Security" },
+  { key: "developer", label: "Developer" },
+];
+
+/* All image-accepting tools for the switcher bar */
+const SWITCHER_SLUGS = [
+  "compress", "resize", "crop", "rotate", "convert-to-jpg", "photo-editor",
+  "upscale", "convert-from-jpg", "watermark", "blur-face", "meme-generator",
+  "profile-picture", "black-and-white", "collage",
+];
+const switcherPrimary = SWITCHER_SLUGS.slice(0, 6).map((s) => tools.find((t) => t.slug === s)!);
+const switcherMore = SWITCHER_SLUGS.slice(6).map((s) => tools.find((t) => t.slug === s)!);
 
 export default function Header() {
   const [menuOpen, setMenuOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
   const [showUserMenu, setShowUserMenu] = useState(false);
-  const [openCat, setOpenCat] = useState<string | null>(null);
+  const [showMore, setShowMore] = useState(false);
+  const [showSwitcherMore, setShowSwitcherMore] = useState(false);
   const { user, isSignedIn, logout } = useLocalAuth();
-  const navRef = useRef<HTMLDivElement>(null);
+  const { sharedFile, sharedFileName, clearSharedImage } = useSharedImage();
+  const moreRef = useRef<HTMLDivElement>(null);
+  const switcherMoreRef = useRef<HTMLDivElement>(null);
+  const pathname = usePathname();
+
+  // Create thumbnail URL for shared image
+  const thumbUrl = useMemo(() => {
+    if (!sharedFile) return null;
+    return URL.createObjectURL(sharedFile);
+  }, [sharedFile]);
+
+  // Cleanup thumbnail URL
+  useEffect(() => {
+    return () => {
+      if (thumbUrl) URL.revokeObjectURL(thumbUrl);
+    };
+  }, [thumbUrl]);
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 20);
@@ -31,60 +71,106 @@ export default function Header() {
 
   useEffect(() => {
     const handleClick = (e: MouseEvent) => {
-      if (navRef.current && !navRef.current.contains(e.target as Node)) {
-        setOpenCat(null);
+      if (moreRef.current && !moreRef.current.contains(e.target as Node)) {
+        setShowMore(false);
+      }
+      if (switcherMoreRef.current && !switcherMoreRef.current.contains(e.target as Node)) {
+        setShowSwitcherMore(false);
       }
     };
     document.addEventListener("mousedown", handleClick);
     return () => document.removeEventListener("mousedown", handleClick);
   }, []);
 
+  const isActive = (href: string) => {
+    if (href === "/") return pathname === "/";
+    return pathname === href;
+  };
+
+  const hasImage = !!sharedFile;
+
   return (
     <header className={`sticky top-0 z-50 transition-all duration-300 ${scrolled ? "glass shadow-lg shadow-violet-500/5" : "bg-transparent"}`}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="flex items-center justify-between h-16">
-          <Link href="/" className="flex items-center gap-2.5 group">
+          <Link href="/" className="flex items-center gap-2.5 group flex-shrink-0">
             <div className="w-9 h-9 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/30 group-hover:shadow-violet-500/50 transition-shadow">
               <svg className="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                 <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z" />
               </svg>
             </div>
-            <span className="text-xl font-bold text-gray-900 dark:text-white">
+            <span className="text-xl font-bold text-gray-900 dark:text-white hidden sm:inline">
               BG<span className="bg-gradient-to-r from-violet-600 to-indigo-600 bg-clip-text text-transparent">Remover</span>
             </span>
           </Link>
 
-          <nav ref={navRef} className="hidden lg:flex items-center gap-1">
-            {/* Category dropdowns */}
-            {navCategories.map((cat) => {
-              const catTools = tools.filter((t) => t.category.includes(cat.key));
-              if (catTools.length === 0) return null;
-              const isOpen = openCat === cat.key;
-              return (
-                <div key={cat.key} className="relative">
+          {/* ===== DESKTOP NAV ===== */}
+          <nav className="hidden lg:flex items-center gap-0.5 flex-1 justify-end">
+            {hasImage ? (
+              /* ---- TOOL SWITCHER MODE (image loaded) ---- */
+              <>
+                {/* Thumbnail + filename */}
+                <div className="flex items-center gap-2 mr-2 pr-3 border-r border-gray-200 dark:border-gray-700">
+                  {thumbUrl && (
+                    // eslint-disable-next-line @next/next/no-img-element
+                    <img src={thumbUrl} alt="" className="w-8 h-8 rounded-lg object-cover ring-2 ring-violet-500/30" />
+                  )}
+                  <span className="text-xs text-gray-500 dark:text-gray-400 max-w-[80px] truncate">{sharedFileName}</span>
                   <button
-                    onClick={() => setOpenCat(isOpen ? null : cat.key)}
-                    className={`flex items-center gap-1 px-2.5 py-1.5 text-sm font-medium rounded-lg transition-colors ${
-                      isOpen
+                    onClick={clearSharedImage}
+                    className="w-5 h-5 flex items-center justify-center rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-red-100 dark:hover:bg-red-900/40 text-gray-500 hover:text-red-500 transition-colors"
+                    title="Clear image"
+                  >
+                    <svg className="w-3 h-3" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+
+                {/* Primary switcher tool links */}
+                {switcherPrimary.map((tool) => (
+                  <Link
+                    key={tool.slug}
+                    href={tool.href}
+                    className={`px-2.5 py-1.5 text-xs font-bold uppercase tracking-wide rounded-lg transition-colors whitespace-nowrap ${
+                      isActive(tool.href)
                         ? "text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/40"
                         : "text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
                     }`}
                   >
-                    {cat.label}
-                    <svg className={`w-3.5 h-3.5 transition-transform ${isOpen ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                    {tool.name}
+                  </Link>
+                ))}
+
+                {/* More tools in switcher */}
+                <div ref={switcherMoreRef} className="relative">
+                  <button
+                    onClick={() => setShowSwitcherMore(!showSwitcherMore)}
+                    className={`flex items-center gap-1 px-2.5 py-1.5 text-xs font-bold uppercase tracking-wide rounded-lg transition-colors ${
+                      showSwitcherMore
+                        ? "text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/40"
+                        : "text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                    }`}
+                  >
+                    More
+                    <svg className={`w-3.5 h-3.5 transition-transform ${showSwitcherMore ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
                       <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
                     </svg>
                   </button>
-                  {isOpen && (
-                    <div className="absolute top-full left-1/2 -translate-x-1/2 mt-2 w-56 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-fade-up py-2">
-                      {catTools.map((tool) => (
+                  {showSwitcherMore && (
+                    <div className="absolute top-full right-0 mt-2 w-56 bg-white dark:bg-gray-900 rounded-xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-fade-up py-2">
+                      {switcherMore.map((tool) => (
                         <Link
                           key={tool.slug}
                           href={tool.href}
-                          onClick={() => setOpenCat(null)}
-                          className="flex items-center gap-2.5 px-3 py-2 hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
+                          onClick={() => setShowSwitcherMore(false)}
+                          className={`flex items-center gap-2.5 px-3 py-2 transition-colors group ${
+                            isActive(tool.href)
+                              ? "bg-violet-50 dark:bg-violet-950/40"
+                              : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                          }`}
                         >
-                          <div className={`w-7 h-7 bg-gradient-to-br ${tool.color} rounded-md flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                          <div className={`w-7 h-7 bg-gradient-to-br ${tool.color} rounded-md flex items-center justify-center flex-shrink-0`}>
                             <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                               <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={tool.icon} />
                             </svg>
@@ -95,15 +181,79 @@ export default function Header() {
                     </div>
                   )}
                 </div>
-              );
-            })}
+              </>
+            ) : (
+              /* ---- NORMAL MODE (no image) ---- */
+              <>
+                {primaryTools.map((tool) => (
+                  <Link
+                    key={tool.slug}
+                    href={tool.href}
+                    className={`px-3 py-1.5 text-xs font-bold uppercase tracking-wide rounded-lg transition-colors ${
+                      isActive(tool.href)
+                        ? "text-violet-600 dark:text-violet-400"
+                        : "text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                    }`}
+                  >
+                    {tool.name}
+                  </Link>
+                ))}
 
-            <Link href="/pricing" className="px-2.5 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">Pricing</Link>
-            <Link href="/api-docs" className="px-2.5 py-1.5 text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-gray-50 dark:hover:bg-gray-800/50 rounded-lg transition-colors">API</Link>
+                {/* More Tools dropdown */}
+                <div ref={moreRef} className="relative">
+                  <button
+                    onClick={() => setShowMore(!showMore)}
+                    className={`flex items-center gap-1 px-3 py-1.5 text-xs font-bold uppercase tracking-wide rounded-lg transition-colors ${
+                      showMore
+                        ? "text-violet-600 dark:text-violet-400 bg-violet-50 dark:bg-violet-950/40"
+                        : "text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 hover:bg-gray-50 dark:hover:bg-gray-800/50"
+                    }`}
+                  >
+                    More Tools
+                    <svg className={`w-3.5 h-3.5 transition-transform ${showMore ? "rotate-180" : ""}`} fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M19 9l-7 7-7-7" />
+                    </svg>
+                  </button>
+                  {showMore && (
+                    <div className="absolute top-full right-0 mt-2 w-[520px] bg-white dark:bg-gray-900 rounded-2xl shadow-2xl border border-gray-200 dark:border-gray-700 z-50 overflow-hidden animate-fade-up p-5 max-h-[75vh] overflow-y-auto">
+                      <div className="grid grid-cols-2 gap-x-6 gap-y-4">
+                        {moreCategories.map((cat) => {
+                          const catTools = moreTools.filter((t) => t.category.includes(cat.key));
+                          if (catTools.length === 0) return null;
+                          return (
+                            <div key={cat.key}>
+                              <p className="text-xs font-bold uppercase tracking-wider text-violet-600 dark:text-violet-400 mb-2 px-1">{cat.label}</p>
+                              <div className="space-y-0.5">
+                                {catTools.map((tool) => (
+                                  <Link
+                                    key={tool.slug}
+                                    href={tool.href}
+                                    onClick={() => setShowMore(false)}
+                                    className="flex items-center gap-2.5 px-2 py-1.5 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors group"
+                                  >
+                                    <div className={`w-7 h-7 bg-gradient-to-br ${tool.color} rounded-md flex items-center justify-center flex-shrink-0 group-hover:scale-110 transition-transform`}>
+                                      <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                        <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={tool.icon} />
+                                      </svg>
+                                    </div>
+                                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300 group-hover:text-violet-600 dark:group-hover:text-violet-400 transition-colors">{tool.name}</span>
+                                  </Link>
+                                ))}
+                              </div>
+                            </div>
+                          );
+                        })}
+                      </div>
+                    </div>
+                  )}
+                </div>
+              </>
+            )}
+
             <DarkModeToggle />
 
             {isSignedIn ? (
-              <div className="relative">
+              <div className="relative ml-1">
                 <button
                   onClick={() => setShowUserMenu(!showUserMenu)}
                   className="w-9 h-9 bg-gradient-to-br from-violet-500 to-indigo-500 rounded-full flex items-center justify-center text-white text-sm font-bold shadow-md hover:shadow-lg transition-shadow"
@@ -129,9 +279,9 @@ export default function Header() {
                 )}
               </div>
             ) : (
-              <div className="flex items-center gap-2">
+              <div className="flex items-center gap-2 ml-1">
                 <Link href="/login" className="text-sm font-medium text-gray-600 dark:text-gray-300 hover:text-violet-600 dark:hover:text-violet-400 transition-colors">
-                  Log in
+                  Login
                 </Link>
                 <Link href="/signup" className="px-4 py-2 bg-gradient-to-r from-violet-600 to-indigo-600 text-white text-sm font-semibold rounded-xl hover:from-violet-700 hover:to-indigo-700 transition-all shadow-lg shadow-violet-500/25">
                   Sign up
@@ -140,6 +290,7 @@ export default function Header() {
             )}
           </nav>
 
+          {/* ===== MOBILE HAMBURGER ===== */}
           <div className="flex lg:hidden items-center gap-2">
             <DarkModeToggle />
             {isSignedIn ? (
@@ -161,36 +312,47 @@ export default function Header() {
           </div>
         </div>
 
+        {/* ===== MOBILE MENU ===== */}
         {menuOpen && (
           <div className="lg:hidden py-4 border-t border-gray-100 dark:border-gray-800 animate-fade-up">
             <div className="flex flex-col gap-1">
-              {navCategories.map((cat) => {
-                const catTools = tools.filter((t) => t.category.includes(cat.key));
-                if (catTools.length === 0) return null;
-                return (
-                  <div key={cat.key}>
-                    <p className="px-3 py-2 text-xs font-semibold text-violet-500 dark:text-violet-400 uppercase tracking-wider">{cat.label}</p>
-                    {catTools.map((tool) => (
-                      <Link
-                        key={tool.slug}
-                        href={tool.href}
-                        className="flex items-center gap-3 px-3 py-2 rounded-lg hover:bg-gray-50 dark:hover:bg-gray-800 transition-colors"
-                        onClick={() => setMenuOpen(false)}
-                      >
-                        <div className={`w-7 h-7 bg-gradient-to-br ${tool.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
-                          <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                            <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={tool.icon} />
-                          </svg>
-                        </div>
-                        <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{tool.name}</span>
-                      </Link>
-                    ))}
+              {/* Shared image indicator */}
+              {hasImage && thumbUrl && (
+                <div className="flex items-center gap-3 px-3 py-2 mb-2 bg-violet-50 dark:bg-violet-950/30 rounded-lg">
+                  {/* eslint-disable-next-line @next/next/no-img-element */}
+                  <img src={thumbUrl} alt="" className="w-10 h-10 rounded-lg object-cover ring-2 ring-violet-500/30" />
+                  <div className="flex-1 min-w-0">
+                    <p className="text-xs font-medium text-violet-600 dark:text-violet-400">Image loaded</p>
+                    <p className="text-xs text-gray-500 truncate">{sharedFileName}</p>
                   </div>
-                );
-              })}
+                  <button onClick={clearSharedImage} className="text-gray-400 hover:text-red-500 transition-colors">
+                    <svg className="w-4 h-4" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d="M6 18L18 6M6 6l12 12" />
+                    </svg>
+                  </button>
+                </div>
+              )}
+
+              {tools.map((tool) => (
+                <Link
+                  key={tool.slug}
+                  href={tool.href}
+                  className={`flex items-center gap-3 px-3 py-2 rounded-lg transition-colors ${
+                    isActive(tool.href)
+                      ? "bg-violet-50 dark:bg-violet-950/40 text-violet-600 dark:text-violet-400"
+                      : "hover:bg-gray-50 dark:hover:bg-gray-800"
+                  }`}
+                  onClick={() => setMenuOpen(false)}
+                >
+                  <div className={`w-7 h-7 bg-gradient-to-br ${tool.color} rounded-lg flex items-center justify-center flex-shrink-0`}>
+                    <svg className="w-3.5 h-3.5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                      <path strokeLinecap="round" strokeLinejoin="round" strokeWidth={2} d={tool.icon} />
+                    </svg>
+                  </div>
+                  <span className="text-sm font-medium text-gray-700 dark:text-gray-300">{tool.name}</span>
+                </Link>
+              ))}
               <div className="border-t border-gray-100 dark:border-gray-800 mt-2 pt-2">
-                <Link href="/#features" className="block px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Features</Link>
-                <Link href="/#how-it-works" className="block px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>How It Works</Link>
                 <Link href="/pricing" className="block px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>Pricing</Link>
                 <Link href="/api-docs" className="block px-3 py-2 text-sm font-medium text-gray-600 dark:text-gray-300" onClick={() => setMenuOpen(false)}>API</Link>
               </div>

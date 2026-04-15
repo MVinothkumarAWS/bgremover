@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -162,6 +163,8 @@ export default function BlackAndWhitePage() {
   const [downloadFormat, setDownloadFormat] = useState<"png" | "jpg">("png");
   const [isDragOver, setIsDragOver] = useState(false);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const thumbCanvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
@@ -183,6 +186,7 @@ export default function BlackAndWhitePage() {
   const handleFile = useCallback(
     (file: File) => {
       if (!file.type.startsWith("image/")) return;
+      setSharedImage(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         const src = e.target?.result as string;
@@ -197,6 +201,11 @@ export default function BlackAndWhitePage() {
     },
     [loadImageToCanvas]
   );
+
+  useEffect(() => {
+    if (sharedFile && !imageSrc) handleFile(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Apply filter whenever activeFilter or intensity changes
   useEffect(() => {

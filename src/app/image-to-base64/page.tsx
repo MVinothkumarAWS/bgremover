@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -44,6 +45,8 @@ export default function ImageToBase64Page() {
   const [outputMode, setOutputMode] = useState<"dataurl" | "raw">("dataurl");
   const [copied, setCopied] = useState<string | null>(null);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const copyToClipboard = useCallback((text: string, label: string) => {
@@ -53,8 +56,9 @@ export default function ImageToBase64Page() {
   }, []);
 
   const handleFiles = useCallback((fileList: FileList) => {
-    Array.from(fileList).forEach((file) => {
-      if (!file.type.startsWith("image/")) return;
+    const validFiles = Array.from(fileList).filter((f) => f.type.startsWith("image/"));
+    if (validFiles.length > 0) setSharedImage(validFiles[0]);
+    validFiles.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (e) => {
         const dataUrl = e.target?.result as string;
@@ -72,6 +76,15 @@ export default function ImageToBase64Page() {
       };
       reader.readAsDataURL(file);
     });
+  }, []);
+
+  useEffect(() => {
+    if (sharedFile && images.length === 0) {
+      const dt = new DataTransfer();
+      dt.items.add(sharedFile);
+      handleFiles(dt.files);
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const removeImage = useCallback((id: string) => {

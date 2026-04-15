@@ -4,6 +4,7 @@ import { AuthProvider } from "@/components/AuthProvider";
 import { AuthContextProvider } from "@/context/AuthContext";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { PremiumProvider } from "@/context/PremiumContext";
+import { SharedImageProvider } from "@/context/SharedImageContext";
 import "./globals.css";
 
 const inter = Inter({
@@ -46,7 +47,9 @@ export default function RootLayout({
         <AuthProvider>
           <AuthContextProvider>
             <ThemeProvider>
-              <PremiumProvider>{children}</PremiumProvider>
+              <PremiumProvider>
+                <SharedImageProvider>{children}</SharedImageProvider>
+              </PremiumProvider>
             </ThemeProvider>
           </AuthContextProvider>
         </AuthProvider>

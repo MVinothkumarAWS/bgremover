@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 interface ImageDimensions {
   width: number;
@@ -40,12 +41,14 @@ export default function ResizePage() {
 
   const inputRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
+  const { sharedFile, setSharedImage } = useSharedImage();
 
   const aspectRatio = originalDimensions.width / (originalDimensions.height || 1);
 
   // Load image and extract dimensions
   const loadImage = useCallback((f: File) => {
     setFile(f);
+    setSharedImage(f);
     const url = URL.createObjectURL(f);
     setOriginalUrl(url);
 
@@ -58,6 +61,12 @@ export default function ResizePage() {
       setPreviewUrl("");
     };
     img.src = url;
+  }, [setSharedImage]);
+
+  // Load shared image on mount
+  useEffect(() => {
+    if (sharedFile && !file) loadImage(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Clean up object URLs

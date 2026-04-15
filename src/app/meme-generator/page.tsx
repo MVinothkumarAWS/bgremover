@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 const FONT_FAMILIES = ["Impact", "Arial Black", "Comic Sans MS", "Courier"];
 const TEXT_ALIGNMENTS = ["left", "center", "right"] as const;
@@ -25,8 +26,11 @@ export default function MemeGeneratorPage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const loadImage = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
+    setSharedImage(file);
     setImageName(file.name);
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -35,6 +39,11 @@ export default function MemeGeneratorPage() {
       img.src = e.target?.result as string;
     };
     reader.readAsDataURL(file);
+  }, [setSharedImage]);
+
+  useEffect(() => {
+    if (sharedFile && !image) loadImage(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrop = useCallback(

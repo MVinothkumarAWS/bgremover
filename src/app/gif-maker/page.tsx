@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 interface FrameItem {
   id: string;
@@ -44,6 +45,8 @@ export default function GifMakerPage() {
   const [currentFrame, setCurrentFrame] = useState(0);
   const [downloading, setDownloading] = useState(false);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const inputRef = useRef<HTMLInputElement>(null);
   const addInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
@@ -54,6 +57,7 @@ export default function GifMakerPage() {
   const addFiles = useCallback(async (files: FileList | File[]) => {
     const fileArr = Array.from(files).filter((f) => f.type.startsWith("image/"));
     if (fileArr.length === 0) return;
+    setSharedImage(fileArr[0]);
 
     const newFrames: FrameItem[] = [];
     for (const file of fileArr) {
@@ -65,6 +69,11 @@ export default function GifMakerPage() {
       }
     }
     setFrames((prev) => [...prev, ...newFrames]);
+  }, []);
+
+  useEffect(() => {
+    if (sharedFile && frames.length === 0) addFiles([sharedFile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   // Drag and drop handlers

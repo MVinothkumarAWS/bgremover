@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 type AspectRatio = "free" | "1:1" | "4:3" | "16:9" | "3:2" | "2:3";
 type DragMode = "none" | "draw" | "move" | "nw" | "ne" | "sw" | "se" | "n" | "s" | "e" | "w";
@@ -37,6 +38,7 @@ export default function CropPage() {
 
   const containerRef = useRef<HTMLDivElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const { sharedFile, setSharedImage } = useSharedImage();
 
   const [displaySize, setDisplaySize] = useState({ w: 0, h: 0 });
   const [imageOffset, setImageOffset] = useState({ x: 0, y: 0 });
@@ -57,8 +59,9 @@ export default function CropPage() {
     return () => window.removeEventListener("resize", updateDisplayMetrics);
   }, [updateDisplayMetrics]);
 
-  const handleFile = (file: File) => {
+  const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
+    setSharedImage(file);
     const ext = file.name.split(".").pop() || "png";
     setFileName(`cropped-image.${ext}`);
     const reader = new FileReader();
@@ -74,7 +77,14 @@ export default function CropPage() {
       img.src = src;
     };
     reader.readAsDataURL(file);
-  };
+  // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [setSharedImage]);
+
+  // Load shared image on mount
+  useEffect(() => {
+    if (sharedFile && !imageSrc) handleFile(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   // Scale factors
   const scaleX = imageEl ? imageEl.naturalWidth / (displaySize.w || 1) : 1;

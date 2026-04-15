@@ -3,6 +3,7 @@
 import { useState, useRef, useEffect, useCallback } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 type WatermarkMode = "text" | "image";
 type Position =
@@ -56,17 +57,25 @@ export default function WatermarkPage() {
   const [scale, setScale] = useState(30);
   const [tile, setTile] = useState(false);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const wmFileInputRef = useRef<HTMLInputElement>(null);
 
   const handleImageLoad = useCallback((file: File) => {
+    setSharedImage(file);
     const img = new Image();
     img.onload = () => {
       setSourceImage(img);
       setSourceFileName(file.name);
     };
     img.src = URL.createObjectURL(file);
+  }, []);
+
+  useEffect(() => {
+    if (sharedFile && !sourceImage) handleImageLoad(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrop = useCallback(

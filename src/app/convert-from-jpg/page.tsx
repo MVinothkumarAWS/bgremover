@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 type TargetFormat = "image/png" | "image/webp" | "image/gif";
 
@@ -30,6 +31,8 @@ export default function ConvertFromJpgPage() {
   const [dragOver, setDragOver] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const formatSize = (bytes: number) => {
     if (bytes < 1024) return `${bytes} B`;
     if (bytes < 1024 * 1024) return `${(bytes / 1024).toFixed(1)} KB`;
@@ -47,6 +50,7 @@ export default function ConvertFromJpgPage() {
       const newItems: FileItem[] = [];
       for (const file of Array.from(incoming)) {
         if (!file.type.match(/^image\/jpe?g$/)) continue;
+        if (newItems.length === 0) setSharedImage(file);
         newItems.push({
           id: crypto.randomUUID(),
           file,
@@ -60,8 +64,13 @@ export default function ConvertFromJpgPage() {
       }
       setFiles((prev) => [...prev, ...newItems]);
     },
-    [targetFormat]
+    [targetFormat, setSharedImage]
   );
+
+  useEffect(() => {
+    if (sharedFile && files.length === 0 && sharedFile.type.match(/^image\/jpe?g$/)) addFiles([sharedFile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const convertOne = useCallback(
     (item: FileItem, fmt: TargetFormat): Promise<FileItem> => {

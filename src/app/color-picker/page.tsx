@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 /* ------------------------------------------------------------------ */
 /*  Types                                                              */
@@ -169,6 +170,8 @@ export default function ColorPickerPage() {
   const [isDragOver, setIsDragOver] = useState(false);
   const [copied, setCopied] = useState<string | null>(null);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const fileInputRef = useRef<HTMLInputElement>(null);
   const imgRef = useRef<HTMLImageElement | null>(null);
@@ -190,6 +193,7 @@ export default function ColorPickerPage() {
   const handleFile = useCallback(
     (file: File) => {
       if (!file.type.startsWith("image/")) return;
+      setSharedImage(file);
       const reader = new FileReader();
       reader.onload = (e) => {
         const src = e.target?.result as string;
@@ -207,6 +211,11 @@ export default function ColorPickerPage() {
     },
     [drawImage]
   );
+
+  useEffect(() => {
+    if (sharedFile && !imageSrc) handleFile(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const handleCanvasClick = useCallback(
     (e: React.MouseEvent<HTMLCanvasElement>) => {

@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 export default function RotatePage() {
   const [imageSrc, setImageSrc] = useState<string | null>(null);
@@ -15,8 +16,11 @@ export default function RotatePage() {
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const originalImageRef = useRef<HTMLImageElement | null>(null);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
+    setSharedImage(file);
     setFileName(file.name);
     const reader = new FileReader();
     reader.onload = (e) => {
@@ -27,6 +31,11 @@ export default function RotatePage() {
       setFlipV(false);
     };
     reader.readAsDataURL(file);
+  }, [setSharedImage]);
+
+  useEffect(() => {
+    if (sharedFile && !imageSrc) handleFile(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrop = useCallback(

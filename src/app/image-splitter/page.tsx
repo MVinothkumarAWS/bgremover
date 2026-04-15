@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 interface GridPreset {
   label: string;
@@ -40,10 +41,13 @@ export default function ImageSplitterPage() {
   const [splitting, setSplitting] = useState(false);
   const [isDragOver, setIsDragOver] = useState(false);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
+    setSharedImage(file);
     const baseName = file.name.replace(/\.[^.]+$/, "");
     setFileName(baseName);
     setPieces([]);
@@ -56,6 +60,11 @@ export default function ImageSplitterPage() {
       img.src = src;
     };
     reader.readAsDataURL(file);
+  }, []);
+
+  useEffect(() => {
+    if (sharedFile && !imageSrc) handleFile(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const onDrop = useCallback(

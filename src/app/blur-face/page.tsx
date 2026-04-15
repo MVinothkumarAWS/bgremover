@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 interface BlurRegion {
   x: number;
@@ -80,6 +81,8 @@ export default function BlurFacePage() {
   const [blurApplied, setBlurApplied] = useState(false);
   const [dragOver, setDragOver] = useState(false);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const overlayCanvasRef = useRef<HTMLCanvasElement>(null);
   const originalImageRef = useRef<HTMLImageElement | null>(null);
@@ -137,6 +140,7 @@ export default function BlurFacePage() {
 
   const handleFile = (file: File) => {
     if (!file.type.startsWith("image/")) return;
+    setSharedImage(file);
     const reader = new FileReader();
     reader.onload = (e) => {
       const src = e.target?.result as string;
@@ -153,6 +157,11 @@ export default function BlurFacePage() {
     };
     reader.readAsDataURL(file);
   };
+
+  useEffect(() => {
+    if (sharedFile && !imageSrc) handleFile(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const getCanvasCoords = (e: React.MouseEvent<HTMLCanvasElement>) => {
     const overlay = overlayCanvasRef.current;

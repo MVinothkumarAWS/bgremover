@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 type ScaleFactor = 2 | 4;
 
@@ -16,8 +17,11 @@ export default function UpscalePage() {
   const fileInputRef = useRef<HTMLInputElement>(null);
   const canvasRef = useRef<HTMLCanvasElement>(null);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const handleFile = useCallback((file: File) => {
     if (!file.type.startsWith("image/")) return;
+    setSharedImage(file);
     const reader = new FileReader();
     reader.onload = (e) => {
       const dataUrl = e.target?.result as string;
@@ -30,6 +34,11 @@ export default function UpscalePage() {
       img.src = dataUrl;
     };
     reader.readAsDataURL(file);
+  }, [setSharedImage]);
+
+  useEffect(() => {
+    if (sharedFile && !originalImage) handleFile(sharedFile);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrop = useCallback(

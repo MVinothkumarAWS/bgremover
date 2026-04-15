@@ -3,6 +3,7 @@
 import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 
 /* ------------------------------------------------------------------ */
 /*  Types & constants                                                  */
@@ -82,6 +83,8 @@ export default function CollagePage() {
   const [dragActive, setDragActive] = useState(false);
   const inputRef = useRef<HTMLInputElement>(null);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   /* ---- collage settings ---- */
   const [layout, setLayout] = useState<LayoutPreset>(LAYOUT_PRESETS[2]); // 2x2
   const [gap, setGap] = useState(6);
@@ -100,6 +103,7 @@ export default function CollagePage() {
 
   const loadImages = useCallback((files: FileList | File[]) => {
     const fileArr = Array.from(files).filter((f) => f.type.startsWith("image/"));
+    if (fileArr.length > 0) setSharedImage(fileArr[0]);
     fileArr.forEach((file) => {
       const reader = new FileReader();
       reader.onload = (e) => {
@@ -109,6 +113,11 @@ export default function CollagePage() {
       };
       reader.readAsDataURL(file);
     });
+  }, [setSharedImage]);
+
+  useEffect(() => {
+    if (sharedFile && images.length === 0) loadImages([sharedFile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const handleDrop = useCallback(

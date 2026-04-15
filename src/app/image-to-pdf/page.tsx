@@ -1,8 +1,9 @@
 "use client";
 
-import { useState, useRef, useCallback } from "react";
+import { useState, useRef, useCallback, useEffect } from "react";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import { useSharedImage } from "@/context/SharedImageContext";
 import { jsPDF } from "jspdf";
 
 interface ImageItem {
@@ -37,6 +38,8 @@ export default function ImageToPdfPage() {
   const inputRef = useRef<HTMLInputElement>(null);
   const addMoreRef = useRef<HTMLInputElement>(null);
 
+  const { sharedFile, setSharedImage } = useSharedImage();
+
   const readAsDataUrl = (file: File): Promise<string> =>
     new Promise((resolve, reject) => {
       const reader = new FileReader();
@@ -60,6 +63,7 @@ export default function ImageToPdfPage() {
     const newItems: ImageItem[] = [];
     for (const file of Array.from(incoming)) {
       if (!file.type.startsWith("image/")) continue;
+      if (newItems.length === 0) setSharedImage(file);
       const previewUrl = URL.createObjectURL(file);
       const dataUrl = await readAsDataUrl(file);
       const { width, height } = await getImageDimensions(previewUrl);
@@ -74,6 +78,11 @@ export default function ImageToPdfPage() {
     }
     setImages((prev) => [...prev, ...newItems]);
     setPdfBlob(null);
+  }, [setSharedImage]);
+
+  useEffect(() => {
+    if (sharedFile && images.length === 0) addFiles([sharedFile]);
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
   const removeImage = (id: string) => {
