@@ -275,6 +275,7 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
         const blob = await removeBackground(files[i], {
           model: "isnet",
           device: "gpu",
+          rescale: false,
           output: { format: "image/png", quality: 1.0 },
         });
         setResults((prev) => new Map(prev).set(files[i].name, URL.createObjectURL(blob)));

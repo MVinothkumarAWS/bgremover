@@ -90,6 +90,7 @@ export async function POST(request: NextRequest) {
     const inputBlob = new Blob([imageBuffer]);
     const resultBlob = await removeBackground(inputBlob, {
       model: "isnet",
+      rescale: false,
       output: { format: "image/png", quality: 1.0 },
     });
 

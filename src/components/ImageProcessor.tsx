@@ -158,6 +158,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
         const blob = await removeBackground(file, {
           model: "isnet",
           device: "gpu",
+          rescale: false,
           output: { format: "image/png", quality: 1.0 },
           progress: (key: string, cur: number, tot: number) => { if (key === "compute:inference") setProgress(30 + Math.round((cur / tot) * 60)); },
         });
