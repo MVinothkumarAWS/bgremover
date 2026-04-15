@@ -148,20 +148,36 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
 
   useEffect(() => {
     let cancelled = false;
+    async function tryServerSide(): Promise<Blob | null> {
+      try {
+        const formData = new FormData();
+        formData.append("image", file);
+        const res = await fetch("/api/remove-bg-server", { method: "POST", body: formData });
+        if (!res.ok) return null;
+        return await res.blob();
+      } catch { return null; }
+    }
+    async function clientSideFallback(): Promise<Blob> {
+      const { removeBackground } = await import("@imgly/background-removal");
+      return await removeBackground(file, {
+        model: "isnet",
+        device: "gpu",
+        rescale: false,
+        output: { format: "image/png", quality: 1.0 },
+        progress: (key: string, cur: number, tot: number) => { if (key === "compute:inference") setProgress(30 + Math.round((cur / tot) * 60)); },
+      });
+    }
     async function run() {
       try {
-        setStatus("loading-model"); setProgress(10);
-        const { removeBackground } = await import("@imgly/background-removal");
-        if (cancelled) return;
-        setStatus("processing"); setProgress(30);
+        setStatus("processing"); setProgress(10);
         const iv = setInterval(() => setProgress(p => p >= 90 ? (clearInterval(iv), 90) : p + Math.random() * 5), 500);
-        const blob = await removeBackground(file, {
-          model: "isnet",
-          device: "gpu",
-          rescale: false,
-          output: { format: "image/png", quality: 1.0 },
-          progress: (key: string, cur: number, tot: number) => { if (key === "compute:inference") setProgress(30 + Math.round((cur / tot) * 60)); },
-        });
+        // Try server-side first (better quality), fall back to client-side
+        let blob = await tryServerSide();
+        if (cancelled) { clearInterval(iv); return; }
+        if (!blob) {
+          setStatus("loading-model"); setProgress(20);
+          blob = await clientSideFallback();
+        }
         clearInterval(iv);
         if (cancelled) return;
         setResultBlob(blob);

@@ -22,6 +22,27 @@ function checkRateLimit(apiKey: string): { allowed: boolean; remaining: number }
   return { allowed: true, remaining: FREE_LIMIT - entry.count };
 }
 
+async function processImage(imageBuffer: ArrayBuffer): Promise<Blob> {
+  // Use Node.js server-side library for better quality
+  try {
+    const { removeBackground } = await import("@imgly/background-removal-node");
+    const inputBlob = new Blob([imageBuffer]);
+    return await removeBackground(inputBlob, {
+      model: "large",
+      output: { format: "image/png", quality: 1.0 },
+    });
+  } catch {
+    // Fallback to browser version if node version fails
+    const { removeBackground } = await import("@imgly/background-removal");
+    const inputBlob = new Blob([imageBuffer]);
+    return await removeBackground(inputBlob, {
+      model: "isnet",
+      rescale: false,
+      output: { format: "image/png", quality: 1.0 },
+    });
+  }
+}
+
 export async function POST(request: NextRequest) {
   try {
     // Check API key
@@ -85,16 +106,8 @@ export async function POST(request: NextRequest) {
       }
     }
 
-    // Process image
-    const { removeBackground } = await import("@imgly/background-removal");
-    const inputBlob = new Blob([imageBuffer]);
-    const resultBlob = await removeBackground(inputBlob, {
-      model: "isnet",
-      rescale: false,
-      output: { format: "image/png", quality: 1.0 },
-    });
-
-    // Convert if needed
+    // Process image with server-side Node.js library
+    const resultBlob = await processImage(imageBuffer);
     const resultBuffer = await resultBlob.arrayBuffer();
 
     return new NextResponse(resultBuffer, {
@@ -122,7 +135,7 @@ export async function GET() {
     docs: "/api-docs",
     endpoints: {
       "POST /api/remove-bg": {
-        description: "Remove background from an image",
+        description: "Remove background from an image (server-side processing)",
         headers: { "x-api-key": "Your API key (required)" },
         body: "multipart/form-data with 'image' field, OR JSON with 'image_url', OR raw image bytes",
         options: { format: "Output format: png (default), jpg, webp" },
