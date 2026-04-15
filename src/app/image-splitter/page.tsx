@@ -292,7 +292,7 @@ export default function ImageSplitterPage() {
                     className="w-24 px-3 py-2 rounded-lg border border-gray-300 dark:border-gray-600 bg-white dark:bg-gray-700 text-center text-sm font-medium focus:ring-2 focus:ring-violet-500 focus:border-transparent outline-none"
                   />
                 </div>
-                <div className="flex items-end pb-2 text-gray-400 font-bold text-lg">\u00d7</div>
+                <div className="flex items-end pb-2 text-gray-400 font-bold text-lg">{"\u00d7"}</div>
                 <div>
                   <label className="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">
                     Columns (1-10)
@@ -308,7 +308,7 @@ export default function ImageSplitterPage() {
                 </div>
                 <div className="flex items-end pb-2">
                   <span className="text-sm text-gray-500 dark:text-gray-400">
-                    = {rows * cols} pieces ({Math.floor(imageEl.naturalWidth / cols)}\u00d7{Math.floor(imageEl.naturalHeight / rows)}px each)
+                    = {rows * cols} pieces ({Math.floor(imageEl.naturalWidth / cols)}{"\u00d7"}{Math.floor(imageEl.naturalHeight / rows)}px each)
                   </span>
                 </div>
               </div>

@@ -146,6 +146,7 @@ export default function PhotoEditorPage() {
   /* Canvas refs */
   const canvasRef = useRef<HTMLCanvasElement>(null);
   const originalImage = useRef<HTMLImageElement | null>(null);
+  const [imageReady, setImageReady] = useState(false);
 
   /* Thumbnail canvas refs for filter previews */
   const thumbRefs = useRef<Map<string, HTMLCanvasElement>>(new Map());
@@ -156,11 +157,13 @@ export default function PhotoEditorPage() {
 
   const loadImage = useCallback((file: File) => {
     setImageFile(file);
+    setImageReady(false);
     const url = URL.createObjectURL(file);
     setImageSrc(url);
     const img = new Image();
     img.onload = () => {
       originalImage.current = img;
+      setImageReady(true);
     };
     img.src = url;
   }, []);
@@ -193,6 +196,7 @@ export default function PhotoEditorPage() {
     if (imageSrc) URL.revokeObjectURL(imageSrc);
     setImageFile(null);
     setImageSrc(null);
+    setImageReady(false);
     originalImage.current = null;
     resetAll();
     if (inputRef.current) inputRef.current.value = "";
@@ -252,7 +256,7 @@ export default function PhotoEditorPage() {
       ctx.globalAlpha = 1;
       ctx.filter = "none";
     }
-  }, [adjustments, activePreset, transform]);
+  }, [adjustments, activePreset, transform, imageReady]);
 
   /* ---------------------------------------------------------------- */
   /*  Thumbnail rendering for filter presets                           */
