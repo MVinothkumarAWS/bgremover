@@ -83,7 +83,7 @@ export default function Header() {
   }, []);
 
   const isActive = (href: string) => {
-    if (href === "/") return pathname === "/";
+    if (href === "/" || href === "/#upload") return pathname === "/";
     return pathname === href;
   };
 
