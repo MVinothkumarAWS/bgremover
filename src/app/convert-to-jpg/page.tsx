@@ -63,49 +63,61 @@ export default function ConvertToJpgPage() {
   const convertOne = useCallback(
     (item: FileItem, q: number, bg: string): Promise<FileItem> => {
       return new Promise((resolve) => {
-        const img = new Image();
-        img.onload = () => {
-          const canvas = document.createElement("canvas");
-          canvas.width = img.naturalWidth;
-          canvas.height = img.naturalHeight;
-          const ctx = canvas.getContext("2d")!;
-          // Fill background for transparent images
-          ctx.fillStyle = bg;
-          ctx.fillRect(0, 0, canvas.width, canvas.height);
-          ctx.drawImage(img, 0, 0);
-          canvas.toBlob(
-            (blob) => {
-              if (blob) {
-                resolve({
-                  ...item,
-                  convertedBlob: blob,
-                  convertedSize: blob.size,
-                  status: "done",
-                });
-              } else {
-                resolve({ ...item, status: "error", error: "Conversion failed" });
-              }
-            },
-            "image/jpeg",
-            q / 100
-          );
+        // Read the original file as a data URL to preserve transparency info
+        const reader = new FileReader();
+        reader.onload = () => {
+          const img = new Image();
+          img.onload = () => {
+            const canvas = document.createElement("canvas");
+            canvas.width = img.naturalWidth;
+            canvas.height = img.naturalHeight;
+            const ctx = canvas.getContext("2d")!;
+            // Fill with chosen background color FIRST (for transparent areas)
+            ctx.fillStyle = bg;
+            ctx.fillRect(0, 0, canvas.width, canvas.height);
+            // Then draw the image on top
+            ctx.drawImage(img, 0, 0);
+            canvas.toBlob(
+              (blob) => {
+                if (blob) {
+                  resolve({
+                    ...item,
+                    convertedBlob: blob,
+                    convertedSize: blob.size,
+                    status: "done",
+                  });
+                } else {
+                  resolve({ ...item, status: "error", error: "Conversion failed" });
+                }
+              },
+              "image/jpeg",
+              q / 100
+            );
+          };
+          img.onerror = () => resolve({ ...item, status: "error", error: "Could not load image" });
+          img.src = reader.result as string;
         };
-        img.onerror = () => resolve({ ...item, status: "error", error: "Could not load image" });
-        img.src = item.previewUrl;
+        reader.onerror = () => resolve({ ...item, status: "error", error: "Could not read file" });
+        reader.readAsDataURL(item.file);
       });
     },
     []
   );
 
+  // Use a ref to always have the latest files for the convert loop
+  const filesRef = useRef<FileItem[]>([]);
+  filesRef.current = files;
+
   const convertAll = useCallback(async () => {
+    const currentFiles = filesRef.current;
     setFiles((prev) => prev.map((f) => (f.status !== "done" ? { ...f, status: "converting" as const } : f)));
 
-    for (let i = 0; i < files.length; i++) {
-      if (files[i].status === "done") continue;
-      const result = await convertOne(files[i], quality, bgColor);
+    for (let i = 0; i < currentFiles.length; i++) {
+      if (currentFiles[i].status === "done") continue;
+      const result = await convertOne(currentFiles[i], quality, bgColor);
       setFiles((prev) => prev.map((f) => (f.id === result.id ? result : f)));
     }
-  }, [files, quality, bgColor, convertOne]);
+  }, [quality, bgColor, convertOne]);
 
   const downloadOne = (item: FileItem) => {
     if (!item.convertedBlob) return;
