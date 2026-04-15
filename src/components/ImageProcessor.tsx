@@ -153,12 +153,16 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
     async function tryRembgApi(): Promise<Blob | null> {
       if (!REMBG_API) return null;
       try {
+        const controller = new AbortController();
+        const timeout = setTimeout(() => controller.abort(), 15000); // 15s timeout
         const formData = new FormData();
         formData.append("image", file);
         const res = await fetch(`${REMBG_API}/remove-bg`, {
           method: "POST",
           body: formData,
+          signal: controller.signal,
         });
+        clearTimeout(timeout);
         if (!res.ok) return null;
         return await res.blob();
       } catch { return null; }
