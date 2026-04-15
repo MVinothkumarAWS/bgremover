@@ -12,14 +12,14 @@ const inter = Inter({
 });
 
 export const metadata: Metadata = {
-  title: "BG Remover - Remove Image Background Instantly",
+  title: "BG Remover - Free Online Image Tools | Remove BG, Compress, Resize & More",
   description:
-    "Remove image backgrounds automatically in seconds. 100% free, no signup required. Powered by AI.",
+    "Free online image tools: remove backgrounds, compress, resize, crop, rotate, convert, watermark, upscale, and edit photos. 100% in-browser, no uploads.",
   manifest: "/manifest.json",
-  keywords: ["background remover", "remove background", "AI background removal", "transparent PNG", "free background remover", "image editor"],
+  keywords: ["background remover", "image compressor", "resize image", "crop image", "convert to jpg", "watermark image", "meme generator", "photo editor", "upscale image", "free image tools"],
   openGraph: {
-    title: "BG Remover - Remove Image Background Instantly",
-    description: "Professional AI background removal. 100% free, private, runs in your browser.",
+    title: "BG Remover - Free Online Image Tools",
+    description: "Every image tool you need in one place. Remove backgrounds, compress, resize, crop, convert, watermark and more. 100% free, runs in your browser.",
     url: "https://bgremover.k2techinfo.com",
     siteName: "BG Remover",
     type: "website",
@@ -27,8 +27,8 @@ export const metadata: Metadata = {
   },
   twitter: {
     card: "summary_large_image",
-    title: "BG Remover - Remove Image Background Instantly",
-    description: "Professional AI background removal. 100% free, private, runs in your browser.",
+    title: "BG Remover - Free Online Image Tools",
+    description: "Every image tool you need in one place. 100% free, private, runs in your browser.",
   },
   alternates: {
     canonical: "https://bgremover.k2techinfo.com",

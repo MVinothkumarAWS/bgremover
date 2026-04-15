@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { tools } from "@/lib/tools";
 
 export default function Footer() {
   return (
@@ -6,7 +7,7 @@ export default function Footer() {
       <div className="absolute top-0 left-1/2 w-[800px] h-[200px] bg-violet-600/5 rounded-full blur-3xl -translate-x-1/2 -translate-y-1/2" />
 
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative">
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-10 mb-12">
+        <div className="grid grid-cols-1 md:grid-cols-5 gap-10 mb-12">
           <div className="md:col-span-2">
             <div className="flex items-center gap-2.5 mb-4">
               <div className="w-9 h-9 bg-gradient-to-br from-violet-600 to-indigo-600 rounded-xl flex items-center justify-center shadow-lg shadow-violet-500/20">
@@ -17,26 +18,40 @@ export default function Footer() {
               <span className="text-xl font-bold text-white">BG<span className="bg-gradient-to-r from-violet-400 to-indigo-400 bg-clip-text text-transparent">Remover</span></span>
             </div>
             <p className="text-sm max-w-md leading-relaxed">
-              Professional AI background removal that runs 100% in your browser. No uploads, no servers, no compromises.
+              Professional AI-powered image tools that run 100% in your browser. Compress, resize, crop, convert, watermark, and more — no uploads, no servers.
             </p>
+          </div>
+
+          <div>
+            <h4 className="text-white font-semibold mb-4">Image Tools</h4>
+            <ul className="space-y-2.5 text-sm">
+              {tools.slice(0, 7).map((tool) => (
+                <li key={tool.slug}>
+                  <Link href={tool.href} className="hover:text-violet-400 transition-colors">{tool.name}</Link>
+                </li>
+              ))}
+            </ul>
+          </div>
+
+          <div>
+            <h4 className="text-white font-semibold mb-4">More Tools</h4>
+            <ul className="space-y-2.5 text-sm">
+              {tools.slice(7).map((tool) => (
+                <li key={tool.slug}>
+                  <Link href={tool.href} className="hover:text-violet-400 transition-colors">{tool.name}</Link>
+                </li>
+              ))}
+            </ul>
           </div>
 
           <div>
             <h4 className="text-white font-semibold mb-4">Product</h4>
             <ul className="space-y-2.5 text-sm">
-              <li><Link href="/#upload" className="hover:text-violet-400 transition-colors">Background Removal</Link></li>
-              <li><Link href="/#features" className="hover:text-violet-400 transition-colors">All Features</Link></li>
+              <li><Link href="/#features" className="hover:text-violet-400 transition-colors">Features</Link></li>
+              <li><Link href="/#how-it-works" className="hover:text-violet-400 transition-colors">How It Works</Link></li>
               <li><Link href="/pricing" className="hover:text-violet-400 transition-colors">Pricing</Link></li>
               <li><Link href="/api-docs" className="hover:text-violet-400 transition-colors">API Docs</Link></li>
-            </ul>
-          </div>
-
-          <div>
-            <h4 className="text-white font-semibold mb-4">Resources</h4>
-            <ul className="space-y-2.5 text-sm">
-              <li><Link href="/#how-it-works" className="hover:text-violet-400 transition-colors">How It Works</Link></li>
               <li><Link href="/#gallery" className="hover:text-violet-400 transition-colors">Gallery</Link></li>
-              <li><Link href="/#upload" className="hover:text-violet-400 transition-colors">Get Started</Link></li>
             </ul>
           </div>
         </div>
