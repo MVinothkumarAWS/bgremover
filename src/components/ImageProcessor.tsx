@@ -155,7 +155,7 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
       try {
         console.log("[BG] Trying server API:", REMBG_API);
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 60000); // 60s timeout for cold starts
+        const timeout = setTimeout(() => controller.abort(), 120000); // 120s timeout for cold starts
         const formData = new FormData();
         formData.append("image", file);
         const res = await fetch(`${REMBG_API}/remove-bg`, {

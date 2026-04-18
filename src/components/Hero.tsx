@@ -276,7 +276,7 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
         try {
           console.log("[BG] Trying server API:", REMBG_API);
           const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 60000);
+          const timeout = setTimeout(() => controller.abort(), 120000);
           const formData = new FormData();
           formData.append("image", file);
           const res = await fetch(`${REMBG_API}/remove-bg`, { method: "POST", body: formData, signal: controller.signal });
