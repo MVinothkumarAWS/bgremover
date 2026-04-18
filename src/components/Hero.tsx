@@ -270,22 +270,7 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
   const processAll = useCallback(async () => {
     const REMBG_API = process.env.NEXT_PUBLIC_REMBG_API_URL;
 
-    async function processOne(file: File): Promise<Blob> {
-      // Try rembg server API first
-      if (REMBG_API) {
-        try {
-          console.log("[BG] Trying server API:", REMBG_API);
-          const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 120000);
-          const formData = new FormData();
-          formData.append("image", file);
-          const res = await fetch(`${REMBG_API}/remove-bg`, { method: "POST", body: formData, signal: controller.signal });
-          clearTimeout(timeout);
-          if (res.ok) { console.log("[BG] Server API success!"); return await res.blob(); }
-          console.log("[BG] Server API error:", res.status);
-        } catch (err) { console.log("[BG] Server API failed:", err); }
-      }
-      // Fallback to client-side
+    async function clientSide(file: File): Promise<Blob> {
       const { removeBackground } = await import("@imgly/background-removal");
       return await removeBackground(file, {
         model: "isnet",
@@ -295,11 +280,30 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
       });
     }
 
+    async function serverUpgrade(file: File, fileName: string) {
+      if (!REMBG_API) return;
+      try {
+        const formData = new FormData();
+        formData.append("image", file);
+        const res = await fetch(`${REMBG_API}/remove-bg`, { method: "POST", body: formData });
+        if (!res.ok) return;
+        const blob = await res.blob();
+        setResults((prev) => {
+          const oldUrl = prev.get(fileName);
+          if (oldUrl && oldUrl !== "error") URL.revokeObjectURL(oldUrl);
+          return new Map(prev).set(fileName, URL.createObjectURL(blob));
+        });
+      } catch { /* silent */ }
+    }
+
     for (let i = 0; i < files.length; i++) {
       setCurrent(i + 1);
       try {
-        const blob = await processOne(files[i]);
+        // Show client-side result instantly
+        const blob = await clientSide(files[i]);
         setResults((prev) => new Map(prev).set(files[i].name, URL.createObjectURL(blob)));
+        // Upgrade with server in background
+        serverUpgrade(files[i], files[i].name);
       } catch { setResults((prev) => new Map(prev).set(files[i].name, "error")); }
     }
     setProcessing(false);

@@ -146,32 +146,15 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
   useEffect(() => { return () => { if (resultUrl) URL.revokeObjectURL(resultUrl); }; }, [resultUrl]);
   useEffect(() => { return () => { if (bgImageUrl) URL.revokeObjectURL(bgImageUrl); }; }, [bgImageUrl]);
 
+  const [enhancing, setEnhancing] = useState(false);
+
   useEffect(() => {
     let cancelled = false;
     const REMBG_API = process.env.NEXT_PUBLIC_REMBG_API_URL;
 
-    async function tryRembgApi(): Promise<Blob | null> {
-      if (!REMBG_API) { console.log("[BG] No REMBG_API URL configured"); return null; }
-      try {
-        console.log("[BG] Trying server API:", REMBG_API);
-        const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 120000); // 120s timeout for cold starts
-        const formData = new FormData();
-        formData.append("image", file);
-        const res = await fetch(`${REMBG_API}/remove-bg`, {
-          method: "POST",
-          body: formData,
-          signal: controller.signal,
-        });
-        clearTimeout(timeout);
-        if (!res.ok) { console.log("[BG] Server API error:", res.status); return null; }
-        console.log("[BG] Server API success!");
-        return await res.blob();
-      } catch (err) { console.log("[BG] Server API failed, falling back:", err); return null; }
-    }
-
-    async function clientSideFallback(): Promise<Blob> {
-      setStatus("loading-model"); setProgress(15);
+    // Step 1: Client-side instant result
+    async function clientSideProcess(): Promise<Blob> {
+      setStatus("loading-model"); setProgress(10);
       const { removeBackground } = await import("@imgly/background-removal");
       if (cancelled) throw new Error("cancelled");
       setStatus("processing"); setProgress(30);
@@ -184,20 +167,45 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
       });
     }
 
+    // Step 2: Server-side upgrade (runs in background)
+    async function serverUpgrade() {
+      if (!REMBG_API || cancelled) return;
+      try {
+        console.log("[BG] Enhancing with server API...");
+        setEnhancing(true);
+        const formData = new FormData();
+        formData.append("image", file);
+        const res = await fetch(`${REMBG_API}/remove-bg`, {
+          method: "POST",
+          body: formData,
+        });
+        if (!res.ok || cancelled) { setEnhancing(false); return; }
+        const serverBlob = await res.blob();
+        if (cancelled) { setEnhancing(false); return; }
+        // Swap with better result
+        console.log("[BG] Server enhanced result received!");
+        setResultBlob(serverBlob);
+        const u = URL.createObjectURL(serverBlob);
+        setResultUrl((prev) => { if (prev) URL.revokeObjectURL(prev); return u; });
+        setEnhancing(false);
+        setToast("Enhanced with AI server");
+        setTimeout(() => setToast(""), 3000);
+      } catch { setEnhancing(false); }
+    }
+
     async function run() {
       try {
-        setStatus("processing"); setProgress(10);
         const iv = setInterval(() => setProgress(p => p >= 90 ? (clearInterval(iv), 90) : p + Math.random() * 5), 500);
-        // Try rembg server API first, fallback to client-side
-        let blob = await tryRembgApi();
-        if (cancelled) { clearInterval(iv); return; }
-        if (!blob) blob = await clientSideFallback();
+        // Show client-side result immediately
+        const blob = await clientSideProcess();
         clearInterval(iv);
         if (cancelled) return;
         setResultBlob(blob);
         const u = URL.createObjectURL(blob);
         setResultUrl(u); setProgress(100); setStatus("done");
         saveToHistory(file);
+        // Then upgrade with server in background
+        serverUpgrade();
       } catch (err) { if (!cancelled) { setErrorMsg(err instanceof Error ? err.message : "Failed"); setStatus("error"); } }
     }
     run();
@@ -686,6 +694,12 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
                 className="absolute bottom-3 left-3 px-3 py-1.5 bg-black/60 text-white text-[11px] font-medium rounded-lg backdrop-blur-sm hover:bg-black/70 select-none">
                 Hold to see original
               </button>
+              {enhancing && (
+                <div className="absolute top-3 right-3 flex items-center gap-2 px-3 py-1.5 bg-violet-600/90 text-white text-[11px] font-medium rounded-lg backdrop-blur-sm animate-pulse">
+                  <svg className="w-3.5 h-3.5 animate-spin" fill="none" viewBox="0 0 24 24"><circle className="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="4" /><path className="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4z" /></svg>
+                  Enhancing quality...
+                </div>
+              )}
             </div>
           )}
 
