@@ -6,7 +6,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Pre-download model during build so first request is fast
-RUN python -c "from rembg import new_session; new_session('isnet-general-use')"
+RUN python -c "from rembg import new_session; new_session('birefnet-general')"
 
 COPY main.py .
 

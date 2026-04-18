@@ -14,12 +14,12 @@ app.add_middleware(
     allow_headers=["*"],
 )
 
-# isnet-general-use: best quality that fits in 2GB (Google Cloud Run free tier)
-session = new_session("isnet-general-use")
+# BiRefNet-General: best quality open-source model for edge detection
+session = new_session("birefnet-general")
 
 @app.get("/")
 def health():
-    return {"status": "ok", "model": "isnet-general-use"}
+    return {"status": "ok", "model": "birefnet-general"}
 
 @app.post("/remove-bg")
 async def remove_background(image: UploadFile = File(...)):
