@@ -274,14 +274,16 @@ function BatchProcessor({ files, onReset }: { files: File[]; onReset: () => void
       // Try rembg server API first
       if (REMBG_API) {
         try {
+          console.log("[BG] Trying server API:", REMBG_API);
           const controller = new AbortController();
-          const timeout = setTimeout(() => controller.abort(), 15000);
+          const timeout = setTimeout(() => controller.abort(), 60000);
           const formData = new FormData();
           formData.append("image", file);
           const res = await fetch(`${REMBG_API}/remove-bg`, { method: "POST", body: formData, signal: controller.signal });
           clearTimeout(timeout);
-          if (res.ok) return await res.blob();
-        } catch { /* fall through to client-side */ }
+          if (res.ok) { console.log("[BG] Server API success!"); return await res.blob(); }
+          console.log("[BG] Server API error:", res.status);
+        } catch (err) { console.log("[BG] Server API failed:", err); }
       }
       // Fallback to client-side
       const { removeBackground } = await import("@imgly/background-removal");

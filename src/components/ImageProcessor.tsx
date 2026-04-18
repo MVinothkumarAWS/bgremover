@@ -151,10 +151,11 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
     const REMBG_API = process.env.NEXT_PUBLIC_REMBG_API_URL;
 
     async function tryRembgApi(): Promise<Blob | null> {
-      if (!REMBG_API) return null;
+      if (!REMBG_API) { console.log("[BG] No REMBG_API URL configured"); return null; }
       try {
+        console.log("[BG] Trying server API:", REMBG_API);
         const controller = new AbortController();
-        const timeout = setTimeout(() => controller.abort(), 15000); // 15s timeout
+        const timeout = setTimeout(() => controller.abort(), 60000); // 60s timeout for cold starts
         const formData = new FormData();
         formData.append("image", file);
         const res = await fetch(`${REMBG_API}/remove-bg`, {
@@ -163,9 +164,10 @@ export default function ImageProcessor({ file, onReset }: ImageProcessorProps) {
           signal: controller.signal,
         });
         clearTimeout(timeout);
-        if (!res.ok) return null;
+        if (!res.ok) { console.log("[BG] Server API error:", res.status); return null; }
+        console.log("[BG] Server API success!");
         return await res.blob();
-      } catch { return null; }
+      } catch (err) { console.log("[BG] Server API failed, falling back:", err); return null; }
     }
 
     async function clientSideFallback(): Promise<Blob> {
